@@ -1,0 +1,70 @@
+#' Calculate the p-value for normal random vectors with specified covariance matrices
+#'
+#' @param Vlist List of vectors
+#' @param covList List of covariance matrices corresponding to the vectors
+#' @param testType The test methods. Either for exact chi-squared test, or approximated gamma test
+#' @param cm Constant for convergence
+#'
+#' @return A list of test information.
+#' \itemize{
+#' \item testType Test method, \code{'chi'} or \code{'gam'}.
+#' \item statistic Test statistic.
+#' \item df Degrees of freedom for chi-squared distribution.
+#' \item shape Shape parameter in gamma distribution.
+#' \item rate Rate parameter in gamma distribution.
+#' \item pvalue P-value.
+#' }
+#' @export
+#'
+#' @import 'stats' 'MASS'
+#'
+#' @importFrom Matrix rankMatrix
+#'
+#' @examples p = length(countryCoeff)
+#'           vlist = vector('list', p)
+#'           for (i in 1:p) {
+#'             vlist[[i]] = as.double(countryCoeff[[i]])
+#'           }
+#'           vec.test(vlist, countryCovar, cm = sqrt(102), testType = 'chi')
+vec.test = function(Vlist, covList = list(), cm, testType = c('chi', 'gam')){
+
+  if (length(covList) == 0) {
+    n = length(Vlist[[1]])
+    p = length(Vlist)
+    covList = vector('list', p)
+    for (i in 1:p) {
+      covList[[i]] = diag(n)
+    }
+  }
+
+  p = length(Vlist)
+  testVal = 0
+
+  if (testType == 'chi') {
+    r = 0
+    for (i in 1:p) {
+      vi = Vlist[[i]]
+      sig.i = covList[[i]]
+      testVal = testVal + crossprod(vi, ginv(sig.i) %*% vi) * cm^2
+      r = r + rankMatrix(sig.i)
+    }
+    testResult = list(testType, testVal, r[1], 1 - pchisq(testVal, r))
+    names(testResult) = c('testType', 'statistic', 'df', 'pvalue')
+  } else {
+    me = 0
+    va = 0
+    for (i in 1:p) {
+      vi = Vlist[[i]]
+      testVal = testVal + norm(vi, 'F')^2 * cm^2
+      sig.i = covList[[i]]
+      me = me + sum(diag(sig.i))
+      va = va + 2*sum(diag(crossprod(sig.i)))
+    }
+    alphaP = me^2/va
+    betaP = me/va
+    testResult = list(testType, testVal, alphaP, betaP, 1 - pgamma(testVal, shape = alphaP, rate = betaP))
+    names(testResult) = c('testType', 'statistic', 'shape', 'rate', 'pvalue')
+  }
+
+  return(testResult)
+}

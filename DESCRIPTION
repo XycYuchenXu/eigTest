@@ -1,0 +1,14 @@
+Package: eigTest
+Type: Package
+Title: Approximate and Test Joint Eigenvectors
+Version: 0.1.0
+Author: Yuchen Xu
+Maintainer: Yuchen Xu <yx439@cornell.edu>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: GPL-2
+Encoding: UTF-8
+LazyData: true
+Imports:
+    MASS, stats, Matrix, pracma, gtools
+RoxygenNote: 7.1.1
