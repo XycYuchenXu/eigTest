@@ -22,8 +22,8 @@
 #' @importFrom Matrix rankMatrix
 #'
 #' @examples means = generateMeans(5,2)
-#'           samples = simuSamples(means, sqrt(100), 1)
-#'           commutatorTest(samples[[1]][[1]][[1]][[1]], sqrt(400))
+#' samples = simuSamples(means, sqrt(100), 1)
+#' commutatorTest(samples[[1]][[1]][[1]][[1]], sqrt(400))
 commutatorTest = function(matList, cm, d = nrow(A),
                           covList = list(diag(d^2), diag(d^2)),
                           testType = c('chi', 'gam')) {

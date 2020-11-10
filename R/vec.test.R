@@ -21,11 +21,11 @@
 #' @importFrom Matrix rankMatrix
 #'
 #' @examples p = length(countryCoeff)
-#'           vlist = vector('list', p)
-#'           for (i in 1:p) {
-#'             vlist[[i]] = as.double(countryCoeff[[i]])
-#'           }
-#'           vec.test(vlist, countryCovar, cm = sqrt(102), testType = 'chi')
+#' vlist = vector('list', p)
+#' for (i in 1:p) {
+#'   vlist[[i]] = as.double(countryCoeff[[i]])
+#' }
+#' vec.test(vlist, countryCovar, cm = sqrt(102), testType = 'chi')
 vec.test = function(Vlist, covList = list(), cm, testType = c('chi', 'gam')){
 
   if (length(covList) == 0) {
