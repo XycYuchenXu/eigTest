@@ -2,7 +2,7 @@
 title: 'eigTest: eigenvector testing toolkit'
 author: "Yuchen Xu"
 date: "11/10/2020"
-output: pdf_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
