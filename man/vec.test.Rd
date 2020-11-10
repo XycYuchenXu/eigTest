@@ -31,9 +31,9 @@ Calculate the p-value for normal random vectors with specified covariance matric
 }
 \examples{
 p = length(countryCoeff)
-          vlist = vector('list', p)
-          for (i in 1:p) {
-            vlist[[i]] = as.double(countryCoeff[[i]])
-          }
-          vec.test(vlist, countryCovar, cm = sqrt(102), testType = 'chi')
+vlist = vector('list', p)
+for (i in 1:p) {
+  vlist[[i]] = as.double(countryCoeff[[i]])
+}
+vec.test(vlist, countryCovar, cm = sqrt(102), testType = 'chi')
 }

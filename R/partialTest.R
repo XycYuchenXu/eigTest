@@ -1,9 +1,11 @@
-#' Test Whole set of Eigenvectors of Upper Left Block after Schur Decomposition
+#' Test Subset of Common Eigenvectors
+#'
+#' Test whether a subset of common eigenvectors are shared by the list of random matrices.
 #'
 #' @param A List of original matrices
 #' @param covList List of original covariance matrices
 #' @param k Size of the block matrices to be tested
-#' @param cm Constant for convergence
+#' @param cn Constant for convergence
 #' @param Q Schur components for transformation
 #' @param n Size of original matrices
 #' @param p Number of matrices
@@ -24,11 +26,11 @@
 #'
 #' @import 'MASS'
 #'
-#' @examples schurBlockTest(countryCoeff, countryCovar, k = 2, cm = 102, testType = 'gam')
-schurBlockTest = function(A, covList = list(), k, cm, nn = FALSE,
-                          Q = expmPartSchur(A,k, nn = nn), n = nrow(A[[1]]),
-                          p = length(A), testType = c('chi', 'gam'),
-                          param.out = FALSE){
+#' @examples partialTest(countryCoeff, countryCovar, k = 2, cn = 102, testType = 'gam')
+partialTest = function(A, covList = list(), k, cn, nn = FALSE,
+                       Q = expmPartSchur(A,k, nn = nn), n = nrow(A[[1]]),
+                       p = length(A), testType = c('chi', 'gam'),
+                       param.out = FALSE){
 
   if (length(covList) == 0) {
     covList = vector('list', p)
@@ -39,10 +41,10 @@ schurBlockTest = function(A, covList = list(), k, cm, nn = FALSE,
   if (k >= n) {k = n}
   if (k <= 0) {k = n}
   if (k == n) {
-    return(eigTest(A, covList, cm, testType = testType, param.out = param.out))
+    return(eigTest(A, covList, cn, testType = testType, param.out = param.out))
   }
   if (k == 1) {
-    return(schurTest(A, covList, k, cm, testType = testType, param.out = param.out, nn = nn))
+    return(schurTest(A, covList, k, cn, testType = testType, param.out = param.out, nn = nn))
   }
 
   matB = matrix(0, ncol = n, nrow = n)
@@ -76,10 +78,10 @@ schurBlockTest = function(A, covList = list(), k, cm, nn = FALSE,
   }
 
   if (length(testType) == 2) {
-    output = c(vec.test(Vlist, covList, cm, 'chi')$pvalue, vec.test(Vlist, covList, cm, 'gam')$pvalue)
+    output = c(vec.test(Vlist, covList, cn, 'chi')$pvalue, vec.test(Vlist, covList, cn, 'gam')$pvalue)
     return(output)
   } else {
-    testResult = vec.test(Vlist, covList, cm, testType)
+    testResult = vec.test(Vlist, covList, cn, testType)
     if (param.out) {return(testResult)}
     return(testResult$pvalue)
   }

@@ -1,7 +1,7 @@
 #' Test on the commutator of two matrices
 #'
 #' @param matList The list of two matrices to be tested
-#' @param cm Constant for convergence
+#' @param cn Constant for convergence
 #' @param d Size of matrices
 #' @param covList The list of covariance matrices of the two matrices
 #' @param testType The test methods. Either for exact chi-squared test, or approximated gamma test
@@ -24,7 +24,7 @@
 #' @examples means = generateMeans(5,2)
 #' samples = simuSamples(means, sqrt(100), 1)
 #' commutatorTest(samples[[1]][[1]][[1]][[1]], sqrt(400))
-commutatorTest = function(matList, cm, d = nrow(A),
+commutatorTest = function(matList, cn, d = nrow(A),
                           covList = list(diag(d^2), diag(d^2)),
                           testType = c('chi', 'gam')) {
 
@@ -44,5 +44,5 @@ commutatorTest = function(matList, cm, d = nrow(A),
 
   sigma.y = tcrossprod(QA, QA %*% covB) + tcrossprod(QB, QB %*% covA)
 
-  return(vec.test(list(y), list(sigma.y), cm, testType))
+  return(vec.test(list(y), list(sigma.y), cn, testType))
 }

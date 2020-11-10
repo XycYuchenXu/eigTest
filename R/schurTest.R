@@ -3,7 +3,7 @@
 #' @param A List of matrices
 #' @param covList List of covariance matrices
 #' @param k Number of components to be tested
-#' @param cm Constant for convergence
+#' @param cn Constant for convergence
 #' @param Q Orthogonal components to be tested
 #' @param n Size of matrices
 #' @param p Number of matrices
@@ -22,8 +22,8 @@
 #' }
 #' @export
 #'
-#' @examples schurTest(countryCoeff, countryCovar, k = 2, cm = 102, testType = 'chi')
-schurTest = function(A, covList = list(), k, cm, nn = FALSE, Q = NULL, n = ncol(A[[1]]), p = length(A), testType = c('gam', 'chi'), param.out = FALSE){
+#' @examples schurTest(countryCoeff, countryCovar, k = 2, cn = 102, testType = 'chi')
+schurTest = function(A, covList = list(), k, cn, nn = FALSE, Q = NULL, n = ncol(A[[1]]), p = length(A), testType = c('gam', 'chi'), param.out = FALSE){
 
   if (is.null(Q)) {Q = partSchur(A, k, nonneg = nn)}
   if (length(covList) == 0) {
@@ -32,7 +32,7 @@ schurTest = function(A, covList = list(), k, cm, nn = FALSE, Q = NULL, n = ncol(
       covList[[i]] = diag(n^2)
     }
   }
-  if (k >= n) {return(eigTest(A, covList, cm, testType, param.out))}
+  if (k >= n) {return(eigTest(A, covList, cn, testType, param.out))}
   Mat = matrix(0, nrow = n, ncol = n)
   Mat[1:k,(k+1):n] = 1
   Mat = as.double(Mat)
@@ -47,10 +47,10 @@ schurTest = function(A, covList = list(), k, cm, nn = FALSE, Q = NULL, n = ncol(
   }
 
   if (length(testType) == 2) {
-    output = c(vec.test(Vlist, covList, cm, 'chi')$pvalue, vec.test(Vlist, covList, cm, 'gam')$pvalue)
+    output = c(vec.test(Vlist, covList, cn, 'chi')$pvalue, vec.test(Vlist, covList, cn, 'gam')$pvalue)
     return(output)
   } else {
-    testResult = vec.test(Vlist, covList, cm, testType)
+    testResult = vec.test(Vlist, covList, cn, testType)
 
     if (param.out) {return(testResult)}
     return(testResult$pvalue)

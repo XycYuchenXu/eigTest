@@ -1,0 +1,74 @@
+---
+title: 'eigTest: eigenvector testing toolkit'
+author: "Yuchen Xu"
+date: "11/10/2020"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{eigTest: eigenvector testing toolkit}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Package installation
+
+To install and load the package, use the code:
+```{r install, message=FALSE, warning=FALSE}
+devtools::install_github('XycYuchenXu/eigTest', quiet = T)
+library(eigTest)
+```
+
+## Simulation samples
+
+The sample generating process is as follows:
+
+1. Randomly sample a common eigenvector matrix $V \in \mathbb{R}^{d \times d}$ where $d$ is the dimension of the square matrix and the entries are i.i.d. standard normal;
+
+2. Adding noise to the matrix $V$ to get $V_i(\sigma) = V + \sigma E_i$ for $i = 1, \dots, p$, where signal to noise ratio (SNR) is defined as $\frac{1}{\sigma^2}$) and entries in $E_i$ are i.i.d. standard normal.
+
+3. Randomly sample vectors $d_i \in \mathbb{R}^d$ with uniform i.i.d. entries in interval $(-1,1)$, and generate square matrices $\mu_i(\sigma) = V_i^{-1}(\sigma) D_i V_i(\sigma)$ where $D_i = \mbox{diag}(d_i)$ is a diagonal matrix.
+
+4. Given sample size $n$, generate $n$ random matrices $X_{ij}, j = 1, \dots, n$ with mean $\mu_i(\sigma)$ and identity variance matrix, and get the estimates $A_i = \bar X_{i}$, $\Sigma_i = \frac{1}{n-1} \sum_{j=1}^n \mbox{vec}(X_{ij} - A_i) \mbox{vec}'(X_{ij} - A_i)$.
+
+The package includes functions to generate simulation samples in the following way:
+
+```{r simuSamples}
+twoSample = generateMeans(d = 5,           # square matrix's dimension
+                          p = 2,           # number of matrices
+                          snr = c(10,1))   # vector of SNR in eigenvector
+```
+
+
+## Functionality
+
+### Two-sample test
+
+```{r twoSample, eval=FALSE, include=FALSE}
+## Commutator-based test
+commutatorTest()
+
+## Log-likelihood ratio test
+projTest()
+```
+
+### Common eigenvector estimate
+
+```{r eigEst, eval=FALSE, include=FALSE}
+JDTE()
+```
+
+### Multi-sample test
+
+```{r multiSample, eval=FALSE, include=FALSE}
+eigTest()
+```
+
+### Partial test
+
+```{r partial, eval=FALSE, include=FALSE}
+
+```
+

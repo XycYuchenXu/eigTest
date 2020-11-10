@@ -2,7 +2,7 @@
 #'
 #' @param A List of matrices to be tested. Require the length to be 2.
 #' @param covList List of covariance matrices corresponding to the random matrices
-#' @param cm Constant for convergence
+#' @param cn Constant for convergence
 #' @param n Matrix dimension
 #' @param param.out Logical. Whether the parameters need to be included in output
 #'
@@ -16,8 +16,8 @@
 #'
 #' @importFrom MASS ginv
 #'
-#' @examples projTest(countryCoeff, countryCovar, cm = 102)
-projTest = function(A, covList = list(), cm, n = ncol(A[[1]]), param.out = FALSE){
+#' @examples projTest(countryCoeff, countryCovar, cn = 102)
+projTest = function(A, covList = list(), cn, n = ncol(A[[1]]), param.out = FALSE){
 
   p = 2
 
@@ -49,7 +49,7 @@ projTest = function(A, covList = list(), cm, n = ncol(A[[1]]), param.out = FALSE
 
   r = 2*n^2-2*n
   testVal = crossprod(as.double(C), Q1 %*% as.double(C)) + crossprod(as.double(D), Q2 %*% as.double(D))
-  testVal = testVal * cm^2
+  testVal = testVal * cn^2
 
   if (param.out) {
     testResult = list(testVal, r[1], 1 - pchisq(testVal, r))

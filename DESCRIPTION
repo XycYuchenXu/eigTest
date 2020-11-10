@@ -12,3 +12,5 @@ LazyData: true
 Imports:
     MASS, stats, Matrix, pracma, gtools
 RoxygenNote: 7.1.1
+Suggests: knitr, rmarkdown, devtools
+VignetteBuilder: knitr
