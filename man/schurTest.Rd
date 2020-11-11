@@ -8,7 +8,7 @@ schurTest(
   A,
   covList = list(),
   k,
-  cm,
+  cn,
   nn = FALSE,
   Q = NULL,
   n = ncol(A[[1]]),
@@ -24,7 +24,7 @@ schurTest(
 
 \item{k}{Number of components to be tested}
 
-\item{cm}{Constant for convergence}
+\item{cn}{Constant for convergence}
 
 \item{nn}{Logical whether the eigenvector elements are nonnegative}
 
@@ -53,5 +53,5 @@ P-value or a list of test information.
 Test Schur Components
 }
 \examples{
-schurTest(countryCoeff, countryCovar, k = 2, cm = 102, testType = 'chi')
+schurTest(countryCoeff, countryCovar, k = 2, cn = 102, testType = 'chi')
 }

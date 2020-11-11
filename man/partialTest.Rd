@@ -8,7 +8,7 @@ partialTest(
   A,
   covList = list(),
   k,
-  cm,
+  cn,
   nn = FALSE,
   Q = expmPartSchur(A, k, nn = nn),
   n = nrow(A[[1]]),
@@ -24,7 +24,7 @@ partialTest(
 
 \item{k}{Size of the block matrices to be tested}
 
-\item{cm}{Constant for convergence}
+\item{cn}{Constant for convergence}
 
 \item{nn}{Logical whether the eigenvector elements are nonnegative}
 
@@ -53,5 +53,5 @@ P-value or a list of test information.
 Test whether a subset of common eigenvectors are shared by the list of random matrices.
 }
 \examples{
-partialTest(countryCoeff, countryCovar, k = 2, cm = 102, testType = 'gam')
+partialTest(countryCoeff, countryCovar, k = 2, cn = 102, testType = 'gam')
 }

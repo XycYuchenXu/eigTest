@@ -4,7 +4,7 @@
 Package is developed for eigenvector testing.
 
 To install, use the code:
-`devtools::install_github('XycYuchenXu/eigTest')`
+`devtools::install_github('XycYuchenXu/eigTest', build_vignettes = T)`
 
 ## Usage
 The package has the following functionalities:

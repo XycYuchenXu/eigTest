@@ -6,7 +6,7 @@
 \usage{
 commutatorTest(
   matList,
-  cm,
+  cn,
   d = nrow(A),
   covList = list(diag(d^2), diag(d^2)),
   testType = c("chi", "gam")
@@ -15,7 +15,7 @@ commutatorTest(
 \arguments{
 \item{matList}{The list of two matrices to be tested}
 
-\item{cm}{Constant for convergence}
+\item{cn}{Constant for convergence}
 
 \item{d}{Size of matrices}
 
