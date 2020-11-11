@@ -21,4 +21,4 @@ The package has the following functionalities:
 
 6. Generate gaussian samples for simulations. The function `generateMeans` is used to generate `p` mean matrices with dimension `d` and noise level `snr` of common eigenvector `V`. Function `simuSamples` takes the output from `generateMeans` as input for mean matrices. For each mean matrix, it generates `cn^2` gaussian random matrices (with identity covariance matrix), and compute the sample mean and the sample covariance matrix as estimators. It then combines those estimates into two lists, `mu.bar` for means, and `cov.bar` for covariances.
 
-7. For more details, read the vignette: `vignettes('XycYuchenXu/eigTest')`
+7. For more details, read the vignette: `browseVignettes('eigTest')`
