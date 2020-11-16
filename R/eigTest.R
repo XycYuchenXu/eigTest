@@ -6,7 +6,7 @@
 #' @param n Size of matrices
 #' @param p Number of matrices
 #' @param testType The test methods. Either for exact chi-squared test, or approximated gamma test.
-#' @param cm Constant for convergence
+#' @param cn Constant for convergence
 #' @param param.out The parameters of limiting distribution should be output or not
 #'
 #' @return P-value or a list of test information.
@@ -23,7 +23,7 @@
 #' @import 'MASS'
 #'
 #' @examples eigTest(countryCoeff, countryCovar, cm = 102, testType = 'gam')
-eigTest = function(A, covList = list(), cm, V = JDTE(A), n = ncol(A[[1]]),
+eigTest = function(A, covList = list(), cn, V = JDTE(A), n = ncol(A[[1]]),
                    p = length(A), testType = c('chi', 'gam'), param.out = FALSE){
 
   if (length(covList) == 0) {
@@ -43,10 +43,10 @@ eigTest = function(A, covList = list(), cm, V = JDTE(A), n = ncol(A[[1]]),
   }
 
   if (length(testType) == 2) {
-    output = c(vec.test(Vlist, covList, cm, 'chi')$pvalue, vec.test(Vlist, covList, cm, 'gam')$pvalue)
+    output = c(vec.test(Vlist, covList, cn, 'chi')$pvalue, vec.test(Vlist, covList, cn, 'gam')$pvalue)
     return(output)
   } else {
-    testResult = vec.test(Vlist, covList, cm, testType)
+    testResult = vec.test(Vlist, covList, cn, testType)
 
     if (param.out) {return(testResult)}
     return(testResult$pvalue)
