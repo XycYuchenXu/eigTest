@@ -22,7 +22,7 @@
 #'
 #' @import 'MASS'
 #'
-#' @examples eigTest(countryCoeff, countryCovar, cm = 102, testType = 'gam')
+#' @examples eigTest(countryCoeff, countryCovar, cn = 102, testType = 'gam')
 eigTest = function(A, covList = list(), cn, V = JDTE(A), n = ncol(A[[1]]),
                    p = length(A), testType = c('chi', 'gam'), param.out = FALSE){
 

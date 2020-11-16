@@ -7,7 +7,7 @@
 eigTest(
   A,
   covList = list(),
-  cm,
+  cn,
   V = JDTE(A),
   n = ncol(A[[1]]),
   p = length(A),
@@ -20,7 +20,7 @@ eigTest(
 
 \item{covList}{List of covariance matrices}
 
-\item{cm}{Constant for convergence}
+\item{cn}{Constant for convergence}
 
 \item{V}{Eigenvector to be tested}
 
@@ -47,5 +47,5 @@ P-value or a list of test information.
 Test Whole Set of Eigenvectors
 }
 \examples{
-eigTest(countryCoeff, countryCovar, cm = 102, testType = 'gam')
+eigTest(countryCoeff, countryCovar, cn = 102, testType = 'gam')
 }
