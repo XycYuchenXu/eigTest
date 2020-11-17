@@ -11,7 +11,7 @@ vec.test(Vlist, covList = list(), cn, testType = c("chi", "gam"))
 
 \item{covList}{List of covariance matrices corresponding to the vectors}
 
-\item{cn}{Constant for convergence}
+\item{cn}{The constant for convergence, or a vector of constants.}
 
 \item{testType}{The test methods. Either for exact chi-squared test, or approximated gamma test}
 }

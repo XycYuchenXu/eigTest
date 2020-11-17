@@ -3,7 +3,7 @@
 #' @param Vlist List of vectors
 #' @param covList List of covariance matrices corresponding to the vectors
 #' @param testType The test methods. Either for exact chi-squared test, or approximated gamma test
-#' @param cn Constant for convergence
+#' @param cn The constant for convergence, or a vector of constants.
 #'
 #' @return A list of test information.
 #' \itemize{
@@ -28,16 +28,19 @@
 #' vec.test(vlist, countryCovar, cn = sqrt(102), testType = 'chi')
 vec.test = function(Vlist, covList = list(), cn, testType = c('chi', 'gam')){
 
+  p = length(Vlist)
   if (length(covList) == 0) {
     n = length(Vlist[[1]])
-    p = length(Vlist)
     covList = vector('list', p)
     for (i in 1:p) {
       covList[[i]] = diag(n)
     }
   }
 
-  p = length(Vlist)
+  if (length(cn) != p) {
+    cn = rep(cn[1], p)
+  }
+
   testVal = 0
 
   if (testType == 'chi') {
@@ -45,7 +48,7 @@ vec.test = function(Vlist, covList = list(), cn, testType = c('chi', 'gam')){
     for (i in 1:p) {
       vi = Vlist[[i]]
       sig.i = covList[[i]]
-      testVal = testVal + crossprod(vi, ginv(sig.i) %*% vi) * cn^2
+      testVal = testVal + crossprod(vi, ginv(sig.i) %*% vi) * cn[i]^2
       r = r + rankMatrix(sig.i)
     }
     testResult = list(testType, testVal, r[1], 1 - pchisq(testVal, r))
@@ -55,7 +58,7 @@ vec.test = function(Vlist, covList = list(), cn, testType = c('chi', 'gam')){
     va = 0
     for (i in 1:p) {
       vi = Vlist[[i]]
-      testVal = testVal + norm(vi, 'F')^2 * cn^2
+      testVal = testVal + norm(vi, 'F')^2 * cn[i]^2
       sig.i = covList[[i]]
       me = me + sum(diag(sig.i))
       va = va + 2*sum(diag(crossprod(sig.i)))
