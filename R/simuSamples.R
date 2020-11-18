@@ -48,10 +48,7 @@ simuSamples = function(mu, cn, samples, nonneg = FALSE){
         CountMat[i,] = CountMat[i,]*sums[1]
       }
 
-      TransMat = rbind(diag(n-1), -rep(1,n-1))
       CovMat = matrix(0, ncol = n^2, nrow = n^2)
-      reverseMat = 1/CountMat
-      reverseMat[is.infinite(reverseMat)] = 0
       pi = matrix(0, nrow = n, ncol = 1)
       for (i in 1:n) {
         pi[i] = sum(Label == i)/(L+1)
@@ -61,7 +58,8 @@ simuSamples = function(mu, cn, samples, nonneg = FALSE){
       for (i in 1:n) {
         Ei = matrix(0, ncol = n, nrow = n)
         Ei[i,i] = 1
-        CovMat = CovMat + kronecker(TransMat %*% ginv(diag(reverseMat[i,1:(n-1)]) + reverseMat[i,n]) %*% t(TransMat) * vec[i], Ei)
+        Qi = diag(CountMat[i,]) - matrix(CountMat[i,], nrow = n, ncol = n) * matrix(CountMat[i,], nrow = n, ncol = n, byrow = T)
+        CovMat = CovMat + kronecker(Qi * vec[i], Ei)
       }
       return(list(CountMat, CovMat))
     }
