@@ -90,7 +90,6 @@ partSchur = function(A, k, n = ncol(A[[1]]), p = length(A), iter = 5000, tol = 1
     return(Q)
   }
 
-  Ai = A
   Q = orderUpdate(A, diag(n))
   Q = orderUpdate(A, Q)
   return(Q)

@@ -10,8 +10,6 @@ score.fun(A, Q)
 \item{A}{List of matrices}
 
 \item{Q}{The orthogonal matrix}
-
-\item{j}{The column to be summed}
 }
 \value{
 The sum of squared norms

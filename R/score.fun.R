@@ -4,7 +4,6 @@
 #'
 #' @param A List of matrices
 #' @param Q The orthogonal matrix
-#' @param j The column to be summed
 #'
 #' @return The sum of squared norms
 #'
