@@ -9,7 +9,7 @@ projTest(A, covList = list(), cn, n = ncol(A[[1]]), param.out = FALSE)
 \arguments{
 \item{A}{List of matrices to be tested. Require the length to be 2.}
 
-\item{covList}{List of covariance matrices corresponding to the random matrices}
+\item{covList}{List of covariance matrices corresponding to the random matrices, default will use identity matrices}
 
 \item{cn}{Constant for convergence}
 

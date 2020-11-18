@@ -19,7 +19,7 @@ commutatorTest(
 
 \item{d}{Size of matrices}
 
-\item{covList}{The list of covariance matrices of the two matrices}
+\item{covList}{The list of covariance matrices of the two matrices, default will use identity matrices}
 
 \item{testType}{The test methods. Either for exact chi-squared test, or approximated gamma test}
 }

@@ -9,7 +9,7 @@ vec.test(Vlist, covList = list(), cn, testType = c("chi", "gam"))
 \arguments{
 \item{Vlist}{List of vectors}
 
-\item{covList}{List of covariance matrices corresponding to the vectors}
+\item{covList}{List of covariance matrices corresponding to the vectors, default will use identity matrices}
 
 \item{cn}{The constant for convergence, or a vector of constants.}
 

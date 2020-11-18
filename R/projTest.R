@@ -1,7 +1,7 @@
 #' Calculate the p-value for projected MLE with specified covariance matrices
 #'
 #' @param A List of matrices to be tested. Require the length to be 2.
-#' @param covList List of covariance matrices corresponding to the random matrices
+#' @param covList List of covariance matrices corresponding to the random matrices, default will use identity matrices
 #' @param cn Constant for convergence
 #' @param n Matrix dimension
 #' @param param.out Logical. Whether the parameters need to be included in output

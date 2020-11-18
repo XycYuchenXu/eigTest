@@ -3,7 +3,7 @@
 #' @param matList The list of two matrices to be tested
 #' @param cn Constant for convergence
 #' @param d Size of matrices
-#' @param covList The list of covariance matrices of the two matrices
+#' @param covList The list of covariance matrices of the two matrices, default will use identity matrices
 #' @param testType The test methods. Either for exact chi-squared test, or approximated gamma test
 #'
 #' @return A list of test information.

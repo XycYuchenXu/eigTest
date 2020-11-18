@@ -2,7 +2,7 @@
 #'
 #' @param A List of matrices
 #' @param V Eigenvector to be tested
-#' @param covList List of covariance matrices
+#' @param covList List of covariance matrices, default with use identity matrices
 #' @param n Size of matrices
 #' @param p Number of matrices
 #' @param testType The test methods. Either for exact chi-squared test, or approximated gamma test.

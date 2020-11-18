@@ -1,7 +1,7 @@
 #' Calculate the p-value for normal random vectors with specified covariance matrices
 #'
 #' @param Vlist List of vectors
-#' @param covList List of covariance matrices corresponding to the vectors
+#' @param covList List of covariance matrices corresponding to the vectors, default will use identity matrices
 #' @param testType The test methods. Either for exact chi-squared test, or approximated gamma test
 #' @param cn The constant for convergence, or a vector of constants.
 #'

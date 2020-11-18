@@ -3,7 +3,7 @@
 #' Test whether a subset of common eigenvectors are shared by the list of random matrices.
 #'
 #' @param A List of original matrices
-#' @param covList List of original covariance matrices
+#' @param covList List of original covariance matrices, default will use identity matrices
 #' @param k Size of the block matrices to be tested
 #' @param cn Constant for convergence
 #' @param Q Schur components for transformation

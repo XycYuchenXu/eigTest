@@ -1,7 +1,7 @@
 #' Test Schur Components
 #'
 #' @param A List of matrices
-#' @param covList List of covariance matrices
+#' @param covList List of covariance matrices, default will use identity matrices
 #' @param k Number of components to be tested
 #' @param cn Constant for convergence
 #' @param Q Orthogonal components to be tested

@@ -29,5 +29,5 @@ or as the estimated transition probability matrix of simulated Markov processes.
 In addition the estimated covariance matrices are also returned.
 }
 \examples{
-simuSamples(generateMeans(5,8,3), sqrt(c(100,500)), 100)
+simuSamples(generateMeans(5,4,3), sqrt(c(50,100)), 50)
 }

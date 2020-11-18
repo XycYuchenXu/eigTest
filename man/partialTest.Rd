@@ -20,7 +20,7 @@ partialTest(
 \arguments{
 \item{A}{List of original matrices}
 
-\item{covList}{List of original covariance matrices}
+\item{covList}{List of original covariance matrices, default will use identity matrices}
 
 \item{k}{Size of the block matrices to be tested}
 

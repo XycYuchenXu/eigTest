@@ -18,7 +18,7 @@ eigTest(
 \arguments{
 \item{A}{List of matrices}
 
-\item{covList}{List of covariance matrices}
+\item{covList}{List of covariance matrices, default with use identity matrices}
 
 \item{cn}{Constant for convergence}
 

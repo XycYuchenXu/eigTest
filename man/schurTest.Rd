@@ -20,7 +20,7 @@ schurTest(
 \arguments{
 \item{A}{List of matrices}
 
-\item{covList}{List of covariance matrices}
+\item{covList}{List of covariance matrices, default will use identity matrices}
 
 \item{k}{Number of components to be tested}
 

@@ -21,7 +21,7 @@
 #'
 #' @import 'MASS'
 #'
-#' @examples simuSamples(generateMeans(5,8,3), sqrt(c(100,500)), 100)
+#' @examples simuSamples(generateMeans(5,4,3), sqrt(c(50,100)), 50)
 simuSamples = function(mu, cn, samples, nonneg = FALSE){
 
   p = dim(mu)[1]
