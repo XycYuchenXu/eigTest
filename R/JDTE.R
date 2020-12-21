@@ -9,7 +9,7 @@
 #' @return Matrix \code{U}.
 #' @export
 #'
-#' @import 'MASS'
+#' @importFrom 'MASS' ginv
 #'
 #' @examples JDTE(countryCoeff)
 JDTE = function(A, n = ncol(A[[1]]), p = length(A), iter = 5000, tol = 10^(-16)){

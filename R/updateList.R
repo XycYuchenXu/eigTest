@@ -8,7 +8,7 @@
 #' @return LIst of transformed matrices
 #' @export
 #'
-#' @examples updateList(countryCoeff, diag(3))
+#' @keywords internal
 updateList = function(A, Q){
   p = length(A)
   for (i in 1:p) {

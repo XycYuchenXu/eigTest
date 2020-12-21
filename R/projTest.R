@@ -3,8 +3,9 @@
 #' @param A List of matrices to be tested. Require the length to be 2.
 #' @param covList List of covariance matrices corresponding to the random matrices, default will use identity matrices
 #' @param cn Constant for convergence
-#' @param n Matrix dimension
+#' @param d Matrix dimension
 #' @param param.out Logical. Whether the parameters need to be included in output
+#' @param eps The threshold of eigenvalues when compute general inverse of covariance matrices
 #'
 #' @return The p-value or a list of test information.
 #' \itemize{
@@ -14,16 +15,14 @@
 #' }
 #' @export
 #'
-#' @importFrom MASS ginv
-#'
-#' @examples projTest(countryCoeff, countryCovar, cn = 102)
-projTest = function(A, covList = list(), cn, n = ncol(A[[1]]), param.out = FALSE){
+#' @examples projTest(countryCoeff, countryCovar, cn = sqrt(112), eps = 112^(-1/3))
+projTest = function(A, covList = list(), cn, eps, d = ncol(A[[1]]), param.out = FALSE){
 
   p = 2
 
   if (length(covList) == 0) {
-    cov1 = diag(n^2)
-    cov2 = diag(n^2)
+    cov1 = diag(d^2)
+    cov2 = diag(d^2)
   } else {
     cov1 = covList[[1]]
     cov2 = covList[[2]]
@@ -32,11 +31,11 @@ projTest = function(A, covList = list(), cn, n = ncol(A[[1]]), param.out = FALSE
   C = A[[1]]
   D = A[[2]]
 
-  C.temp = diag(n)
-  D.temp = diag(n)
+  C.temp = diag(d)
+  D.temp = diag(d)
   SP.C = as.vector(C.temp)/norm(C.temp, 'F')
   SP.D = as.vector(D.temp)/norm(D.temp, 'F')
-  for (i in 1:(n-1)) {
+  for (i in 1:(d-1)) {
     C.temp = C.temp %*% C
     D.temp = D.temp %*% D
     C.temp = C.temp/norm(C.temp, 'F')
@@ -44,15 +43,18 @@ projTest = function(A, covList = list(), cn, n = ncol(A[[1]]), param.out = FALSE
     SP.C = cbind(SP.C, as.vector(C.temp))
     SP.D = cbind(SP.D, as.vector(D.temp))
   }
-  Q1 = ginv(cov1) - ginv(cov1) %*% SP.D %*% ginv(crossprod(SP.D, ginv(cov1) %*% SP.D)) %*% t(SP.D) %*% ginv(cov1)
-  Q2 = ginv(cov2) - ginv(cov2) %*% SP.C %*% ginv(crossprod(SP.C, ginv(cov2) %*% SP.C)) %*% t(SP.C) %*% ginv(cov2)
+  tSVD1 = truncateSVD(cov1, eps); tSVD2 = truncateSVD(cov2, eps)
+  inner1 = truncateSVD(crossprod(SP.D, tSVD1$ginv %*% SP.D), eps)
+  inner2 = truncateSVD(crossprod(SP.C, tSVD2$ginv %*% SP.C), eps)
+  Q1 = tSVD1$ginv - tSVD1$ginv %*% SP.D %*% inner1$ginv %*% t(SP.D) %*% tSVD1$ginv
+  Q2 = tSVD2$ginv - tSVD2$ginv %*% SP.C %*% inner2$ginv %*% t(SP.C) %*% tSVD2$ginv
 
-  r = 2*n^2-2*n
+  r = tSVD1$r + tSVD2$r - inner1$r - inner2$r
   testVal = crossprod(as.double(C), Q1 %*% as.double(C)) + crossprod(as.double(D), Q2 %*% as.double(D))
   testVal = testVal * cn^2
 
   if (param.out) {
-    testResult = list(testVal, r[1], 1 - pchisq(testVal, r))
+    testResult = list(testVal, r, 1 - pchisq(testVal, r))
     names(testResult) = c('statistic', 'df', 'pvalue')
   } else {
     testResult = 1 - pchisq(testVal, r)

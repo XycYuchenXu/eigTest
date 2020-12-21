@@ -8,6 +8,7 @@ eigTest(
   A,
   covList = list(),
   cn,
+  eps = NULL,
   V = JDTE(A),
   n = ncol(A[[1]]),
   p = length(A),
@@ -21,6 +22,8 @@ eigTest(
 \item{covList}{List of covariance matrices, default with use identity matrices}
 
 \item{cn}{Constant for convergence}
+
+\item{eps}{The threshold of eigenvalues when compute general inverse of covariance matrices. Must be supplied when \code{testType = 'chi'}}
 
 \item{V}{Eigenvector to be tested}
 
@@ -47,5 +50,5 @@ P-value or a list of test information.
 Test Whole Set of Eigenvectors
 }
 \examples{
-eigTest(countryCoeff, countryCovar, cn = 102, testType = 'gam')
+eigTest(countryCoeff, countryCovar, cn = sqrt(112), testType = 'gam')
 }

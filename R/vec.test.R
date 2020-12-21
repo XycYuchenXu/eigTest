@@ -4,6 +4,7 @@
 #' @param covList List of covariance matrices corresponding to the vectors, default will use identity matrices
 #' @param testType The test methods. Either for exact chi-squared test, or approximated gamma test
 #' @param cn The constant for convergence, or a vector of constants.
+#' @param eps The threshold of eigenvalues when compute general inverse of covariance matrices. Must be supplied when \code{testType = 'chi'}
 #'
 #' @return A list of test information.
 #' \itemize{
@@ -16,17 +17,15 @@
 #' }
 #' @export
 #'
-#' @import 'stats' 'MASS'
-#'
-#' @importFrom Matrix rankMatrix
+#' @import 'stats'
 #'
 #' @examples p = length(countryCoeff)
 #' vlist = vector('list', p)
 #' for (i in 1:p) {
 #'   vlist[[i]] = as.double(countryCoeff[[i]])
 #' }
-#' vec.test(vlist, countryCovar, cn = sqrt(102), testType = 'chi')
-vec.test = function(Vlist, covList = list(), cn, testType = c('chi', 'gam')){
+#' vec.test(vlist, countryCovar, cn = sqrt(112), eps = 112^(-1/3), testType = 'chi')
+vec.test = function(Vlist, covList = list(), cn, eps=NULL, testType = c('chi', 'gam')){
 
   p = length(Vlist)
   if (length(covList) == 0) {
@@ -47,11 +46,11 @@ vec.test = function(Vlist, covList = list(), cn, testType = c('chi', 'gam')){
     r = 0
     for (i in 1:p) {
       vi = Vlist[[i]]
-      sig.i = covList[[i]]
-      testVal = testVal + crossprod(vi, ginv(sig.i) %*% vi) * cn[i]^2
-      r = r + rankMatrix(sig.i)
+      s = truncateSVD(covList[[i]], eps)
+      testVal = testVal + crossprod(vi, s$ginv %*% vi) * cn[i]^2
+      r = r + s$r
     }
-    testResult = list(testType, testVal, r[1], 1 - pchisq(testVal, r))
+    testResult = list(testType, testVal, r, 1 - pchisq(testVal, r))
     names(testResult) = c('testType', 'statistic', 'df', 'pvalue')
   } else {
     me = 0

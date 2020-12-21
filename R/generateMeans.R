@@ -15,7 +15,7 @@
 #'         If \code{control.g = TRUE}, \code{q = length(snr) + 1} otherwise \code{q = 1}.
 #' @export
 #'
-#' @import 'MASS'
+#' @importFrom 'MASS' ginv
 #' @import gtools
 #'
 #' @examples generateMeans(5,8,3)

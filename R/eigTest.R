@@ -8,6 +8,7 @@
 #' @param testType The test methods. Either for exact chi-squared test, or approximated gamma test.
 #' @param cn Constant for convergence
 #' @param param.out The parameters of limiting distribution should be output or not
+#' @param eps The threshold of eigenvalues when compute general inverse of covariance matrices. Must be supplied when \code{testType = 'chi'}
 #'
 #' @return P-value or a list of test information.
 #' \itemize{
@@ -20,10 +21,10 @@
 #' }
 #' @export
 #'
-#' @import 'MASS'
+#' @importFrom 'MASS' ginv
 #'
-#' @examples eigTest(countryCoeff, countryCovar, cn = 102, testType = 'gam')
-eigTest = function(A, covList = list(), cn, V = JDTE(A), n = ncol(A[[1]]),
+#' @examples eigTest(countryCoeff, countryCovar, cn = sqrt(112), testType = 'gam')
+eigTest = function(A, covList = list(), cn, eps=NULL, V = JDTE(A), n = ncol(A[[1]]),
                    p = length(A), testType = c('chi', 'gam'), param.out = FALSE){
 
   if (length(covList) == 0) {
@@ -43,10 +44,10 @@ eigTest = function(A, covList = list(), cn, V = JDTE(A), n = ncol(A[[1]]),
   }
 
   if (length(testType) == 2) {
-    output = c(vec.test(Vlist, covList, cn, 'chi')$pvalue, vec.test(Vlist, covList, cn, 'gam')$pvalue)
+    output = c(vec.test(Vlist, covList, cn, eps, 'chi')$pvalue, vec.test(Vlist, covList, cn, eps, 'gam')$pvalue)
     return(output)
   } else {
-    testResult = vec.test(Vlist, covList, cn, testType)
+    testResult = vec.test(Vlist, covList, cn, eps, testType)
 
     if (param.out) {return(testResult)}
     return(testResult$pvalue)

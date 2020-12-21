@@ -12,7 +12,6 @@
 #' @export
 #'
 #' @importFrom Matrix Schur
-#' @importFrom MASS ginv
 #' @importFrom pracma quadprog
 #'
 #' @examples partSchur(countryCoeff, k = 2)

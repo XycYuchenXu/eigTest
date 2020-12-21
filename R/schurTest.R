@@ -10,6 +10,7 @@
 #' @param testType The test methods. Either for exact chi-squared test, or approximated gamma test
 #' @param param.out The parameters of limiting distribution should be output or not
 #' @param nn Logical whether the eigenvector elements are nonnegative
+#' @param eps The threshold of eigenvalues when compute general inverse of covariance matrices. Must be supplied when \code{testType = 'chi'}
 #'
 #' @return P-value or a list of test information.
 #' \itemize{
@@ -22,8 +23,8 @@
 #' }
 #' @export
 #'
-#' @examples schurTest(countryCoeff, countryCovar, k = 2, cn = 102, testType = 'chi')
-schurTest = function(A, covList = list(), k, cn, nn = FALSE, Q = NULL, n = ncol(A[[1]]), p = length(A), testType = c('gam', 'chi'), param.out = FALSE){
+#' @examples schurTest(countryCoeff, countryCovar, k = 2, cn = sqrt(112), eps = 112^(-1/3), testType = 'chi')
+schurTest = function(A, covList = list(), k, cn, eps=NULL, nn = FALSE, Q = NULL, n = ncol(A[[1]]), p = length(A), testType = c('gam', 'chi'), param.out = FALSE){
 
   if (is.null(Q)) {Q = partSchur(A, k, nonneg = nn)}
   if (length(covList) == 0) {
@@ -32,7 +33,7 @@ schurTest = function(A, covList = list(), k, cn, nn = FALSE, Q = NULL, n = ncol(
       covList[[i]] = diag(n^2)
     }
   }
-  if (k >= n) {return(eigTest(A, covList, cn, testType, param.out))}
+  if (k >= n) {return(eigTest(A, covList, cn, eps, testType, param.out))}
   Mat = matrix(0, nrow = n, ncol = n)
   Mat[1:k,(k+1):n] = 1
   Mat = as.double(Mat)
@@ -47,10 +48,10 @@ schurTest = function(A, covList = list(), k, cn, nn = FALSE, Q = NULL, n = ncol(
   }
 
   if (length(testType) == 2) {
-    output = c(vec.test(Vlist, covList, cn, 'chi')$pvalue, vec.test(Vlist, covList, cn, 'gam')$pvalue)
+    output = c(vec.test(Vlist, covList, cn, eps, 'chi')$pvalue, vec.test(Vlist, covList, cn, eps, 'gam')$pvalue)
     return(output)
   } else {
-    testResult = vec.test(Vlist, covList, cn, testType)
+    testResult = vec.test(Vlist, covList, cn, eps, testType)
 
     if (param.out) {return(testResult)}
     return(testResult$pvalue)

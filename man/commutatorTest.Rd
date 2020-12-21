@@ -7,6 +7,7 @@
 commutatorTest(
   matList,
   cn,
+  eps = NULL,
   d = nrow(A),
   covList = list(diag(d^2), diag(d^2)),
   testType = c("chi", "gam")
@@ -16,6 +17,8 @@ commutatorTest(
 \item{matList}{The list of two matrices to be tested}
 
 \item{cn}{Constant for convergence}
+
+\item{eps}{The threshold of eigenvalues when compute general inverse of covariance matrices. Must be supplied when \code{testType = 'chi'}}
 
 \item{d}{Size of matrices}
 
@@ -40,5 +43,5 @@ Test on the commutator of two matrices
 \examples{
 means = generateMeans(5,2)
 samples = simuSamples(means, sqrt(100), 1)
-commutatorTest(samples[[1]][[1]][[1]][[1]], sqrt(400))
+commutatorTest(samples[[1]][[1]][[1]][[1]], sqrt(400), 400^(-1/3))
 }

@@ -4,7 +4,7 @@
 \alias{vec.test}
 \title{Calculate the p-value for normal random vectors with specified covariance matrices}
 \usage{
-vec.test(Vlist, covList = list(), cn, testType = c("chi", "gam"))
+vec.test(Vlist, covList = list(), cn, eps = NULL, testType = c("chi", "gam"))
 }
 \arguments{
 \item{Vlist}{List of vectors}
@@ -12,6 +12,8 @@ vec.test(Vlist, covList = list(), cn, testType = c("chi", "gam"))
 \item{covList}{List of covariance matrices corresponding to the vectors, default will use identity matrices}
 
 \item{cn}{The constant for convergence, or a vector of constants.}
+
+\item{eps}{The threshold of eigenvalues when compute general inverse of covariance matrices. Must be supplied when \code{testType = 'chi'}}
 
 \item{testType}{The test methods. Either for exact chi-squared test, or approximated gamma test}
 }
@@ -35,5 +37,5 @@ vlist = vector('list', p)
 for (i in 1:p) {
   vlist[[i]] = as.double(countryCoeff[[i]])
 }
-vec.test(vlist, countryCovar, cn = sqrt(102), testType = 'chi')
+vec.test(vlist, countryCovar, cn = sqrt(112), eps = 112^(-1/3), testType = 'chi')
 }

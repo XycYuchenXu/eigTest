@@ -17,6 +17,4 @@ LIst of transformed matrices
 \description{
 Calculate the list of matrices after orthogonal transformation by matrix \code{Q}
 }
-\examples{
-updateList(countryCoeff, diag(3))
-}
+\keyword{internal}

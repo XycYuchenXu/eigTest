@@ -5,6 +5,7 @@
 #' @param d Size of matrices
 #' @param covList The list of covariance matrices of the two matrices, default will use identity matrices
 #' @param testType The test methods. Either for exact chi-squared test, or approximated gamma test
+#' @param eps The threshold of eigenvalues when compute general inverse of covariance matrices. Must be supplied when \code{testType = 'chi'}
 #'
 #' @return A list of test information.
 #' \itemize{
@@ -17,14 +18,12 @@
 #' }
 #' @export
 #'
-#' @import 'MASS' 'stats'
-#'
-#' @importFrom Matrix rankMatrix
+#' @import 'stats'
 #'
 #' @examples means = generateMeans(5,2)
 #' samples = simuSamples(means, sqrt(100), 1)
-#' commutatorTest(samples[[1]][[1]][[1]][[1]], sqrt(400))
-commutatorTest = function(matList, cn, d = nrow(A),
+#' commutatorTest(samples[[1]][[1]][[1]][[1]], sqrt(400), 400^(-1/3))
+commutatorTest = function(matList, cn, eps=NULL, d = nrow(A),
                           covList = list(diag(d^2), diag(d^2)),
                           testType = c('chi', 'gam')) {
 
@@ -44,5 +43,5 @@ commutatorTest = function(matList, cn, d = nrow(A),
 
   sigma.y = tcrossprod(QA, QA %*% covB) + tcrossprod(QB, QB %*% covA)
 
-  return(vec.test(list(y), list(sigma.y), cn, testType))
+  return(vec.test(list(y), list(sigma.y), cn, eps, testType))
 }

@@ -12,6 +12,7 @@
 #' @param testType The test methods. Either for exact chi-squared test, or approximated gamma test
 #' @param param.out The parameters of limiting distribution should be output or not
 #' @param nn Logical whether the eigenvector elements are nonnegative
+#' @param eps The threshold of eigenvalues when compute general inverse of covariance matrices. Must be supplied when \code{testType = 'chi'}
 #'
 #' @return P-value or a list of test information.
 #' \itemize{
@@ -24,10 +25,10 @@
 #' }
 #' @export
 #'
-#' @import 'MASS'
+#' @importFrom 'MASS' ginv
 #'
-#' @examples partialTest(countryCoeff, countryCovar, k = 2, cn = 102, testType = 'gam')
-partialTest = function(A, covList = list(), k, cn, nn = FALSE,
+#' @examples partialTest(countryCoeff, countryCovar, k = 2, cn = sqrt(112), testType = 'gam')
+partialTest = function(A, covList = list(), k, cn, eps, nn = FALSE,
                        Q = expmPartSchur(A,k, nn = nn), n = nrow(A[[1]]),
                        p = length(A), testType = c('chi', 'gam'),
                        param.out = FALSE){
@@ -41,10 +42,10 @@ partialTest = function(A, covList = list(), k, cn, nn = FALSE,
   if (k >= n) {k = n}
   if (k <= 0) {k = n}
   if (k == n) {
-    return(eigTest(A, covList, cn, testType = testType, param.out = param.out))
+    return(eigTest(A, covList, cn, eps, testType = testType, param.out = param.out))
   }
   if (k == 1) {
-    return(schurTest(A, covList, k, cn, testType = testType, param.out = param.out, nn = nn))
+    return(schurTest(A, covList, k, cn, eps, testType = testType, param.out = param.out, nn = nn))
   }
 
   matB = matrix(0, ncol = n, nrow = n)
@@ -78,10 +79,10 @@ partialTest = function(A, covList = list(), k, cn, nn = FALSE,
   }
 
   if (length(testType) == 2) {
-    output = c(vec.test(Vlist, covList, cn, 'chi')$pvalue, vec.test(Vlist, covList, cn, 'gam')$pvalue)
+    output = c(vec.test(Vlist, covList, cn, eps, 'chi')$pvalue, vec.test(Vlist, covList, cn, eps, 'gam')$pvalue)
     return(output)
   } else {
-    testResult = vec.test(Vlist, covList, cn, testType)
+    testResult = vec.test(Vlist, covList, cn, eps, testType)
     if (param.out) {return(testResult)}
     return(testResult$pvalue)
   }

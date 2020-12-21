@@ -4,7 +4,7 @@
 \alias{projTest}
 \title{Calculate the p-value for projected MLE with specified covariance matrices}
 \usage{
-projTest(A, covList = list(), cn, n = ncol(A[[1]]), param.out = FALSE)
+projTest(A, covList = list(), cn, eps, d = ncol(A[[1]]), param.out = FALSE)
 }
 \arguments{
 \item{A}{List of matrices to be tested. Require the length to be 2.}
@@ -13,7 +13,9 @@ projTest(A, covList = list(), cn, n = ncol(A[[1]]), param.out = FALSE)
 
 \item{cn}{Constant for convergence}
 
-\item{n}{Matrix dimension}
+\item{eps}{The threshold of eigenvalues when compute general inverse of covariance matrices}
+
+\item{d}{Matrix dimension}
 
 \item{param.out}{Logical. Whether the parameters need to be included in output}
 }
@@ -29,5 +31,5 @@ The p-value or a list of test information.
 Calculate the p-value for projected MLE with specified covariance matrices
 }
 \examples{
-projTest(countryCoeff, countryCovar, cn = 102)
+projTest(countryCoeff, countryCovar, cn = sqrt(112), eps = 112^(-1/3))
 }

@@ -12,6 +12,7 @@
 #' @export
 #'
 #' @importFrom Matrix expm
+#' @importFrom 'MASS' ginv
 #'
 #' @examples expmPartSchur(countryCoeff, 2)
 expmPartSchur = function(A, k, n = ncol(A[[1]]), p = length(A), iter = 5000, tol = 10^(-12), nn = FALSE){

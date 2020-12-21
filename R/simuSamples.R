@@ -21,8 +21,6 @@
 #'
 #' @export
 #'
-#' @import 'MASS'
-#'
 #' @examples simuSamples(generateMeans(5,4,3), sqrt(c(50,100)), 50)
 simuSamples = function(mu, cn, samples, nonneg = FALSE){
 
