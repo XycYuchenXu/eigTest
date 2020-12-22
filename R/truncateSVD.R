@@ -18,7 +18,9 @@ truncateSVD = function(A, eps){
   s = svd(A)
   A.eps = s$u %*% diag((s$d > eps)*s$d) %*% t(s$v)
   r = sum(s$d > eps)
-  ginv.A = s$v %*% diag((s$d > eps)/s$d) %*% t(s$u)
+  d.inv = (s$d > eps)/s$d
+  d.inv[is.na(d.inv)] = 0
+  ginv.A = s$v %*% diag(d.inv) %*% t(s$u)
 
   output = list(Id = A.eps, r = r, ginv = ginv.A)
   return(output)
