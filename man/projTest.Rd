@@ -4,12 +4,22 @@
 \alias{projTest}
 \title{Calculate the p-value for projected MLE with specified covariance matrices}
 \usage{
-projTest(A, covList = list(), cn, eps, d = ncol(A[[1]]), param.out = FALSE)
+projTest(
+  A,
+  covList = list(),
+  refMat = A,
+  cn,
+  eps,
+  d = ncol(A[[1]]),
+  param.out = FALSE
+)
 }
 \arguments{
 \item{A}{List of matrices to be tested. Require the length to be 2.}
 
 \item{covList}{List of covariance matrices corresponding to the random matrices, default will use identity matrices}
+
+\item{refMat}{The list of reference matrices with the same eigenvectors, default is to use the estimated \code{A}}
 
 \item{cn}{Constant for convergence}
 
@@ -28,7 +38,7 @@ The p-value or a list of test information.
 }
 }
 \description{
-Calculate the p-value for projected MLE with specified covariance matrices
+Only valid for nonsingular covariance matrices \code{covList}.
 }
 \examples{
 projTest(countryCoeff, countryCovar, cn = sqrt(112), eps = 112^(-1/3))
