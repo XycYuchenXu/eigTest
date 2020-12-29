@@ -52,12 +52,12 @@ projTest = function(A, covList = list(), refMat = A, cn, eps, d = ncol(A[[1]]), 
     SP.C = cbind(SP.C, as.vector(C.temp))
     SP.D = cbind(SP.D, as.vector(D.temp))
   }
-  cov1.r = ginv(cov1); cov2.r = ginv(cov2)
-  inner1 = ginv(crossprod(SP.D, cov1.r %*% SP.D)); inner2 = ginv(crossprod(SP.C, cov2.r %*% SP.C))
-  Q1 = cov1.r - cov1.r %*% SP.D %*% inner1 %*% t(SP.D) %*% cov1.r
-  Q2 = cov2.r - cov2.r %*% SP.C %*% inner2 %*% t(SP.C) %*% cov2.r
+  cov1.svd = truncateSVD(cov1, eps); cov2.svd = truncateSVD(cov2, eps)
+  inner1 = ginv(crossprod(SP.D, cov1.svd$ginv %*% SP.D)); inner2 = ginv(crossprod(SP.C, cov2.svd$ginv %*% SP.C))
+  Q1 = cov1.svd$ginv - cov1.svd$ginv %*% SP.D %*% inner1 %*% t(SP.D) %*% cov1.svd$ginv
+  Q2 = cov2.svd$ginv - cov2.svd$ginv %*% SP.C %*% inner2 %*% t(SP.C) %*% cov2.svd$ginv
 
-  r = 2*d*(d-1)
+  r = cov1.svd$r + cov2.svd$r
   testVal = crossprod(as.double(X), Q1 %*% as.double(X)) + crossprod(as.double(Y), Q2 %*% as.double(Y))
   testVal = testVal * cn^2
 
