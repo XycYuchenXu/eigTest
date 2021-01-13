@@ -46,7 +46,7 @@ JDTE = function(A, n = ncol(A[[1]]), p = length(A), iter = 5000, tol = 10^(-16))
         num = 0
         for (j in 1:p) {
           Aj = tempA[[j]]
-          denum = denum + (Aj[r,r] - Aj[s,s])^2 + 1
+          denum = denum + (Aj[r,r] - Aj[s,s])^2
           num = num + Aj[r,s]*(Aj[r,r] - Aj[s,s])
         }
         Z[r,s] = - num/denum
