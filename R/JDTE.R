@@ -37,7 +37,7 @@ JDTE = function(A, d = dim(A)[2], p = dim(A)[1], iter = 5000, tol = 10^(-16)){
   score.old = score.fun(A, p)
   for (i in 1:iter) {
 
-    Z = matrix(0, nrow = d, ncol = d)
+    Z = diag(d)
 
     for (r in 1:d) {
       for (s in 1:d) {
@@ -46,21 +46,19 @@ JDTE = function(A, d = dim(A)[2], p = dim(A)[1], iter = 5000, tol = 10^(-16)){
         num = 0
         for (j in 1:p) {
           Aj = tempA[j,,]
-          denum = denum + (Aj[r,r] - Aj[s,s])^2 + 1
+          denum = denum + (Aj[r,r] - Aj[s,s])^2
           num = num + Aj[r,s]*(Aj[r,r] - Aj[s,s])
         }
         Z[r,s] = - num/denum
       }
     }
 
-    B = diag(d) + Z
-
     for (j in 1:p) {
-      tempA[j,,] = ginv(B) %*% tempA[j,,] %*% B
+      tempA[j,,] = ginv(Z) %*% tempA[j,,] %*% Z
     }
 
-    U = U %*% B
-    U = U/norm(U, type = '2')
+    U = U %*% Z
+    #U = U/norm(U, type = '2')
     score.new = score.fun(tempA, p)
     if (abs(score.new - score.old) < tol) {
       break()
