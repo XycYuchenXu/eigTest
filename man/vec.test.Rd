@@ -4,12 +4,12 @@
 \alias{vec.test}
 \title{Calculate the p-value for normal random vectors with specified covariance matrices}
 \usage{
-vec.test(Vlist, covList = list(), cn, eps = NULL, testType = c("chi", "gam"))
+vec.test(V.arr, cov.arr = NULL, cn, eps = NULL, testType = c("chi", "gam"))
 }
 \arguments{
-\item{Vlist}{List of vectors}
+\item{V.arr}{Array of vectors}
 
-\item{covList}{List of covariance matrices corresponding to the vectors, default will use identity matrices}
+\item{cov.arr}{Array of covariance matrices corresponding to the vectors, default will use identity matrices}
 
 \item{cn}{The constant for convergence, or a vector of constants.}
 
@@ -32,10 +32,10 @@ A list of test information.
 Calculate the p-value for normal random vectors with specified covariance matrices
 }
 \examples{
-p = length(countryCoeff)
-vlist = vector('list', p)
+p = dim(countryCoeff)[1]
+varr = matrix(0, p, dim(countryCoeff)[2]^2)
 for (i in 1:p) {
-  vlist[[i]] = as.double(countryCoeff[[i]])
+  varr[i,] = as.double(countryCoeff[i,,])
 }
-vec.test(vlist, countryCovar, cn = sqrt(112), eps = 112^(-1/3), testType = 'chi')
+vec.test(varr, countryCovar, cn = sqrt(112), eps = 112^(-1/3), testType = 'chi')
 }

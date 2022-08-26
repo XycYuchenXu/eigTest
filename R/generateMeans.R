@@ -38,6 +38,9 @@ generateMeans = function(d, p, k = d, V = matrix(0, ncol = d, nrow = d), v = rep
   }
 
   mu = array(0, dim = c(p, means.groups, d, d))
+  dimnames(mu) = list(paste0('Mat ID: i=', 1:p),
+                      paste0('1/SNR=', SNR),
+                      NULL, NULL)
 
   if (!nonneg) {
     orth = matrix(rnorm(d^2), ncol = d)

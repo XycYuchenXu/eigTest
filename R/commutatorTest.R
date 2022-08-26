@@ -1,9 +1,9 @@
 #' Test on the commutator of two matrices
 #'
-#' @param matList The list of two matrices to be tested
+#' @param mat.arr The array of two matrices to be tested
 #' @param cn Constant for convergence
 #' @param d Size of matrices
-#' @param covList The list of covariance matrices of the two matrices, default will use identity matrices
+#' @param cov.arr The array of covariance matrices of the two matrices, default will use identity matrices
 #' @param testType The test methods. Either for exact chi-squared test, or approximated gamma test
 #' @param eps The threshold of eigenvalues when compute general inverse of covariance matrices. Must be supplied when \code{testType = 'chi'}
 #'
@@ -22,26 +22,31 @@
 #'
 #' @examples means = generateMeans(5,2)
 #' samples = simuSamples(means, sqrt(100), 1)
-#' commutatorTest(samples[[1]][[1]][[1]][[1]], sqrt(400), 400^(-1/3))
-commutatorTest = function(matList, cn, eps=NULL, d = nrow(A),
-                          covList = list(diag(d^2), diag(d^2)),
-                          testType = c('chi', 'gam')) {
+#' commutatorTest(samples[[1]][1,1,1,,,], sqrt(400), 400^(-1/3))
+commutatorTest = function(mat.arr, cn, eps=NULL, d = dim(mat.arr)[2],
+                          cov.arr = NULL, testType = c('chi', 'gam')) {
 
   if (length(testType) == 2){
     testType = 'chi'
   }
 
-  A = matList[[1]]
-  B = matList[[2]]
-  covA = covList[[1]]
-  covB = covList[[2]]
+  if (is.null(cov.arr)) {
+    covA = diag(d^2)
+    covB = diag(d^2)
+  } else {
+    covA = cov.arr[1,,]
+    covB = cov.arr[2,,]
+  }
 
-  y = matrix(data = A %*% B - B %*% A, ncol = 1)
+  A = mat.arr[1,,]
+  B = mat.arr[2,,]
+
+  y = array(A %*% B - B %*% A, dim = c(1, d^2))
 
   QA = kronecker(diag(d), A) - kronecker(t(A), diag(d))
   QB = kronecker(diag(d), B) - kronecker(t(B), diag(d))
 
-  sigma.y = tcrossprod(QA, QA %*% covB) + tcrossprod(QB, QB %*% covA)
+  sigma.y = array(tcrossprod(QA, QA %*% covB) + tcrossprod(QB, QB %*% covA), dim = c(1, d^2, d^2))
 
-  return(vec.test(list(y), list(sigma.y), cn, eps, testType))
+  return(vec.test(y, sigma.y, cn, eps, testType))
 }

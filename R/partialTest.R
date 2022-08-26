@@ -2,12 +2,12 @@
 #'
 #' Test whether a subset of common eigenvectors are shared by the list of random matrices.
 #'
-#' @param A List of original matrices
-#' @param covList List of original covariance matrices, default will use identity matrices
+#' @param A Array of original matrices
+#' @param cov.arr Array of original covariance matrices, default will use identity matrices
 #' @param k Size of the block matrices to be tested
 #' @param cn Constant for convergence
 #' @param Q Schur components for transformation
-#' @param n Size of original matrices
+#' @param d Size of original matrices
 #' @param p Number of matrices
 #' @param testType The test methods. Either for exact chi-squared test, or approximated gamma test
 #' @param param.out The parameters of limiting distribution should be output or not
@@ -28,61 +28,63 @@
 #' @importFrom 'MASS' ginv
 #'
 #' @examples partialTest(countryCoeff, countryCovar, k = 2, cn = sqrt(112), testType = 'gam')
-partialTest = function(A, covList = list(), k, cn, eps, nn = FALSE,
-                       Q = expmPartSchur(A,k, nn = nn), n = nrow(A[[1]]),
-                       p = length(A), testType = c('chi', 'gam'),
+partialTest = function(A, cov.arr = NULL, k, cn, eps, nn = FALSE,
+                       Q = expmPartSchur(A, k, nn = nn), d = dim(A)[2],
+                       p = dim(A)[1], testType = c('chi', 'gam'),
                        param.out = FALSE){
 
-  if (length(covList) == 0) {
-    covList = vector('list', p)
+  if (is.null(cov.arr)) {
+    cov.arr = array(0, c(p, d^2, d^2))
     for (i in 1:p) {
-      covList[[i]] = diag(n^2)
+      cov.arr[i,,] = diag(d^2)
     }
   }
-  if (k >= n) {k = n}
-  if (k <= 0) {k = n}
-  if (k == n) {
-    return(eigTest(A, covList, cn, eps, testType = testType, param.out = param.out))
+
+  if (k >= d) {k = d}
+  if (k <= 0) {k = d}
+  if (k == d) {
+    return(eigTest(A, cov.arr, cn, eps, testType = testType, param.out = param.out))
   }
   if (k == 1) {
-    return(schurTest(A, covList, k, cn, eps, testType = testType, param.out = param.out, nn = nn))
+    return(schurTest(A, cov.arr, k, cn, eps, testType = testType, param.out = param.out, nn = nn))
   }
 
-  matB = matrix(0, ncol = n, nrow = n)
-  matC = matrix(0, ncol = n, nrow = n)
+  matB = matrix(0, d, d)
+  matC = matrix(0, d, d)
   matB[1:k, 1:k] = 1
   SB = diag(as.double(matB))
   SB = SB[which(as.double(matB) == 1),]
-  matC[1:k, (k+1):n] = 1
+  matC[1:k, (k+1):d] = 1
   SC = diag(as.double(matC))
   SC = SC[which(as.double(matC) == 1),]
   SBC = rbind(SB, SC)
 
   SQ = SBC %*% kronecker(t(Q), t(Q))
 
-  B = vector('list', p)
+  B = array(0, c(p,k,k))
   for (i in 1:p) {
-    Ai = t(Q) %*% A[[i]] %*% Q
-    B[[i]] = Ai[1:k, 1:k]
+    Ai = t(Q) %*% A[i,,] %*% Q
+    B[i,,] = Ai[1:k, 1:k]
   }
   V = JDTE(B)
   SV = (diag(k^2) - diag(as.vector(diag(k)))) %*% kronecker(t(V), ginv(V))
 
-  SW = matrix(0, nrow = k*n, ncol = n*k)
+  SW = matrix(0, nrow = k*d, ncol = d*k)
   SW[1:(k^2), 1:(k^2)] = SV
-  SW[(k^2+1):(k*n), (k^2+1):(n*k)] = diag(k*(n-k))
+  SW[(k^2+1):(k*d), (k^2+1):(k*d)] = diag(k*(d-k))
 
-  Vlist = vector('list', p)
+  Varr = array(0, c(p, k*d))
   for (i in 1:p) {
-    Vlist[[i]] = SW %*% SQ %*% as.double(A[[i]])
-    covList[[i]] = tcrossprod(SW %*% SQ, SW %*% SQ %*% covList[[i]])
+    Varr[i,] = SW %*% SQ %*% as.double(A[i,,])
+    cov.arr[i, 1:(k*d), 1:(k*d)] = tcrossprod(SW %*% SQ, SW %*% SQ %*% cov.arr[i,,])
   }
+  cov.arr = cov.arr[,1:(k*d),1:(k*d)]
 
   if (length(testType) == 2) {
-    output = c(vec.test(Vlist, covList, cn, eps, 'chi')$pvalue, vec.test(Vlist, covList, cn, eps, 'gam')$pvalue)
+    output = c(vec.test(Varr, cov.arr, cn, eps, 'chi')$pvalue, vec.test(Varr, cov.arr, cn, eps, 'gam')$pvalue)
     return(output)
   } else {
-    testResult = vec.test(Vlist, covList, cn, eps, testType)
+    testResult = vec.test(Varr, cov.arr, cn, eps, testType)
     if (param.out) {return(testResult)}
     return(testResult$pvalue)
   }

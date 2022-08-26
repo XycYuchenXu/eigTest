@@ -1,7 +1,7 @@
 #' Calculate the p-value for normal random vectors with specified covariance matrices
 #'
-#' @param Vlist List of vectors
-#' @param covList List of covariance matrices corresponding to the vectors, default will use identity matrices
+#' @param V.arr Array of vectors
+#' @param cov.arr Array of covariance matrices corresponding to the vectors, default will use identity matrices
 #' @param testType The test methods. Either for exact chi-squared test, or approximated gamma test
 #' @param cn The constant for convergence, or a vector of constants.
 #' @param eps The threshold of eigenvalues when compute general inverse of covariance matrices. Must be supplied when \code{testType = 'chi'}
@@ -19,20 +19,20 @@
 #'
 #' @import 'stats'
 #'
-#' @examples p = length(countryCoeff)
-#' vlist = vector('list', p)
+#' @examples p = dim(countryCoeff)[1]
+#' varr = matrix(0, p, dim(countryCoeff)[2]^2)
 #' for (i in 1:p) {
-#'   vlist[[i]] = as.double(countryCoeff[[i]])
+#'   varr[i,] = as.double(countryCoeff[i,,])
 #' }
-#' vec.test(vlist, countryCovar, cn = sqrt(112), eps = 112^(-1/3), testType = 'chi')
-vec.test = function(Vlist, covList = list(), cn, eps=NULL, testType = c('chi', 'gam')){
+#' vec.test(varr, countryCovar, cn = sqrt(112), eps = 112^(-1/3), testType = 'chi')
+vec.test = function(V.arr, cov.arr = NULL, cn, eps=NULL, testType = c('chi', 'gam')){
 
-  p = length(Vlist)
-  if (length(covList) == 0) {
-    n = length(Vlist[[1]])
-    covList = vector('list', p)
+  p = dim(V.arr)[1]
+  if (is.null(cov.arr)) {
+    n = dim(V.arr)[2]
+    cov.arr = array(0, c(p, n, n))
     for (i in 1:p) {
-      covList[[i]] = diag(n)
+      cov.arr[i,,] = diag(n)
     }
   }
 
@@ -45,8 +45,8 @@ vec.test = function(Vlist, covList = list(), cn, eps=NULL, testType = c('chi', '
   if (testType == 'chi') {
     r = 0
     for (i in 1:p) {
-      vi = Vlist[[i]]
-      s = truncateSVD(covList[[i]], eps)
+      vi = V.arr[i,]
+      s = truncateSVD(cov.arr[i,,], eps)
       testVal = testVal + crossprod(vi, s$ginv %*% vi) * cn[i]^2
       r = r + s$r
     }
@@ -56,9 +56,9 @@ vec.test = function(Vlist, covList = list(), cn, eps=NULL, testType = c('chi', '
     me = 0
     va = 0
     for (i in 1:p) {
-      vi = Vlist[[i]]
-      testVal = testVal + norm(vi, 'F')^2 * cn[i]^2
-      sig.i = covList[[i]]
+      vi = V.arr[i,]
+      testVal = testVal + norm(vi, '2')^2 * cn[i]^2
+      sig.i = cov.arr[i,,]
       me = me + sum(diag(sig.i))
       va = va + 2*sum(diag(crossprod(sig.i)))
     }

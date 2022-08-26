@@ -1,6 +1,6 @@
 #' Initiate orthogonal matrix \code{Q}.
 #'
-#' @param A List of matrices
+#' @param A Array of matrices
 #'
 #' @return Best initial condition for function \code{partSchur}.
 #' @export
@@ -9,23 +9,23 @@
 #'
 init.Q = function(A){
 
-  n = ncol(A[[1]])
-  p = length(A)
+  d = dim(A)[2]
+  p = dim(A)[1]
 
-  if (n > 3) {
+  if (d > 3) {
     scores = c()
-    Q = array(0, dim = c(p,n,n))
-    Q.temp = diag(n)
+    Q = array(0, dim = c(p,d,d))
+    Q.temp = diag(d)
 
     for (i in 1:p) {
-      Q[i,,] = qr.Q(qr(Re(eigen(A[[i]])$vectors)))
+      Q[i,,] = qr.Q(qr(Re(eigen(A[i,,])$vectors)))
       Qi = Q[i,,]
       scores = c(scores, score.fun(A, Qi))
     }
     k = which.min(scores)[1]
     Q = Q[k,,]
   } else {
-    Q = diag(n)
+    Q = diag(d)
   }
 
   return(Q)

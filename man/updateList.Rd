@@ -7,12 +7,12 @@
 updateList(A, Q)
 }
 \arguments{
-\item{A}{Original list of matrices}
+\item{A}{Original array of matrices}
 
 \item{Q}{Orthogonal matrix}
 }
 \value{
-LIst of transformed matrices
+Array of transformed matrices
 }
 \description{
 Calculate the list of matrices after orthogonal transformation by matrix \code{Q}

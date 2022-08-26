@@ -7,7 +7,7 @@
 init.Q(A)
 }
 \arguments{
-\item{A}{List of matrices}
+\item{A}{Array of matrices}
 }
 \value{
 Best initial condition for function \code{partSchur}.

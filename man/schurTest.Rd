@@ -6,22 +6,22 @@
 \usage{
 schurTest(
   A,
-  covList = list(),
+  cov.arr = NULL,
   k,
   cn,
   eps = NULL,
   nn = FALSE,
   Q = NULL,
-  n = ncol(A[[1]]),
-  p = length(A),
+  d = dim(A)[2],
+  p = dim(A)[1],
   testType = c("gam", "chi"),
   param.out = FALSE
 )
 }
 \arguments{
-\item{A}{List of matrices}
+\item{A}{Array of matrices}
 
-\item{covList}{List of covariance matrices, default will use identity matrices}
+\item{cov.arr}{Array of covariance matrices, default will use identity matrices}
 
 \item{k}{Number of components to be tested}
 
@@ -33,7 +33,7 @@ schurTest(
 
 \item{Q}{Orthogonal components to be tested}
 
-\item{n}{Size of matrices}
+\item{d}{Size of matrices}
 
 \item{p}{Number of matrices}
 

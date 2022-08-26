@@ -1,11 +1,11 @@
 #' Test Schur Components
 #'
-#' @param A List of matrices
-#' @param covList List of covariance matrices, default will use identity matrices
+#' @param A Array of matrices
+#' @param cov.arr Array of covariance matrices, default will use identity matrices
 #' @param k Number of components to be tested
 #' @param cn Constant for convergence
 #' @param Q Orthogonal components to be tested
-#' @param n Size of matrices
+#' @param d Size of matrices
 #' @param p Number of matrices
 #' @param testType The test methods. Either for exact chi-squared test, or approximated gamma test
 #' @param param.out The parameters of limiting distribution should be output or not
@@ -24,34 +24,35 @@
 #' @export
 #'
 #' @examples schurTest(countryCoeff, countryCovar, k = 2, cn = sqrt(112), eps = 112^(-1/3), testType = 'chi')
-schurTest = function(A, covList = list(), k, cn, eps=NULL, nn = FALSE, Q = NULL, n = ncol(A[[1]]), p = length(A), testType = c('gam', 'chi'), param.out = FALSE){
+schurTest = function(A, cov.arr = NULL, k, cn, eps=NULL, nn = FALSE, Q = NULL, d = dim(A)[2], p = dim(A)[1], testType = c('gam', 'chi'), param.out = FALSE){
 
   if (is.null(Q)) {Q = partSchur(A, k, nonneg = nn)}
-  if (length(covList) == 0) {
-    covList = vector('list', p)
+  if (is.null(cov.arr)) {
+    cov.arr = array(0, c(p, d^2, d^2))
     for (i in 1:p) {
-      covList[[i]] = diag(n^2)
+      cov.arr[i,,] = diag(d^2)
     }
   }
-  if (k >= n) {return(eigTest(A, covList, cn, eps, testType, param.out))}
-  Mat = matrix(0, nrow = n, ncol = n)
-  Mat[1:k,(k+1):n] = 1
+  if (k >= d) {return(eigTest(A, cov.arr, cn, eps, testType, param.out))}
+  Mat = matrix(0, d, d)
+  Mat[1:k,(k+1):d] = 1
   Mat = as.double(Mat)
   select = diag(Mat)
   S = select[which(Mat == 1),]
   SV = S %*% kronecker(t(Q), t(Q))
 
-  Vlist = vector('list', p)
+  Varr = array(0, c(p, k*(d-k)))
   for (i in 1:p) {
-    Vlist[[i]] = S %*% as.double(crossprod(Q, A[[i]] %*% Q))
-    covList[[i]] = tcrossprod(SV, SV %*% covList[[i]])
+    Varr[i,] = S %*% as.double(crossprod(Q, A[i,,] %*% Q))
+    cov.arr[i,1:(k*(d-k)),1:(k*(d-k))] = tcrossprod(SV, SV %*% cov.arr[i,,])
   }
+  cov.arr = cov.arr[,1:(k*(d-k)),1:(k*(d-k))]
 
   if (length(testType) == 2) {
-    output = c(vec.test(Vlist, covList, cn, eps, 'chi')$pvalue, vec.test(Vlist, covList, cn, eps, 'gam')$pvalue)
+    output = c(vec.test(Varr, cov.arr, cn, eps, 'chi')$pvalue, vec.test(Varr, cov.arr, cn, eps, 'gam')$pvalue)
     return(output)
   } else {
-    testResult = vec.test(Vlist, covList, cn, eps, testType)
+    testResult = vec.test(Varr, cov.arr, cn, eps, testType)
 
     if (param.out) {return(testResult)}
     return(testResult$pvalue)

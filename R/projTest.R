@@ -1,7 +1,7 @@
 #' Calculate the p-value for projected MLE with specified covariance matrices
 #'
-#' @param A List of matrices to be tested. Require the length to be 2.
-#' @param covList List of covariance matrices corresponding to the random matrices, default will use identity matrices
+#' @param A Array of matrices to be tested. Require the length to be 2.
+#' @param cov.arr List of covariance matrices corresponding to the random matrices, default will use identity matrices
 #' @param cn Constant for convergence
 #' @param d Matrix dimension
 #' @param param.out Logical. Whether the parameters need to be included in output
@@ -17,28 +17,28 @@
 #' @importFrom MASS ginv
 #' @export
 #'
-#' @description Only valid for nonsingular covariance matrices \code{covList}.
+#' @description Only valid for nonsingular covariance matrices \code{cov.arr}.
 #'
 #' @examples projTest(countryCoeff, countryCovar, cn = sqrt(112), eps = 112^(-1/3))
-projTest = function(A, covList = list(), refMat = A, cn, eps, d = ncol(A[[1]]), param.out = FALSE){
+projTest = function(A, cov.arr = NULL, refMat = A, cn, eps, d = dim(A)[2], param.out = FALSE){
 
   p = 2
 
-  if (length(covList) == 0) {
+  if (is.null(cov.arr)) {
     cov1 = diag(d^2)
     cov2 = diag(d^2)
   } else {
-    cov1 = covList[[1]]
-    cov2 = covList[[2]]
+    cov1 = cov.arr[1,,]
+    cov2 = cov.arr[2,,]
   }
 
-  if (length(refMat) == 1) {
-    refMat = list(refMat[[1]], refMat[[1]])
+  if (dim(refMat)[1] == 1) {
+    C = refMat[1,,]; D = refMat[1,,]
+  } else {
+    C = refMat[1,,]; D = refMat[2,,]
   }
 
-  X = A[[1]]; Y = A[[2]]
-
-  C = refMat[[1]]; D = refMat[[2]]
+  X = A[1,,]; Y = A[2,,]
 
   C.temp = diag(d)
   D.temp = diag(d)

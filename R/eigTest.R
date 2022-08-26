@@ -1,9 +1,9 @@
 #' Test Whole Set of Eigenvectors
 #'
-#' @param A List of matrices
+#' @param A Array of matrices
 #' @param V Eigenvector to be tested
-#' @param covList List of covariance matrices, default with use identity matrices
-#' @param n Size of matrices
+#' @param cov.arr List of covariance matrices, default with use identity matrices
+#' @param d Size of matrices
 #' @param p Number of matrices
 #' @param testType The test methods. Either for exact chi-squared test, or approximated gamma test.
 #' @param cn Constant for convergence
@@ -24,30 +24,31 @@
 #' @importFrom 'MASS' ginv
 #'
 #' @examples eigTest(countryCoeff, countryCovar, cn = sqrt(112), testType = 'gam')
-eigTest = function(A, covList = list(), cn, eps=NULL, V = JDTE(A), n = ncol(A[[1]]),
-                   p = length(A), testType = c('chi', 'gam'), param.out = FALSE){
+eigTest = function(A, cov.arr = NULL, cn, eps=NULL, V = JDTE(A), d = dim(A)[2],
+                   p = dim(A)[1], testType = c('chi', 'gam'), param.out = FALSE){
 
-  if (length(covList) == 0) {
-    covList = vector('list', p)
+  if (is.null(cov.arr)) {
+    cov.arr = array(0, c(p, d^2, d^2))
     for (i in 1:p) {
-      covList[[i]] = diag(n^2)
+      cov.arr[i,,] = diag(d^2)
     }
   }
-  S = diag(n^2) - diag(as.vector(diag(n)))
-  S = S[-which(as.double(diag(n)) == 1),]
+  S = diag(d^2) - diag(as.vector(diag(d)))
+  S = S[-which(as.double(diag(d)) == 1),]
   SV = S %*% kronecker(t(V), ginv(V))
 
-  Vlist = vector('list', p)
+  Varr = array(0, c(p, d^2 - d))
   for (i in 1:p) {
-    Vlist[[i]] = SV %*% as.double(A[[i]])
-    covList[[i]] = tcrossprod(SV, SV %*% covList[[i]])
+    Varr[i,] = SV %*% as.double(A[i,,])
+    cov.arr[i, 1:(d^2 - d), 1:(d^2 - d)] = tcrossprod(SV, SV %*% cov.arr[i,,])
   }
+  cov.arr = cov.arr[, 1:(d^2 - d), 1:(d^2 - d)]
 
   if (length(testType) == 2) {
-    output = c(vec.test(Vlist, covList, cn, eps, 'chi')$pvalue, vec.test(Vlist, covList, cn, eps, 'gam')$pvalue)
+    output = c(vec.test(Varr, cov.arr, cn, eps, 'chi')$pvalue, vec.test(Varr, cov.arr, cn, eps, 'gam')$pvalue)
     return(output)
   } else {
-    testResult = vec.test(Vlist, covList, cn, eps, testType)
+    testResult = vec.test(Varr, cov.arr, cn, eps, testType)
 
     if (param.out) {return(testResult)}
     return(testResult$pvalue)

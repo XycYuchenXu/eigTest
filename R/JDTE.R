@@ -1,7 +1,7 @@
 #' JDTE algorithm.
 #'
-#' @param A List of matrices.
-#' @param n Size of matrices.
+#' @param A Array of matrices.
+#' @param d Size of matrices.
 #' @param p Number of matrices.
 #' @param iter Maximum iteration times.
 #' @param tol Tolerance error.
@@ -12,40 +12,40 @@
 #' @importFrom 'MASS' ginv
 #'
 #' @examples JDTE(countryCoeff)
-JDTE = function(A, n = ncol(A[[1]]), p = length(A), iter = 5000, tol = 10^(-16)){
+JDTE = function(A, d = dim(A)[2], p = dim(A)[1], iter = 5000, tol = 10^(-16)){
 
   score.fun = function(A, p){
     sc = 0
     for (i in 1:p) {
-      Ai = A[[i]]
+      Ai = A[i,,]
       sc = sc + norm(Ai - diag(diag(Ai)), type = 'f')^2
     }
     sc
   }
 
-  sumA = A[[1]]
+  sumA = A[1,,]
   for (i in 2:p) {
-    sumA = sumA + A[[i]]
+    sumA = sumA + A[i,,]
   }
   U = eigen(sumA/p, symmetric = TRUE)$vectors
   V = solve(U)
   for (i in 1:p) {
-    A[[i]] = V %*% A[[i]] %*% U
+    A[i,,] = V %*% A[i,,] %*% U
   }
 
   tempA = A
   score.old = score.fun(A, p)
   for (i in 1:iter) {
 
-    Z = matrix(0, nrow = n, ncol = n)
+    Z = matrix(0, nrow = d, ncol = d)
 
-    for (r in 1:n) {
-      for (s in 1:n) {
+    for (r in 1:d) {
+      for (s in 1:d) {
         if (r == s) {next()}
         denum = 0
         num = 0
         for (j in 1:p) {
-          Aj = tempA[[j]]
+          Aj = tempA[j,,]
           denum = denum + (Aj[r,r] - Aj[s,s])^2 + 1
           num = num + Aj[r,s]*(Aj[r,r] - Aj[s,s])
         }
@@ -53,10 +53,10 @@ JDTE = function(A, n = ncol(A[[1]]), p = length(A), iter = 5000, tol = 10^(-16))
       }
     }
 
-    B = diag(n) + Z
+    B = diag(d) + Z
 
     for (j in 1:p) {
-      tempA[[j]] = ginv(B) %*% tempA[[j]] %*% B
+      tempA[j,,] = ginv(B) %*% tempA[j,,] %*% B
     }
 
     U = U %*% B

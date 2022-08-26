@@ -5,7 +5,7 @@
 \alias{countryCovar}
 \title{Asymptotic covariance matrices of the 6 coefficient matrices' estimates}
 \format{
-A list of matrices
+List of multivariate time series
 }
 \usage{
 countryCovar

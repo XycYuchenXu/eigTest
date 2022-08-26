@@ -2,7 +2,7 @@
 #'
 #' Calculate the summation of squared 'F' norms of \code{Bi[(j+1):n,j]} where \code{Bi = t(Q) Ai Q}.
 #'
-#' @param A List of matrices
+#' @param A Array of matrices
 #' @param Q The orthogonal matrix
 #'
 #' @return The sum of squared norms
@@ -11,11 +11,11 @@
 #'
 score.fun = function(A, Q){
   score.fun = 0
-  n = ncol(A[[1]])
-  p = length(A)
+  d = dim(A)[2]
+  p = dim(A)[1]
 
   for (i in 1:p) {
-    Ai = crossprod(Q, A[[i]] %*% Q)
+    Ai = crossprod(Q, A[i,,] %*% Q)
     vi = Ai[-1,1]
     score.fun = score.fun + as.double(crossprod(vi))
   }

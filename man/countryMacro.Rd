@@ -5,7 +5,7 @@
 \alias{countryMacro}
 \title{Standardized macroeconomic quarterly data for 8 countries}
 \format{
-A list of data frames
+Array of data frames
 }
 \source{
 CEIC

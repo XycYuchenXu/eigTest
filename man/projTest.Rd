@@ -6,18 +6,18 @@
 \usage{
 projTest(
   A,
-  covList = list(),
+  cov.arr = NULL,
   refMat = A,
   cn,
   eps,
-  d = ncol(A[[1]]),
+  d = dim(A)[2],
   param.out = FALSE
 )
 }
 \arguments{
-\item{A}{List of matrices to be tested. Require the length to be 2.}
+\item{A}{Array of matrices to be tested. Require the length to be 2.}
 
-\item{covList}{List of covariance matrices corresponding to the random matrices, default will use identity matrices}
+\item{cov.arr}{List of covariance matrices corresponding to the random matrices, default will use identity matrices}
 
 \item{refMat}{The list of reference matrices with the same eigenvectors, default is to use the estimated \code{A}}
 
@@ -38,7 +38,7 @@ The p-value or a list of test information.
 }
 }
 \description{
-Only valid for nonsingular covariance matrices \code{covList}.
+Only valid for nonsingular covariance matrices \code{cov.arr}.
 }
 \examples{
 projTest(countryCoeff, countryCovar, cn = sqrt(112), eps = 112^(-1/3))

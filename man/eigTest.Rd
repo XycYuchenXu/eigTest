@@ -6,20 +6,20 @@
 \usage{
 eigTest(
   A,
-  covList = list(),
+  cov.arr = NULL,
   cn,
   eps = NULL,
   V = JDTE(A),
-  n = ncol(A[[1]]),
-  p = length(A),
+  d = dim(A)[2],
+  p = dim(A)[1],
   testType = c("chi", "gam"),
   param.out = FALSE
 )
 }
 \arguments{
-\item{A}{List of matrices}
+\item{A}{Array of matrices}
 
-\item{covList}{List of covariance matrices, default with use identity matrices}
+\item{cov.arr}{List of covariance matrices, default with use identity matrices}
 
 \item{cn}{Constant for convergence}
 
@@ -27,7 +27,7 @@ eigTest(
 
 \item{V}{Eigenvector to be tested}
 
-\item{n}{Size of matrices}
+\item{d}{Size of matrices}
 
 \item{p}{Number of matrices}
 

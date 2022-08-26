@@ -1,8 +1,8 @@
 #' Partial Joint Schur Decomposition
 #'
-#' @param A List of matrices
+#' @param A Array of matrices
 #' @param k Number of Schur components
-#' @param n Size of matrices
+#' @param d Size of matrices
 #' @param p Number of matrices
 #' @param iter Maximum iteration number
 #' @param tol Tolerance error
@@ -15,40 +15,40 @@
 #' @importFrom pracma quadprog
 #'
 #' @examples partSchur(countryCoeff, k = 2)
-partSchur = function(A, k, n = ncol(A[[1]]), p = length(A), iter = 5000, tol = 10^(-16), nonneg = FALSE){
+partSchur = function(A, k, d = dim(A)[2], p = dim(A)[1], iter = 5000, tol = 10^(-16), nonneg = FALSE){
 
   if (nonneg == TRUE) {
-    mid = matrix(0, ncol = n, nrow = n)
+    mid = matrix(0, d, d)
     for (i in 1:p) {
-      AiI = A[[i]] - diag(n)
+      AiI = A[i,,] - diag(d)
       mid = mid + tcrossprod(AiI)
     }
-    Q = quadprog(mid, d = rep(0,n), Aeq = rep(1, n), beq = 1, lb = rep(0,n))$xmin
-    Q = cbind(Q, matrix(rnorm(n*(n-1)), nrow = n))
+    Q = quadprog(mid, d = rep(0, d), Aeq = rep(1, d), beq = 1, lb = rep(0, d))$xmin
+    Q = cbind(Q, matrix(rnorm(d*(d-1)), nrow = d))
     Q = qr.Q(qr(Q))
     return(Q)
   }
 
   for (i in 1:p) {
-    A[[i]] = t(A[[i]])
+    A[i,,] = t(A[i,,])
   }
-  if (k >= n) {k = n}
+  if (k >= d) {k = d}
 
-  oneSchur = function(A, n = ncol(A[[1]]), Q = diag(n)){
+  oneSchur = function(A, d = dim(A)[2], Q = diag(d)){
     Qr = cbind(Q[,1], Q[,2])
 
     score.old = score.fun(A, Q)
 
     for (i in 1:iter) {
-      seq.order = n:2
+      seq.order = d:2
       for (r in seq.order) {
         Qr[,2] = Q[,r]
 
         mid = matrix(0, nrow = 2, ncol = 2)
         for (j in 1:p) {
-          Aj = A[[j]]
+          Aj = A[j,,]
           mid = mid + tcrossprod(crossprod(Qr, Aj %*% Q[,1]))
-          for (k in 2:n) {
+          for (k in 2:d) {
             mid = mid - tcrossprod(crossprod(Aj %*% Qr, Q[,k]))
           }
         }
@@ -65,15 +65,15 @@ partSchur = function(A, k, n = ncol(A[[1]]), p = length(A), iter = 5000, tol = 1
   }
 
   orderUpdate = function(A, Q){
-    n = ncol(A[[1]])
+    d = dim(A)[2]
     Qi = Q
 
     for (j in 1:k) {
-      if (j == n) {break()}
+      if (j == d) {break()}
       Ai = updateList(A, Qi)
-      D = diag(n - j + 1)
+      D = diag(d - j + 1)
       scores = score.fun(Ai, D)
-      for (i in (j+1):n) {
+      for (i in (j+1):d) {
         Di = D
         Di[c(1,i-j+1), c(1,i-j+1)] = matrix(c(0,1,1,0), ncol = 2)
         scores = c(scores, score.fun(Ai, Di))
@@ -83,13 +83,13 @@ partSchur = function(A, k, n = ncol(A[[1]]), p = length(A), iter = 5000, tol = 1
       if (kk != 1) {
         Di[c(1,kk), c(1,kk)] = matrix(c(0,1,1,0), ncol = 2)
       }
-      Q[,j:n] = Q[,j:n] %*% oneSchur(Ai, Q = Di)
+      Q[,j:d] = Q[,j:d] %*% oneSchur(Ai, Q = Di)
       Qi = Q[,-(1:j)]
     }
     return(Q)
   }
 
-  Q = orderUpdate(A, diag(n))
+  Q = orderUpdate(A, diag(d))
   Q = orderUpdate(A, Q)
   return(Q)
 

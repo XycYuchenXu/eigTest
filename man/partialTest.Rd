@@ -6,22 +6,22 @@
 \usage{
 partialTest(
   A,
-  covList = list(),
+  cov.arr = NULL,
   k,
   cn,
   eps,
   nn = FALSE,
   Q = expmPartSchur(A, k, nn = nn),
-  n = nrow(A[[1]]),
-  p = length(A),
+  d = dim(A)[2],
+  p = dim(A)[1],
   testType = c("chi", "gam"),
   param.out = FALSE
 )
 }
 \arguments{
-\item{A}{List of original matrices}
+\item{A}{Array of original matrices}
 
-\item{covList}{List of original covariance matrices, default will use identity matrices}
+\item{cov.arr}{Array of original covariance matrices, default will use identity matrices}
 
 \item{k}{Size of the block matrices to be tested}
 
@@ -33,7 +33,7 @@ partialTest(
 
 \item{Q}{Schur components for transformation}
 
-\item{n}{Size of original matrices}
+\item{d}{Size of original matrices}
 
 \item{p}{Number of matrices}
 

@@ -5,16 +5,16 @@
 \title{Test on the commutator of two matrices}
 \usage{
 commutatorTest(
-  matList,
+  mat.arr,
   cn,
   eps = NULL,
-  d = nrow(A),
-  covList = list(diag(d^2), diag(d^2)),
+  d = dim(mat.arr)[2],
+  cov.arr = NULL,
   testType = c("chi", "gam")
 )
 }
 \arguments{
-\item{matList}{The list of two matrices to be tested}
+\item{mat.arr}{The array of two matrices to be tested}
 
 \item{cn}{Constant for convergence}
 
@@ -22,7 +22,7 @@ commutatorTest(
 
 \item{d}{Size of matrices}
 
-\item{covList}{The list of covariance matrices of the two matrices, default will use identity matrices}
+\item{cov.arr}{The array of covariance matrices of the two matrices, default will use identity matrices}
 
 \item{testType}{The test methods. Either for exact chi-squared test, or approximated gamma test}
 }
@@ -43,5 +43,5 @@ Test on the commutator of two matrices
 \examples{
 means = generateMeans(5,2)
 samples = simuSamples(means, sqrt(100), 1)
-commutatorTest(samples[[1]][[1]][[1]][[1]], sqrt(400), 400^(-1/3))
+commutatorTest(samples[[1]][1,1,1,,,], sqrt(400), 400^(-1/3))
 }

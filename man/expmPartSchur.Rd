@@ -7,19 +7,19 @@
 expmPartSchur(
   A,
   k,
-  n = ncol(A[[1]]),
-  p = length(A),
+  d = dim(A)[2],
+  p = dim(A)[1],
   iter = 5000,
   tol = 10^(-12),
   nn = FALSE
 )
 }
 \arguments{
-\item{A}{List of matrices}
+\item{A}{Array of matrices}
 
 \item{k}{Number of Schur components}
 
-\item{n}{Size of matrices}
+\item{d}{Size of matrices}
 
 \item{p}{Number of matrices}
 

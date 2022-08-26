@@ -7,7 +7,7 @@
 score.fun(A, Q)
 }
 \arguments{
-\item{A}{List of matrices}
+\item{A}{Array of matrices}
 
 \item{Q}{The orthogonal matrix}
 }

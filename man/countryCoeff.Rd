@@ -5,7 +5,7 @@
 \alias{countryCoeff}
 \title{Coefficient matrices of 6 countries' VAR(1) models}
 \format{
-A list of matrices
+Array of matrices
 }
 \usage{
 countryCoeff

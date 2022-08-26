@@ -2,17 +2,19 @@
 #'
 #' Calculate the list of matrices after orthogonal transformation by matrix \code{Q}
 #'
-#' @param A Original list of matrices
+#' @param A Original array of matrices
 #' @param Q Orthogonal matrix
 #'
-#' @return LIst of transformed matrices
+#' @return Array of transformed matrices
 #' @export
 #'
 #' @keywords internal
 updateList = function(A, Q){
-  p = length(A)
+  p = dim(A)[1]
+  d = dim(Q)[2]
   for (i in 1:p) {
-    A[[i]] = t(Q) %*% A[[i]] %*% Q
+    A[i,1:d,1:d] = t(Q) %*% A[i,,] %*% Q
   }
+  A = A[,1:d,1:d]
   return(A)
 }
