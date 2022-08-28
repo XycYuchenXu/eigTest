@@ -64,14 +64,15 @@ expmPartSchur = function(A, k, d = dim(A)[2], p = dim(A)[1], iter = 5000, tol = 
   }
 
   resultAB = function(U, X){
-    scores = c()
+    minS = Inf; Z = X
     for (i in 1:length(gridNodes)) {
-      newU = as.matrix(U %*% expm(gridNodes[i] * X))
-      scores = c(scores, scoresUL(newU))
+      Zi = as.matrix(U %*% expm(gridNodes[i] * X))
+      tempS = scoresUL(Zi)
+      if (tempS < minS) {
+        minS = tempS; Z = Zi
+      }
     }
-    minT = which.min(scores)
-    finalU = as.matrix(U %*% expm(gridNodes[minT] * X))
-    return(list(finalU, scores[minT]))
+    return(list(Z, minS))
   }
 
   score.old = scoresUL(Ui)
