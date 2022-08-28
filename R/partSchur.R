@@ -44,10 +44,10 @@ partSchur = function(A, k, d = dim(A)[2], p = dim(A)[1], iter = 5000, tol = 10^(
 
         mid = matrix(0, nrow = 2, ncol = 2)
         for (j in 1:p) {
-          Mj = crossprod(crossprod(Qr, A[j,,]))
-          mid = mid + crossprod(Q[,1], Mj %*% Q[,1])
+          Mj = crossprod(Qr, A[j,,])
+          mid = mid + tcrossprod(Mj %*% Q[,1])
           for (k in 2:d) {
-            mid = mid - crossprod(Q[,k], Mj %*% Q[,k])
+            mid = mid - tcrossprod(Mj %*% Q[,k])
           }
         }
 
@@ -70,14 +70,13 @@ partSchur = function(A, k, d = dim(A)[2], p = dim(A)[1], iter = 5000, tol = 10^(
       if (j == d) {break()}
       Ai = updateList(A, Qi)
       D = diag(d - j + 1)
-      minD = D
-      minS = score.fun(Ai, D)
+      minS = score.fun(Ai, D); minD = D
       for (i in (j+1):d) {
         Di = D
         Di[c(1,i-j+1), c(1,i-j+1)] = matrix(c(0,1,1,0), ncol = 2)
         tempS = score.fun(Ai, Di)
         if (tempS < minS) {
-          minD = Di; minS = tempS
+          minS = tempS; minD = Di
         }
       }
       Q[,j:d] = Q[,j:d] %*% oneSchur(Ai, Q = minD)
