@@ -20,8 +20,7 @@ partSchur = function(A, k, d = dim(A)[2], p = dim(A)[1], iter = 5000, tol = 10^(
   if (nonneg == TRUE) {
     mid = matrix(0, d, d)
     for (i in 1:p) {
-      AiI = A[i,,] - diag(d)
-      mid = mid + tcrossprod(AiI)
+      mid = mid + tcrossprod(A[i,,] - diag(d))
     }
     Q = quadprog(mid, d = rep(0, d), Aeq = rep(1, d), beq = 1, lb = rep(0, d))$xmin
     Q = cbind(Q, matrix(rnorm(d*(d-1)), nrow = d))
@@ -40,16 +39,15 @@ partSchur = function(A, k, d = dim(A)[2], p = dim(A)[1], iter = 5000, tol = 10^(
     score.old = score.fun(A, Q)
 
     for (i in 1:iter) {
-      seq.order = d:2
-      for (r in seq.order) {
+      for (r in d:2) {
         Qr[,2] = Q[,r]
 
         mid = matrix(0, nrow = 2, ncol = 2)
         for (j in 1:p) {
-          Aj = A[j,,]
-          mid = mid + tcrossprod(crossprod(Qr, Aj %*% Q[,1]))
+          Mj = crossprod(crossprod(Qr, A[j,,]))
+          mid = mid + crossprod(Q[,1], Mj %*% Q[,1])
           for (k in 2:d) {
-            mid = mid - tcrossprod(crossprod(Aj %*% Qr, Q[,k]))
+            mid = mid - crossprod(Q[,k], Mj %*% Q[,k])
           }
         }
 
@@ -72,18 +70,17 @@ partSchur = function(A, k, d = dim(A)[2], p = dim(A)[1], iter = 5000, tol = 10^(
       if (j == d) {break()}
       Ai = updateList(A, Qi)
       D = diag(d - j + 1)
-      scores = score.fun(Ai, D)
+      minD = D
+      minS = score.fun(Ai, D)
       for (i in (j+1):d) {
         Di = D
         Di[c(1,i-j+1), c(1,i-j+1)] = matrix(c(0,1,1,0), ncol = 2)
-        scores = c(scores, score.fun(Ai, Di))
+        tempS = score.fun(Ai, Di)
+        if (tempS < minS) {
+          minD = Di; minS = tempS
+        }
       }
-      kk = which.min(scores)[1]
-      Di = D
-      if (kk != 1) {
-        Di[c(1,kk), c(1,kk)] = matrix(c(0,1,1,0), ncol = 2)
-      }
-      Q[,j:d] = Q[,j:d] %*% oneSchur(Ai, Q = Di)
+      Q[,j:d] = Q[,j:d] %*% oneSchur(Ai, Q = minD)
       Qi = Q[,-(1:j)]
     }
     return(Q)

@@ -38,9 +38,9 @@ expmPartSchur = function(A, k, d = dim(A)[2], p = dim(A)[1], iter = 5000, tol = 
     }
   }
 
-  ul = ZeroM
-  ul[1:k, (k+1):d] = 1
-  UL = diag(as.vector(ul))
+  UL = ZeroM
+  UL[1:k, (k+1):d] = 1
+  UL = diag(as.vector(UL))
 
   listAB = function(U){
     matA = 0
