@@ -48,7 +48,7 @@ partialTest = function(A, cn, cov.arr = NULL, nn = FALSE, k=NULL, warmup = FALSE
     }
   }
 
-  if (is.null(k) || k >= d || k <= 0 || k != round(k)) {
+  if (is.null(k) || k > d || k <= 0 || k != round(k)) {
     print('Unavailable setup. The number of common components must be an integer within (0, d) for partial test.')
     return()
   }
@@ -56,6 +56,10 @@ partialTest = function(A, cn, cov.arr = NULL, nn = FALSE, k=NULL, warmup = FALSE
   if (k == 1) {
     return(schurTest(A, cn, cov.arr = cov.arr, k = k, warmup = warmup, Q = Q,
                      testType = testType, eps = eps, param.out = param.out))
+  }
+  if (k == d) {
+    return(eigTest(A, cn, cov.arr = cov.arr, testType = testType,
+                   eps = eps, param.out = param.out))
   }
 
   if (is.null(Q)) {Q = expmPartSchur(A, k, warmup = warmup)}
