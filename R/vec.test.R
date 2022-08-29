@@ -1,19 +1,20 @@
 #' Calculate the p-value for normal random vectors with specified covariance matrices
 #'
-#' @param V.arr Array of vectors
-#' @param cn The constant for convergence, or a vector of constants.
-#' @param testType The test methods. Either for exact chi-squared test, or approximated gamma test
-#' @param cov.arr Array of covariance matrices corresponding to the vectors, default will use identity matrices
-#' @param eps The threshold of eigenvalues when compute general inverse of covariance matrices. Required when \code{testType = 'chi'} but with default \code{cn^(-2/3)} when unsupplied
-#' @param param.out The parameters of limiting distribution should be output or not
+#' @param V.arr The array of vectors, with dimension \code{p}-\code{L}, where \code{p} is the number of vectors, \code{L} is the vector length.
+#' @param cn The convergence rate(s) to normality. Assume \code{n} is the sample size, usually CLT indicates \code{cn = sqrt(n)} for consistent estimators. If \code{length(cn) < p}, all vectors share the same rate \code{cn[1]}, otherwise \code{cn = cn[1:p]}.
+#' @param testType The test methods, can be exact chi-squared test \code{testType = 'chi'}, and/or approximated gamma test \code{testType = 'gam'}.
+#' @param cov.arr The array of covariance matrices corresponding to the vectors with dimension \code{p}-\code{L^2}-\code{L^2}, default will use identity matrices when \code{is.null(cov.arr)}.
+#' @param eps The threshold of eigenvalues when compute general inverse of covariance matrices. Required when \code{testType = 'chi'} but with default \code{cn^(-2/3)} when unsupplied.
+#' @param param.out Logical, whether the parameters of limiting distribution should be output or not. Default \code{param.out = FALSE} to only output P-value.
 #'
-#' @return A list of test information.
+#' @return A P-value when \code{param.out=FALSE} or a list of test information when \code{param.out = TRUE}.
 #' \itemize{
-#' \item statistic Test statistic.
-#' \item df Degrees of freedom for chi-squared distribution.
-#' \item shape Shape parameter in gamma distribution.
-#' \item rate Rate parameter in gamma distribution.
-#' \item pvalue P-value.
+#' \item testType The test methods. Either exact chi-squared test \code{'chi'}, or approximated gamma test \code{'gam'}.
+#' \item statistic The test statistic.
+#' \item df The degrees of freedom for chi-squared distribution when \code{testType = 'chi'}.
+#' \item shape The shape parameter in gamma distribution when \code{testType = 'gam'}.
+#' \item rate The rate parameter in gamma distribution when \code{testType = 'gam'}.
+#' \item pvalue The P-value.
 #' }
 #'
 #' @keywords internal
@@ -55,8 +56,8 @@ vec.test = function(V.arr, cn, testType, cov.arr = NULL,
       testVal = testVal + crossprod(vi, s$ginv %*% vi) * cn[i]^2
       r = r + s$r
     }
-    testResult = list(testVal, r, 1 - pchisq(testVal, r))
-    names(testResult) = c('statistic', 'df', 'pvalue')
+    testResult = list(testType, testVal, r, 1 - pchisq(testVal, r))
+    names(testResult) = c('testType', 'statistic', 'df', 'pvalue')
   } else {
     me = 0
     va = 0
@@ -69,8 +70,8 @@ vec.test = function(V.arr, cn, testType, cov.arr = NULL,
     }
     alphaP = me^2/va
     betaP = me/va
-    testResult = list(testVal, alphaP, betaP, 1 - pgamma(testVal, shape = alphaP, rate = betaP))
-    names(testResult) = c('statistic', 'shape', 'rate', 'pvalue')
+    testResult = list(testType, testVal, alphaP, betaP, 1 - pgamma(testVal, shape = alphaP, rate = betaP))
+    names(testResult) = c('testType', 'statistic', 'shape', 'rate', 'pvalue')
   }
 
   if (param.out) {return(testResult)}

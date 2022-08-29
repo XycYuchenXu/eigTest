@@ -1,11 +1,11 @@
-#' Update the list of matrices
+#' Update the array of matrices
 #'
-#' Calculate the list of matrices after orthogonal transformation by matrix \code{Q}
+#' Calculate the array of matrices after orthogonal transformation by matrix \code{Q}, i.e., \code{t(Q) Ai Q}.
 #'
-#' @param A Original array of matrices
-#' @param Q Orthogonal matrix
+#' @param A The array of matrices with dimension \code{p}-\code{d}-\code{d}, where \code{p} is the number of matrices, \code{d} is the dimension of the matrices.
+#' @param Q The orthogonal matrix of dimension \code{d}-\code{d}.
 #'
-#' @return Array of transformed matrices
+#' @return The array of transformed matrices with dimension \code{p}-\code{d}-\code{d}.
 #'
 #' @keywords internal
 updateList = function(A, Q){

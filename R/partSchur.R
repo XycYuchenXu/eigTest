@@ -1,12 +1,11 @@
 #' Partial Joint Schur Decomposition
 #'
-#' @param A Array of matrices
-#' @param k Number of Schur components
-#' @param iter Maximum iteration number
-#' @param tol Tolerance error
-#' @param nonneg Logical whether the eigenvector elements are nonnegative
+#' @param A The array of matrices with dimension \code{p}-\code{d}-\code{d}, where \code{p} is the number of matrices, \code{d} is the dimension of the matrices.
+#' @param k The number of common components to be tested. \code{k} must be an integer within (0, \code{d}).
+#' @param iter The maximum iteration number.
+#' @param tol The tolerance error for iteration termination.
 #'
-#' @return Orthogonal matrix \code{Q}
+#' @return The orthogonal matrix \code{Q} of dimension \code{d}-\code{d} with the first \code{k} columns to be the estimated common components.
 #'
 #' @keywords internal
 #'

@@ -1,10 +1,10 @@
 #' JDTE algorithm.
 #'
-#' @param A Array of matrices.
-#' @param iter Maximum iteration times.
-#' @param tol Tolerance error.
+#' @param A The array of matrices with dimension \code{p}-\code{d}-\code{d}, where \code{p} is the number of matrices, \code{d} is the dimension of the matrices.
+#' @param iter The maximum iteration times.
+#' @param tol The tolerance error for iteration termination.
 #'
-#' @return Matrix \code{U}.
+#' @return The eigenvector matrix \code{U} with dimension \code{d}-\code{d}.
 #' @export
 #'
 #' @importFrom 'MASS' ginv

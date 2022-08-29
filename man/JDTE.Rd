@@ -7,14 +7,14 @@
 JDTE(A, iter = 5000, tol = 10^(-16))
 }
 \arguments{
-\item{A}{Array of matrices.}
+\item{A}{The array of matrices with dimension \code{p}-\code{d}-\code{d}, where \code{p} is the number of matrices, \code{d} is the dimension of the matrices.}
 
-\item{iter}{Maximum iteration times.}
+\item{iter}{The maximum iteration times.}
 
-\item{tol}{Tolerance error.}
+\item{tol}{The tolerance error for iteration termination.}
 }
 \value{
-Matrix \code{U}.
+The eigenvector matrix \code{U} with dimension \code{d}-\code{d}.
 }
 \description{
 JDTE algorithm.

@@ -7,16 +7,16 @@
 truncateSVD(A, eps, tr.approx = FALSE)
 }
 \arguments{
-\item{A}{Matrix}
+\item{A}{The square matrix of dimension \code{d}-\code{d} to be decomposed.}
 
-\item{eps}{The truncation threshold of singular values for SVD}
+\item{eps}{The truncation threshold of singular values for SVD.}
 
-\item{tr.approx}{Logical whether approximate the truncated version of \code{A}}
+\item{tr.approx}{Logical, whether approximate the truncated version of \code{A}}
 }
 \value{
 A list of information about truncated SVD.
 \itemize{
-\item Id The truncated approximation of \code{A}.
+\item Id The truncated approximation of \code{A}. Included only when \code{tr.approx = TRUE}.
 \item r The rank of \code{A} after truncation.
 \item ginv The general inverse of the truncated SVD approximation.
 }

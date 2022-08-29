@@ -1,12 +1,12 @@
 #' Compute truncated SVD of a matrix.
 #'
-#' @param A Matrix
-#' @param eps The truncation threshold of singular values for SVD
-#' @param tr.approx Logical whether approximate the truncated version of \code{A}
+#' @param A The square matrix of dimension \code{d}-\code{d} to be decomposed.
+#' @param eps The truncation threshold of singular values for SVD.
+#' @param tr.approx Logical, whether approximate the truncated version of \code{A}
 #'
 #' @return A list of information about truncated SVD.
 #' \itemize{
-#' \item Id The truncated approximation of \code{A}.
+#' \item Id The truncated approximation of \code{A}. Included only when \code{tr.approx = TRUE}.
 #' \item r The rank of \code{A} after truncation.
 #' \item ginv The general inverse of the truncated SVD approximation.
 #' }

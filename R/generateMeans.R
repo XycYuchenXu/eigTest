@@ -1,17 +1,15 @@
 #' Generate mean matrices for simulation samples
 #'
-#' @param d Size of matrices
-#' @param p Number of matrices
-#' @param k Number of shared components
-#' @param snr Signal to noice variance ratio (SNR), can be a vector
-#' @param control.g Whether the control group of samples with perturbed common
-#'                  eigenvectors should be output or not
-#' @param V Input of eigenvector matrix
-#' @param v Input of stationary distribution
-#' @param nonneg Whether the generated matrix should be nonnegative as a transition
-#'               probability matrix.
+#' @param d The dimension of matrices.
+#' @param p The number of matrices.
+#' @param k The number of common Schur components. Must be an integer within (0, \code{d}), otherwise set \code{k = d}.
+#' @param snr The positive signal to noise variance ratio (SNR), can be a vector.
+#' @param control.g Logical, whether the control group of samples with perturbed common eigenvectors should be output or not.
+#' @param V The input of eigenvector matrix with dimension \code{d}-\code{d}, needed when \code{nonneg = FALSE}. Default will use random sampling when \code{is.null(V)}.
+#' @param v The input of stationary distribution with length \code{d}, needed when \code{nonneg = TRUE}. Default will use Dirichlet random sampling when \code{is.null(v)}.
+#' @param nonneg Logical, whether the generated matrices should be nonnegative as transition probability matrices.
 #'
-#' @return Array of matrices: p-by-q-by-d-by-d, where q is the number of SNRs.
+#' @return An array of mean matrices: \code{p}-by-\code{q}-by-\code{d}-by-\code{d}, where \code{q} is the number of SNRs.
 #'         If \code{control.g = TRUE}, \code{q = length(snr) + 1} otherwise \code{q = 1}.
 #' @export
 #'
@@ -22,7 +20,7 @@
 generateMeans = function(d, p, k = d, snr = 10, control.g = FALSE,
                          V = NULL, v = NULL, nonneg = FALSE) {
 
-  if (k <= 0 || k > d) {k = d}
+  if (k <= 0 || k > d || k != round(k)) {k = d}
   means.groups = 1
   SNR = 0
   if (control.g) {

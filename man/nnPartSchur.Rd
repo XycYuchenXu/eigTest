@@ -7,10 +7,10 @@
 nnPartSchur(A)
 }
 \arguments{
-\item{A}{Array of matrices}
+\item{A}{The array of matrices with dimension \code{p}-\code{d}-\code{d}, where \code{p} is the number of matrices, \code{d} is the dimension of the matrices.}
 }
 \value{
-Orthogonal matrix \code{Q}
+The orthogonal matrix \code{Q} of dimension \code{d}-\code{d} with the first column to be the estimated nonnegative common component.
 }
 \description{
 Joint Schur decomposition for the non-negative leading component

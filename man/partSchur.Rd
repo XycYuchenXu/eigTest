@@ -7,18 +7,16 @@
 partSchur(A, k, iter = 5000, tol = 10^(-16))
 }
 \arguments{
-\item{A}{Array of matrices}
+\item{A}{The array of matrices with dimension \code{p}-\code{d}-\code{d}, where \code{p} is the number of matrices, \code{d} is the dimension of the matrices.}
 
-\item{k}{Number of Schur components}
+\item{k}{The number of common components to be tested. \code{k} must be an integer within (0, \code{d}).}
 
-\item{iter}{Maximum iteration number}
+\item{iter}{The maximum iteration number.}
 
-\item{tol}{Tolerance error}
-
-\item{nonneg}{Logical whether the eigenvector elements are nonnegative}
+\item{tol}{The tolerance error for iteration termination.}
 }
 \value{
-Orthogonal matrix \code{Q}
+The orthogonal matrix \code{Q} of dimension \code{d}-\code{d} with the first \code{k} columns to be the estimated common components.
 }
 \description{
 Partial Joint Schur Decomposition

@@ -7,18 +7,18 @@
 expmPartSchur(A, k, warmup = FALSE, iter = 5000, tol = 10^(-12))
 }
 \arguments{
-\item{A}{Array of matrices}
+\item{A}{The array of matrices with dimension \code{p}-\code{d}-\code{d}, where \code{p} is the number of matrices, \code{d} is the dimension of the matrices.}
 
-\item{k}{Number of Schur components}
+\item{k}{The number of common Schur components. Must be an integer within (0, \code{d}).}
 
-\item{warmup}{Logical whether use \code{partSchur} for a warm-up \code{Q}}
+\item{warmup}{Logical, whether use \code{partSchur} for a warm-up initial value, default to \code{FALSE}.}
 
-\item{iter}{Maximum iteration number}
+\item{iter}{The maximum iteration number.}
 
-\item{tol}{Tolerance error}
+\item{tol}{The tolerance error for iteration termination.}
 }
 \value{
-Orthogonal matrix \code{Q}
+The orthogonal matrix \code{Q} of dimension \code{d}-\code{d} with the first \code{k} columns to be the estimated common components.
 }
 \description{
 Tangent space optimization for partially joint Schur decomposition using matrix exponential

@@ -2,19 +2,19 @@
 % Please edit documentation in R/updateList.R
 \name{updateList}
 \alias{updateList}
-\title{Update the list of matrices}
+\title{Update the array of matrices}
 \usage{
 updateList(A, Q)
 }
 \arguments{
-\item{A}{Original array of matrices}
+\item{A}{The array of matrices with dimension \code{p}-\code{d}-\code{d}, where \code{p} is the number of matrices, \code{d} is the dimension of the matrices.}
 
-\item{Q}{Orthogonal matrix}
+\item{Q}{The orthogonal matrix of dimension \code{d}-\code{d}.}
 }
 \value{
-Array of transformed matrices
+The array of transformed matrices with dimension \code{p}-\code{d}-\code{d}.
 }
 \description{
-Calculate the list of matrices after orthogonal transformation by matrix \code{Q}
+Calculate the array of matrices after orthogonal transformation by matrix \code{Q}, i.e., \code{t(Q) Ai Q}.
 }
 \keyword{internal}

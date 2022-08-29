@@ -1,8 +1,8 @@
 #' Joint Schur decomposition for the non-negative leading component
 #'
-#' @param A Array of matrices
+#' @param A The array of matrices with dimension \code{p}-\code{d}-\code{d}, where \code{p} is the number of matrices, \code{d} is the dimension of the matrices.
 #'
-#' @return Orthogonal matrix \code{Q}
+#' @return The orthogonal matrix \code{Q} of dimension \code{d}-\code{d} with the first column to be the estimated nonnegative common component.
 #' @export
 #'
 #' @importFrom 'pracma' quadprog

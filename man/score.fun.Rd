@@ -7,14 +7,14 @@
 score.fun(A, Q)
 }
 \arguments{
-\item{A}{Array of matrices}
+\item{A}{The array of matrices with dimension \code{p}-\code{d}-\code{d}, where \code{p} is the number of matrices, \code{d} is the dimension of the matrices.}
 
-\item{Q}{The orthogonal matrix}
+\item{Q}{The orthogonal matrix of dimension \code{d}-\code{d} with the first column evaluated for common.}
 }
 \value{
-The sum of squared norms
+The sum of squared norms of \code{t(Q[,-1]) Ai Q[,1]}.
 }
 \description{
-Calculate the summation of squared 'F' norms of \code{Bi[(j+1):n,j]} where \code{Bi = t(Q) Ai Q}.
+Calculate the summation of squared 'F' norms of \code{Bi[(j+1):n,j]} where \code{Bi = t(Q) Ai  Q}.
 }
 \keyword{internal}

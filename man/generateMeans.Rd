@@ -16,26 +16,24 @@ generateMeans(
 )
 }
 \arguments{
-\item{d}{Size of matrices}
+\item{d}{The dimension of matrices.}
 
-\item{p}{Number of matrices}
+\item{p}{The number of matrices.}
 
-\item{k}{Number of shared components}
+\item{k}{The number of common Schur components. Must be an integer within (0, \code{d}), otherwise set \code{k = d}.}
 
-\item{snr}{Signal to noice variance ratio (SNR), can be a vector}
+\item{snr}{The positive signal to noise variance ratio (SNR), can be a vector.}
 
-\item{control.g}{Whether the control group of samples with perturbed common
-eigenvectors should be output or not}
+\item{control.g}{Logical, whether the control group of samples with perturbed common eigenvectors should be output or not.}
 
-\item{V}{Input of eigenvector matrix}
+\item{V}{The input of eigenvector matrix with dimension \code{d}-\code{d}, needed when \code{nonneg = FALSE}. Default will use random sampling when \code{is.null(V)}.}
 
-\item{v}{Input of stationary distribution}
+\item{v}{The input of stationary distribution with length \code{d}, needed when \code{nonneg = TRUE}. Default will use Dirichlet random sampling when \code{is.null(v)}.}
 
-\item{nonneg}{Whether the generated matrix should be nonnegative as a transition
-probability matrix.}
+\item{nonneg}{Logical, whether the generated matrices should be nonnegative as transition probability matrices.}
 }
 \value{
-Array of matrices: p-by-q-by-d-by-d, where q is the number of SNRs.
+An array of mean matrices: \code{p}-by-\code{q}-by-\code{d}-by-\code{d}, where \code{q} is the number of SNRs.
         If \code{control.g = TRUE}, \code{q = length(snr) + 1} otherwise \code{q = 1}.
 }
 \description{

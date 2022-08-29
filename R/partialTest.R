@@ -2,24 +2,25 @@
 #'
 #' Test whether a subset of common eigenvectors are shared by the list of random matrices.
 #'
-#' @param A Array of original matrices
-#' @param cn Constant for convergence
-#' @param cov.arr Array of original covariance matrices, default will use identity matrices
-#' @param nn Logical whether the eigenvector elements are nonnegative
-#' @param k Size of the block matrices to be tested
-#' @param warmup Logical whether use \code{partSchur} for a warm-up \code{Q}
-#' @param Q Schur components for transformation
-#' @param testType The test methods. Either for exact chi-squared test, or approximated gamma test
-#' @param eps The threshold of eigenvalues when compute general inverse of covariance matrices. Required when \code{testType = 'chi'} but with default \code{cn^(-2/3)} when unsupplied
-#' @param param.out The parameters of limiting distribution should be output or not
+#' @param A The array of matrices with dimension \code{p}-\code{d}-\code{d}, where \code{p} is the number of matrices, \code{d} is the dimension of the matrices.
+#' @param cn The convergence rate(s) to normality. Assume \code{n} is the sample size, usually CLT indicates \code{cn = sqrt(n)} for consistent estimators. If \code{length(cn) < p}, all matrices share the same rate \code{cn[1]}, otherwise \code{cn = cn[1:p]}.
+#' @param cov.arr The array of covariance matrices corresponding to the vectors with dimension \code{p}-\code{d^2}-\code{d^2}, default will use identity matrices when \code{is.null(cov.arr)}.
+#' @param nn Logical, whether the matrices \code{A} are regarded as nonnegative transition probability matrices and the the eigenvector elements should be nonnegative.
+#' @param k The number of common components to be tested. When \code{nn=TRUE}, \code{k} can be \code{NULL} or \code{k = 1}, otherwise \code{k} must be an integer within (0, \code{d}]. Will call \code{eigTest} instead if \code{k = d}.
+#' @param warmup Logical, whether use \code{partSchur} for a warm-up initial value, default to \code{FALSE}.
+#' @param Q The orthogonal components to be tested with dimension \code{d}-\code{d}. Default (when \code{is.null(Q)}) will use \code{Q = nnPartSchur(A)} if \code{nn} else \code{Q = expmPartSchur(A, k, warmup = warmup)}.
+#' @param testType The test methods, can be exact chi-squared test \code{testType = 'chi'}, and/or approximated gamma test \code{testType = 'gam'}.
+#' @param eps The threshold of eigenvalues when compute general inverse of covariance matrices. Required when \code{testType = 'chi'} but with default \code{cn^(-2/3)} when unsupplied.
+#' @param param.out Logical, whether the parameters of limiting distribution should be output or not. Default \code{param.out = FALSE} to only output P-value.
 #'
 #' @return A named vector of P-value(s) when \code{param.out = FALSE}, or a named list of test information when \code{param.out = TRUE}, with name(s) to be \code{'chi'} and/or \code{'gam'}. Test information is a sub-list with elements including:
 #' \itemize{
-#' \item statistic Test statistic.
-#' \item df Degrees of freedom for chi-squared distribution.
-#' \item shape Shape parameter in gamma distribution.
-#' \item rate Rate parameter in gamma distribution.
-#' \item pvalue P-value.
+#' \item testType The test methods. Either exact chi-squared test \code{'chi'}, or approximated gamma test \code{'gam'}.
+#' \item statistic The test statistic.
+#' \item df The degrees of freedom for chi-squared distribution when \code{testType = 'chi'}.
+#' \item shape The shape parameter in gamma distribution when \code{testType = 'gam'}.
+#' \item rate The rate parameter in gamma distribution when \code{testType = 'gam'}.
+#' \item pvalue The P-value.
 #' }
 #' @export
 #'
