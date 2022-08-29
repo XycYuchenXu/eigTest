@@ -3,15 +3,15 @@
 \docType{data}
 \name{countryCovar}
 \alias{countryCovar}
-\title{Asymptotic covariance matrices of the 6 coefficient matrices' estimates}
+\title{Asymptotic covariance matrices of the 8 coefficient matrices' estimates.}
 \format{
-List of multivariate time series
+The array of covariance matrices of the estimated VAR(1) coefficient matrices.
 }
 \usage{
 countryCovar
 }
 \description{
-Asymptotic covariance matrices of the 6 coefficient matrices' estimates
+Asymptotic covariance matrices of the 8 coefficient matrices' estimates.
 }
 \examples{
 \dontrun{

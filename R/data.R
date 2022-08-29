@@ -1,25 +1,25 @@
-#' Standardized macroeconomic quarterly data for 8 countries
+#' Standardized macroeconomic quarterly data for 8 countries.
 #'
 #' @source CEIC
-#' @format Array of data frames
+#' @format The list of multivariate time series.
 #' @examples
 #' \dontrun{
 #'  countryMacro
 #' }
 "countryMacro"
 
-#' Coefficient matrices of 6 countries' VAR(1) models
+#' Coefficient matrices of 8 countries' VAR(1) models.
 #'
-#' @format Array of matrices
+#' @format The array of coefficient matrices for country-wise macroeconomic VAR(1) models.
 #' @examples
 #' \dontrun{
 #'  countryCoeff
 #' }
 "countryCoeff"
 
-#' Asymptotic covariance matrices of the 6 coefficient matrices' estimates
+#' Asymptotic covariance matrices of the 8 coefficient matrices' estimates.
 #'
-#' @format List of multivariate time series
+#' @format The array of covariance matrices of the estimated VAR(1) coefficient matrices.
 #' @examples
 #' \dontrun{
 #'  countryCovar

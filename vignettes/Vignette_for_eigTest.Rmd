@@ -25,20 +25,45 @@ library(eigTest)
 
 The sample generating process is as follows:
 
-1. Randomly sample a common eigenvector matrix $V \in \mathbb{R}^{d \times d}$ where $d$ is the dimension of the square matrix and the entries are i.i.d. standard normal;
+1. Randomly sample a common eigenvector matrix $V(k; d) \in \mathbb{R}^{d \times k}$, where $d$ is the matrix dimension, $k \in \{1, \dots, d\}$ is the number of common components, and the entries are i.i.d. standard normal;
 
-2. Adding noise to the matrix $V$ to get $V_i(\sigma) = V + \sigma E_i$ for $i = 1, \dots, p$, where signal to noise ratio (SNR) is defined as $\frac{1}{\sigma^2}$) and entries in $E_i$ are i.i.d. standard normal.
+2. Set $V_i(k; d) = V(k; d)$ if $k = d$, otherwise span $V_i(k; d) = (V(k; d), \widetilde{V}_i) \in \R^{d \times d}$ with random but sufficiently distinct $\widetilde{V}_i \in \R^{d \times (d-k)}$ for $i = 1, \dots, p$.
 
-3. Randomly sample vectors $d_i \in \mathbb{R}^d$ with uniform i.i.d. entries in interval $(-1,1)$, and generate square matrices $\mu_i(\sigma) = V_i^{-1}(\sigma) D_i V_i(\sigma)$ where $D_i = \mbox{diag}(d_i)$ is a diagonal matrix.
+3. For $i=1, \dots, p$:
+  1. Perturb the $i$-th eigenvector matrix $V_i(k; d)$ as $V_i(\rho, k; d) = V_i(k; d) + \rho E_i$ with noise $E_i$ to be independent and standard normal, element-wise.
+  2. Randomly generate non-singular diagonal matrices $D_i \in \R^{d \times d}$ for $i = 1, \dots, p$.
 
-4. Given sample size $n$, generate $n$ random matrices $X_{ij}, j = 1, \dots, n$ with mean $\mu_i(\sigma)$ and identity variance matrix, and get the estimates $A_i = \bar X_{i}$, $\Sigma_i = \frac{1}{n-1} \sum_{j=1}^n \mbox{vec}(X_{ij} - A_i) \mbox{vec}'(X_{ij} - A_i)$.
+4. Generate the target matrices $\mathcal{M}_p(\rho, k; d) = \{\mu_i(\rho, k; d)\} = \{ V_i(\rho, k; d) D_i V_i^{-1}(\rho, k; d)\}_{i=1}^p$.
+
+5. Given sample size $n$, generate $n$ random matrices $X_{ij}(\rho, k; d), j = 1, \dots, n$ with mean $\mu_i(\rho, k; d)$ and identity variance matrix, and get the estimates $A_i(\rho, k; d) = \bar X_{ij}(\rho, k; d)$, $\Sigma_i(\rho, k; d) = \frac{1}{n-1} \sum_{j=1}^n \mbox{vec}(X_{ij}(\rho, k; d) - A_i(\rho, k; d)) \mbox{vec}'(X_{ij}(\rho, k; d) - A_i(\rho, k; d))$.
 
 The package includes functions to generate simulation samples in the following way:
 
-```{r simuSamples}
-twoSample = generateMeans(d = 5,           # square matrix's dimension
-                          p = 2,           # number of matrices
-                          snr = c(10,1))   # vector of SNR in eigenvector
+```{r simuSamples, echo=TRUE, message=FALSE, warning=FALSE}
+full_means = generateMeans(d = 5,           # square matrix's dimension
+                           p = 4,           # number of matrices
+                           snr = c(10,1))   # vector of SNR in eigenvector
+
+full_samples = simuSamples(mu = full_means,                # mean matrices
+                           cn = c(sqrt(100), sqrt(500)),   # convergence rate
+                           reps = 200)                     # replicate
+
+full_mat = full_samples[[1]]; print(dim(full_mat))
+full_cov = full_samples[[2]]; print(dim(full_cov))
+
+part_means = generateMeans(d = 5,           # square matrix's dimension
+                           p = 4,           # number of matrices
+                           k = 3,           # number of components
+                           snr = c(10,1),   # vector of SNR in eigenvector
+                           nonneg = FALSE)  # nonnegativity
+
+part_samples = simuSamples(mu = part_means,                # mean matrices
+                           cn = c(sqrt(100), sqrt(500)),   # convergence rate
+                           reps = 200,                     # replicate
+                           nonneg = FALSE)                 # nonnegativity
+
+part_mat = part_samples[[1]]; print(dim(part_mat))
+part_cov = part_samples[[2]]; print(dim(part_cov))
 ```
 
 
@@ -46,12 +71,18 @@ twoSample = generateMeans(d = 5,           # square matrix's dimension
 
 ### Two-sample test
 
-```{r twoSample, eval=FALSE, include=FALSE}
+```{r twoSample, echo=TRUE, message=FALSE, warning=FALSE}
 ## Commutator-based test
-commutatorTest()
+commutatorTest(mat.arr = full_mat[1,1,1,,,],  # sample matrices
+               cn = sqrt(100),                # convergence rate
+               cov.arr = full_cov[1,1,1,,,],  # covariance matrices
+               param.out = TRUE)              # return parameters
 
 ## Log-likelihood ratio test
-projTest()
+projTest(A = part_mat[1,1,1,,,],        # sample matrices
+         cn = sqrt(100),                # convergence rate
+         cov.arr = part_cov[1,1,1,,,],  # covariance matrices
+         param.out = TRUE)              # return parameters
 ```
 
 ### Common eigenvector estimate

@@ -3,15 +3,15 @@
 \docType{data}
 \name{countryCoeff}
 \alias{countryCoeff}
-\title{Coefficient matrices of 6 countries' VAR(1) models}
+\title{Coefficient matrices of 8 countries' VAR(1) models.}
 \format{
-Array of matrices
+The array of coefficient matrices for country-wise macroeconomic VAR(1) models.
 }
 \usage{
 countryCoeff
 }
 \description{
-Coefficient matrices of 6 countries' VAR(1) models
+Coefficient matrices of 8 countries' VAR(1) models.
 }
 \examples{
 \dontrun{

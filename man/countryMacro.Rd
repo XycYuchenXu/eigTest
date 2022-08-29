@@ -3,9 +3,9 @@
 \docType{data}
 \name{countryMacro}
 \alias{countryMacro}
-\title{Standardized macroeconomic quarterly data for 8 countries}
+\title{Standardized macroeconomic quarterly data for 8 countries.}
 \format{
-Array of data frames
+The list of multivariate time series.
 }
 \source{
 CEIC
@@ -14,7 +14,7 @@ CEIC
 countryMacro
 }
 \description{
-Standardized macroeconomic quarterly data for 8 countries
+Standardized macroeconomic quarterly data for 8 countries.
 }
 \examples{
 \dontrun{
