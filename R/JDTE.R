@@ -1,8 +1,6 @@
 #' JDTE algorithm.
 #'
 #' @param A Array of matrices.
-#' @param d Size of matrices.
-#' @param p Number of matrices.
 #' @param iter Maximum iteration times.
 #' @param tol Tolerance error.
 #'
@@ -12,8 +10,9 @@
 #' @importFrom 'MASS' ginv
 #'
 #' @examples JDTE(countryCoeff)
-JDTE = function(A, d = dim(A)[2], p = dim(A)[1], iter = 5000, tol = 10^(-16)){
+JDTE = function(A, iter = 5000, tol = 10^(-16)){
 
+  d = dim(A)[2]; p = dim(A)[1]
   score.fun = function(A, p){
     sc = 0
     for (i in 1:p) {
@@ -58,7 +57,6 @@ JDTE = function(A, d = dim(A)[2], p = dim(A)[1], iter = 5000, tol = 10^(-16)){
     }
 
     U = U %*% Z
-    #U = U/norm(U, type = '2')
     score.new = score.fun(tempA, p)
     if (abs(score.new - score.old) < tol) {
       break()

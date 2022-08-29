@@ -1,27 +1,32 @@
-#' Tangent space optimization for partial Schur decomposition
+#' Tangent space optimization for partially joint Schur decomposition using matrix exponential
 #'
 #' @param A Array of matrices
 #' @param k Number of Schur components
-#' @param d Size of matrices
-#' @param p Number of matrices
+#' @param warmup Logical whether use \code{partSchur} for a warm-up \code{Q}
 #' @param iter Maximum iteration number
 #' @param tol Tolerance error
-#' @param nn Logical whether the eigenvector elements are nonnegative
 #'
 #' @return Orthogonal matrix \code{Q}
 #' @export
 #'
-#' @importFrom Matrix expm
+#' @importFrom 'Matrix' expm
 #' @importFrom 'MASS' ginv
 #'
 #' @examples expmPartSchur(countryCoeff, 2)
-expmPartSchur = function(A, k, d = dim(A)[2], p = dim(A)[1], iter = 5000, tol = 10^(-12), nn = FALSE){
+expmPartSchur = function(A, k, warmup = FALSE, iter = 5000, tol = 10^(-12)){
 
-  if (k <= 0) {k = d}
-  if (k >= d) {return(JDTE(A))}
+  d = dim(A)[2]; p = dim(A)[1]
+  if (k <= 0 || k >= d || k != round(k)) {
+    print('Unavailable setup. The number of components must be an integer within (0, d).')
+    return()
+  }
 
-  Ui = partSchur(A, k, nonneg = nn)
-  if (nn) {return(Ui)}
+  if (warmup) {
+    Ui = partSchur(A, k)
+  } else {
+    Ui = diag(d)
+  }
+
   ZeroM = matrix(0, d, d)
 
   gridNodes = seq(0,1,0.02)
@@ -51,7 +56,8 @@ expmPartSchur = function(A, k, d = dim(A)[2], p = dim(A)[1], iter = 5000, tol = 
       matA = matA + crossprod(Ti, UL %*% Ti)
       vecB = vecB + crossprod(Ti, UL %*% as.vector(Mi))
     }
-    return(list(as.matrix(matA), vecB))
+    matA = as.matrix(matA)
+    return(matrix(ginv(crossprod(CY, matA %*% CY)) %*% crossprod(CY, vecB), ncol = d))
   }
 
   scoresUL = function(U){
@@ -77,9 +83,7 @@ expmPartSchur = function(A, k, d = dim(A)[2], p = dim(A)[1], iter = 5000, tol = 
 
   score.old = scoresUL(Ui)
   for (i in 1:iter) {
-    AB = listAB(Ui)
-    Xi = ginv(crossprod(CY, AB[[1]] %*% CY)) %*% crossprod(CY, AB[[2]])
-    Xi = matrix(Xi, ncol = d)
+    Xi = listAB(Ui)
     solAB = resultAB(Ui, Xi)
     Ui = solAB[[1]]
     score.new = solAB[[2]]

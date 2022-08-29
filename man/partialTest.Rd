@@ -6,45 +6,41 @@
 \usage{
 partialTest(
   A,
-  cov.arr = NULL,
-  k,
   cn,
-  eps,
+  cov.arr = NULL,
   nn = FALSE,
-  Q = expmPartSchur(A, k, nn = nn),
-  d = dim(A)[2],
-  p = dim(A)[1],
+  k = NULL,
+  warmup = FALSE,
+  Q = NULL,
   testType = c("chi", "gam"),
+  eps = NULL,
   param.out = FALSE
 )
 }
 \arguments{
 \item{A}{Array of original matrices}
 
-\item{cov.arr}{Array of original covariance matrices, default will use identity matrices}
-
-\item{k}{Size of the block matrices to be tested}
-
 \item{cn}{Constant for convergence}
 
-\item{eps}{The threshold of eigenvalues when compute general inverse of covariance matrices. Must be supplied when \code{testType = 'chi'}}
+\item{cov.arr}{Array of original covariance matrices, default will use identity matrices}
 
 \item{nn}{Logical whether the eigenvector elements are nonnegative}
 
+\item{k}{Size of the block matrices to be tested}
+
+\item{warmup}{Logical whether use \code{partSchur} for a warm-up \code{Q}}
+
 \item{Q}{Schur components for transformation}
 
-\item{d}{Size of original matrices}
-
-\item{p}{Number of matrices}
-
 \item{testType}{The test methods. Either for exact chi-squared test, or approximated gamma test}
+
+\item{eps}{The threshold of eigenvalues when compute general inverse of covariance matrices. Required when \code{testType = 'chi'} but with default \code{cn^(-2/3)} when unsupplied}
 
 \item{param.out}{The parameters of limiting distribution should be output or not}
 }
 \value{
-P-value or a list of test information.
+A named vector of P-value(s) when \code{param.out = FALSE}, or a named list of test information when \code{param.out = TRUE}, with name(s) to be \code{'chi'} and/or \code{'gam'}. Test information is a sub-list with elements including:
 \itemize{
-\item testType Test method, \code{'chi'} or \code{'gam'}.
 \item statistic Test statistic.
 \item df Degrees of freedom for chi-squared distribution.
 \item shape Shape parameter in gamma distribution.
@@ -56,5 +52,5 @@ P-value or a list of test information.
 Test whether a subset of common eigenvectors are shared by the list of random matrices.
 }
 \examples{
-partialTest(countryCoeff, countryCovar, k = 2, cn = sqrt(112), testType = 'gam')
+partialTest(countryCoeff, cn = sqrt(112), cov.arr = countryCovar, k = 2, testType = 'gam')
 }

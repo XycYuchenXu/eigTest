@@ -4,33 +4,23 @@
 \alias{projTest}
 \title{Calculate the p-value for projected MLE with specified covariance matrices}
 \usage{
-projTest(
-  A,
-  cov.arr = NULL,
-  refMat = A,
-  cn,
-  eps,
-  d = dim(A)[2],
-  param.out = FALSE
-)
+projTest(A, cn, cov.arr = NULL, eps = NULL, refMat = A, param.out = FALSE)
 }
 \arguments{
 \item{A}{Array of matrices to be tested. Require the length to be 2.}
 
-\item{cov.arr}{List of covariance matrices corresponding to the random matrices, default will use identity matrices}
-
-\item{refMat}{The list of reference matrices with the same eigenvectors, default is to use the estimated \code{A}}
-
 \item{cn}{Constant for convergence}
 
-\item{eps}{The threshold of eigenvalues when compute general inverse of covariance matrices}
+\item{cov.arr}{List of covariance matrices corresponding to the random matrices, default will use identity matrices}
 
-\item{d}{Matrix dimension}
+\item{eps}{The threshold of eigenvalues when compute general inverse of covariance matrices. Required when \code{testType = 'chi'} but with default \code{cn^(-2/3)} when unsupplied}
+
+\item{refMat}{The list of reference matrices with the same eigenvectors, default is to use the estimated \code{A}}
 
 \item{param.out}{Logical. Whether the parameters need to be included in output}
 }
 \value{
-The p-value or a list of test information.
+P-value, or a list of test information when \code{param.out = TRUE}, with elements including:
 \itemize{
 \item statistic Test statistic.
 \item df Degrees of freedom for chi-squared distribution.
@@ -41,5 +31,5 @@ The p-value or a list of test information.
 Only valid for nonsingular covariance matrices \code{cov.arr}.
 }
 \examples{
-projTest(countryCoeff, countryCovar, cn = sqrt(112), eps = 112^(-1/3))
+projTest(countryCoeff, cn = sqrt(112), countryCovar)
 }

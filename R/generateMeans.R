@@ -19,10 +19,10 @@
 #' @import gtools
 #'
 #' @examples generateMeans(5,8,3)
-generateMeans = function(d, p, k = d, V = matrix(0, ncol = d, nrow = d), v = rep(0,d), snr = 10, control.g = FALSE, nonneg = FALSE) {
+generateMeans = function(d, p, k = d, snr = 10, control.g = FALSE,
+                         V = NULL, v = NULL, nonneg = FALSE) {
 
-  if (k <= 0) {k = d}
-  if (k > d) {k = d}
+  if (k <= 0 || k > d) {k = d}
   means.groups = 1
   SNR = 0
   if (control.g) {
@@ -43,16 +43,19 @@ generateMeans = function(d, p, k = d, V = matrix(0, ncol = d, nrow = d), v = rep
                       NULL, NULL)
 
   if (!nonneg) {
-    orth = matrix(rnorm(d^2), ncol = d)
-    orth = qr.Q(qr(orth))
+    if (is.null(V)) {
+      orth = qr.Q(qr(matrix(rnorm(d^2), ncol = d)))
+    } else {
+      orth = qr.Q(qr(orth))
+    }
     groups = sample(d, k)
 
-    if (sum(V) == 0 || k != d){
+    if (is.null(V) || k < d){
       V = matrix(0, ncol = d, nrow = d)
       V[1:k,] = matrix(runif(k^2, -2, 2), nrow = k) %*% orth[groups,]
     }
   } else {
-    if (sum(v) == 0) {v = rdirichlet(1, rep(1,d))}
+    if (is.null(v)) {v = rdirichlet(1, rep(1,d))}
   }
 
   for (i in 1:p) {
@@ -67,11 +70,11 @@ generateMeans = function(d, p, k = d, V = matrix(0, ncol = d, nrow = d), v = rep
         vv = v + SNR[l]*rdirichlet(1, rep(1,d))
         MarkovMat2 = matrix(0, nrow = d, ncol = d)
         for (j in 1:d) {
-          for (k in 1:d) {
-            if (j != k) {
+          for (l in 1:d) {
+            if (j != l) {
               randNum = abs(rexp(1))
-              MarkovMat2[j,k] = vv[k]*randNum
-              MarkovMat2[k,j] = vv[j]*randNum
+              MarkovMat2[j,l] = vv[l]*randNum
+              MarkovMat2[l,j] = vv[j]*randNum
             }
           }
         }

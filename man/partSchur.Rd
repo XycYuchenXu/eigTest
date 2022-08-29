@@ -4,24 +4,12 @@
 \alias{partSchur}
 \title{Partial Joint Schur Decomposition}
 \usage{
-partSchur(
-  A,
-  k,
-  d = dim(A)[2],
-  p = dim(A)[1],
-  iter = 5000,
-  tol = 10^(-16),
-  nonneg = FALSE
-)
+partSchur(A, k, iter = 5000, tol = 10^(-16))
 }
 \arguments{
 \item{A}{Array of matrices}
 
 \item{k}{Number of Schur components}
-
-\item{d}{Size of matrices}
-
-\item{p}{Number of matrices}
 
 \item{iter}{Maximum iteration number}
 
@@ -35,6 +23,4 @@ Orthogonal matrix \code{Q}
 \description{
 Partial Joint Schur Decomposition
 }
-\examples{
-partSchur(countryCoeff, k = 2)
-}
+\keyword{internal}

@@ -1,28 +1,28 @@
 #' Calculate the p-value for projected MLE with specified covariance matrices
 #'
 #' @param A Array of matrices to be tested. Require the length to be 2.
-#' @param cov.arr List of covariance matrices corresponding to the random matrices, default will use identity matrices
 #' @param cn Constant for convergence
-#' @param d Matrix dimension
-#' @param param.out Logical. Whether the parameters need to be included in output
-#' @param eps The threshold of eigenvalues when compute general inverse of covariance matrices
+#' @param cov.arr List of covariance matrices corresponding to the random matrices, default will use identity matrices
+#' @param eps The threshold of eigenvalues when compute general inverse of covariance matrices. Required when \code{testType = 'chi'} but with default \code{cn^(-2/3)} when unsupplied
 #' @param refMat The list of reference matrices with the same eigenvectors, default is to use the estimated \code{A}
+#' @param param.out Logical. Whether the parameters need to be included in output
 #'
-#' @return The p-value or a list of test information.
+#' @return P-value, or a list of test information when \code{param.out = TRUE}, with elements including:
 #' \itemize{
 #' \item statistic Test statistic.
 #' \item df Degrees of freedom for chi-squared distribution.
 #' \item pvalue P-value.
 #' }
-#' @importFrom MASS ginv
+#' @importFrom 'MASS' ginv
 #' @export
 #'
 #' @description Only valid for nonsingular covariance matrices \code{cov.arr}.
 #'
-#' @examples projTest(countryCoeff, countryCovar, cn = sqrt(112), eps = 112^(-1/3))
-projTest = function(A, cov.arr = NULL, refMat = A, cn, eps, d = dim(A)[2], param.out = FALSE){
+#' @examples projTest(countryCoeff, cn = sqrt(112), countryCovar)
+projTest = function(A, cn, cov.arr = NULL, eps = NULL,
+                    refMat = A, param.out = FALSE){
 
-  p = 2
+  p = 2; d = dim(A)[2]
 
   if (is.null(cov.arr)) {
     cov1 = diag(d^2)
@@ -37,6 +37,8 @@ projTest = function(A, cov.arr = NULL, refMat = A, cn, eps, d = dim(A)[2], param
   } else {
     C = refMat[1,,]; D = refMat[2,,]
   }
+
+  if (is.null(eps)) {eps = cn^(-2/3)}
 
   X = A[1,,]; Y = A[2,,]
 

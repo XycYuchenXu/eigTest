@@ -6,39 +6,32 @@
 \usage{
 eigTest(
   A,
-  cov.arr = NULL,
   cn,
-  eps = NULL,
-  V = JDTE(A),
-  d = dim(A)[2],
-  p = dim(A)[1],
+  cov.arr = NULL,
+  V = NULL,
   testType = c("chi", "gam"),
+  eps = NULL,
   param.out = FALSE
 )
 }
 \arguments{
 \item{A}{Array of matrices}
 
-\item{cov.arr}{List of covariance matrices, default with use identity matrices}
-
 \item{cn}{Constant for convergence}
 
-\item{eps}{The threshold of eigenvalues when compute general inverse of covariance matrices. Must be supplied when \code{testType = 'chi'}}
+\item{cov.arr}{List of covariance matrices, default with use identity matrices}
 
 \item{V}{Eigenvector to be tested}
 
-\item{d}{Size of matrices}
-
-\item{p}{Number of matrices}
-
 \item{testType}{The test methods. Either for exact chi-squared test, or approximated gamma test.}
+
+\item{eps}{The threshold of eigenvalues when compute general inverse of covariance matrices. Required when \code{testType = 'chi'} but with default \code{cn^(-2/3)} when unsupplied}
 
 \item{param.out}{The parameters of limiting distribution should be output or not}
 }
 \value{
-P-value or a list of test information.
+A named vector of P-value(s) when \code{param.out = FALSE}, or a named list of test information when \code{param.out = TRUE}, with name(s) to be \code{'chi'} and/or \code{'gam'}. Test information is a sub-list with elements including:
 \itemize{
-\item testType Test method, \code{'chi'} or \code{'gam'}.
 \item statistic Test statistic.
 \item df Degrees of freedom for chi-squared distribution.
 \item shape Shape parameter in gamma distribution.
@@ -50,5 +43,5 @@ P-value or a list of test information.
 Test Whole Set of Eigenvectors
 }
 \examples{
-eigTest(countryCoeff, countryCovar, cn = sqrt(112), testType = 'gam')
+eigTest(countryCoeff, cn = sqrt(112), cov.arr = countryCovar, testType = 'gam')
 }

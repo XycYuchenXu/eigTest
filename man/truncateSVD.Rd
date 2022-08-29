@@ -4,12 +4,14 @@
 \alias{truncateSVD}
 \title{Compute truncated SVD of a matrix.}
 \usage{
-truncateSVD(A, eps)
+truncateSVD(A, eps, tr.approx = FALSE)
 }
 \arguments{
 \item{A}{Matrix}
 
 \item{eps}{The truncation threshold of singular values for SVD}
+
+\item{tr.approx}{Logical whether approximate the truncated version of \code{A}}
 }
 \value{
 A list of information about truncated SVD.

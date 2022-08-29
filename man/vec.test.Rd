@@ -4,23 +4,24 @@
 \alias{vec.test}
 \title{Calculate the p-value for normal random vectors with specified covariance matrices}
 \usage{
-vec.test(V.arr, cov.arr = NULL, cn, eps = NULL, testType = c("chi", "gam"))
+vec.test(V.arr, cn, testType, cov.arr = NULL, eps = NULL, param.out = FALSE)
 }
 \arguments{
 \item{V.arr}{Array of vectors}
 
-\item{cov.arr}{Array of covariance matrices corresponding to the vectors, default will use identity matrices}
-
 \item{cn}{The constant for convergence, or a vector of constants.}
 
-\item{eps}{The threshold of eigenvalues when compute general inverse of covariance matrices. Must be supplied when \code{testType = 'chi'}}
-
 \item{testType}{The test methods. Either for exact chi-squared test, or approximated gamma test}
+
+\item{cov.arr}{Array of covariance matrices corresponding to the vectors, default will use identity matrices}
+
+\item{eps}{The threshold of eigenvalues when compute general inverse of covariance matrices. Required when \code{testType = 'chi'} but with default \code{cn^(-2/3)} when unsupplied}
+
+\item{param.out}{The parameters of limiting distribution should be output or not}
 }
 \value{
 A list of test information.
 \itemize{
-\item testType Test method, \code{'chi'} or \code{'gam'}.
 \item statistic Test statistic.
 \item df Degrees of freedom for chi-squared distribution.
 \item shape Shape parameter in gamma distribution.
@@ -31,11 +32,4 @@ A list of test information.
 \description{
 Calculate the p-value for normal random vectors with specified covariance matrices
 }
-\examples{
-p = dim(countryCoeff)[1]
-varr = matrix(0, p, dim(countryCoeff)[2]^2)
-for (i in 1:p) {
-  varr[i,] = as.double(countryCoeff[i,,])
-}
-vec.test(varr, countryCovar, cn = sqrt(112), eps = 112^(-1/3), testType = 'chi')
-}
+\keyword{internal}

@@ -18,7 +18,6 @@
 #' \item cov.bar The array of consistent estimators of covariance matrices.
 #' }
 #'
-#'
 #' @export
 #'
 #' @examples simuSamples(generateMeans(5,4,3), sqrt(c(50,100)), 50)

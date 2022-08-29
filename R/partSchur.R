@@ -2,30 +2,20 @@
 #'
 #' @param A Array of matrices
 #' @param k Number of Schur components
-#' @param d Size of matrices
-#' @param p Number of matrices
 #' @param iter Maximum iteration number
 #' @param tol Tolerance error
 #' @param nonneg Logical whether the eigenvector elements are nonnegative
 #'
 #' @return Orthogonal matrix \code{Q}
-#' @export
 #'
-#' @importFrom Matrix Schur
-#' @importFrom pracma quadprog
+#' @keywords internal
 #'
-#' @examples partSchur(countryCoeff, k = 2)
-partSchur = function(A, k, d = dim(A)[2], p = dim(A)[1], iter = 5000, tol = 10^(-16), nonneg = FALSE){
+partSchur = function(A, k, iter = 5000, tol = 10^(-16)){
 
-  if (nonneg == TRUE) {
-    mid = matrix(0, d, d)
-    for (i in 1:p) {
-      mid = mid + tcrossprod(A[i,,] - diag(d))
-    }
-    Q = quadprog(mid, d = rep(0, d), Aeq = rep(1, d), beq = 1, lb = rep(0, d))$xmin
-    Q = cbind(Q, matrix(rnorm(d*(d-1)), nrow = d))
-    Q = qr.Q(qr(Q))
-    return(Q)
+  d = dim(A)[2]; p = dim(A)[1]
+  if (k <= 0 || k >= d || k != round(k)) {
+    print('Unavailable setup. The number of components must be an integer within (0, d).')
+    return()
   }
 
   for (i in 1:p) {

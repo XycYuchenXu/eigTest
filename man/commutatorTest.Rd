@@ -7,10 +7,10 @@
 commutatorTest(
   mat.arr,
   cn,
-  eps = NULL,
-  d = dim(mat.arr)[2],
   cov.arr = NULL,
-  testType = c("chi", "gam")
+  testType = c("chi", "gam"),
+  eps = NULL,
+  param.out = FALSE
 )
 }
 \arguments{
@@ -18,18 +18,17 @@ commutatorTest(
 
 \item{cn}{Constant for convergence}
 
-\item{eps}{The threshold of eigenvalues when compute general inverse of covariance matrices. Must be supplied when \code{testType = 'chi'}}
-
-\item{d}{Size of matrices}
-
 \item{cov.arr}{The array of covariance matrices of the two matrices, default will use identity matrices}
 
 \item{testType}{The test methods. Either for exact chi-squared test, or approximated gamma test}
+
+\item{eps}{The threshold of eigenvalues when compute general inverse of covariance matrices. Required when \code{testType = 'chi'} but with default \code{cn^(-2/3)} when unsupplied}
+
+\item{param.out}{The parameters of limiting distribution should be output or not}
 }
 \value{
-A list of test information.
+A named vector of P-value(s) when \code{param.out = FALSE}, or a named list of test information when \code{param.out = TRUE}, with name(s) to be \code{'chi'} and/or \code{'gam'}. Test information is a sub-list with elements including:
 \itemize{
-\item testType Test method, \code{'chi'} or \code{'gam'}.
 \item statistic Test statistic.
 \item df Degrees of freedom for chi-squared distribution.
 \item shape Shape parameter in gamma distribution.
@@ -43,5 +42,5 @@ Test on the commutator of two matrices
 \examples{
 means = generateMeans(5,2)
 samples = simuSamples(means, sqrt(100), 1)
-commutatorTest(samples[[1]][1,1,1,,,], sqrt(400), 400^(-1/3))
+commutatorTest(samples[[1]][1,1,1,,,], sqrt(400))
 }

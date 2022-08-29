@@ -6,7 +6,6 @@
 #' @param Q Orthogonal matrix
 #'
 #' @return Array of transformed matrices
-#' @export
 #'
 #' @keywords internal
 updateList = function(A, Q){

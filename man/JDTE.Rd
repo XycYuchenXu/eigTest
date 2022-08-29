@@ -4,14 +4,10 @@
 \alias{JDTE}
 \title{JDTE algorithm.}
 \usage{
-JDTE(A, d = dim(A)[2], p = dim(A)[1], iter = 5000, tol = 10^(-16))
+JDTE(A, iter = 5000, tol = 10^(-16))
 }
 \arguments{
 \item{A}{Array of matrices.}
-
-\item{d}{Size of matrices.}
-
-\item{p}{Number of matrices.}
 
 \item{iter}{Maximum iteration times.}
 

@@ -2,38 +2,26 @@
 % Please edit documentation in R/expmPartSchur.R
 \name{expmPartSchur}
 \alias{expmPartSchur}
-\title{Tangent space optimization for partial Schur decomposition}
+\title{Tangent space optimization for partially joint Schur decomposition using matrix exponential}
 \usage{
-expmPartSchur(
-  A,
-  k,
-  d = dim(A)[2],
-  p = dim(A)[1],
-  iter = 5000,
-  tol = 10^(-12),
-  nn = FALSE
-)
+expmPartSchur(A, k, warmup = FALSE, iter = 5000, tol = 10^(-12))
 }
 \arguments{
 \item{A}{Array of matrices}
 
 \item{k}{Number of Schur components}
 
-\item{d}{Size of matrices}
-
-\item{p}{Number of matrices}
+\item{warmup}{Logical whether use \code{partSchur} for a warm-up \code{Q}}
 
 \item{iter}{Maximum iteration number}
 
 \item{tol}{Tolerance error}
-
-\item{nn}{Logical whether the eigenvector elements are nonnegative}
 }
 \value{
 Orthogonal matrix \code{Q}
 }
 \description{
-Tangent space optimization for partial Schur decomposition
+Tangent space optimization for partially joint Schur decomposition using matrix exponential
 }
 \examples{
 expmPartSchur(countryCoeff, 2)

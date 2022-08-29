@@ -10,14 +10,14 @@
 #' @keywords internal
 #'
 score.fun = function(A, Q){
+
   score.fun = 0
   d = dim(A)[2]
   p = dim(A)[1]
 
   for (i in 1:p) {
-    Ai = crossprod(Q, A[i,,] %*% Q)
-    vi = Ai[-1,1]
-    score.fun = score.fun + as.double(crossprod(vi))
+    score.fun = score.fun +
+      norm(crossprod(Q[,-1], A[i,,] %*% Q[,1]), 'F')^2
   }
   return(score.fun)
 }

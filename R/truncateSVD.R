@@ -2,6 +2,7 @@
 #'
 #' @param A Matrix
 #' @param eps The truncation threshold of singular values for SVD
+#' @param tr.approx Logical whether approximate the truncated version of \code{A}
 #'
 #' @return A list of information about truncated SVD.
 #' \itemize{
@@ -9,11 +10,10 @@
 #' \item r The rank of \code{A} after truncation.
 #' \item ginv The general inverse of the truncated SVD approximation.
 #' }
-#' @export
 #'
 #' @keywords internal
 #'
-truncateSVD = function(A, eps){
+truncateSVD = function(A, eps, tr.approx = FALSE){
 
   s = svd(A)
   A.eps = s$u %*% diag((s$d > eps)*s$d) %*% t(s$v)
@@ -22,6 +22,10 @@ truncateSVD = function(A, eps){
   d.inv[is.na(d.inv)] = 0
   ginv.A = s$v %*% diag(d.inv) %*% t(s$u)
 
-  output = list(Id = A.eps, r = r, ginv = ginv.A)
+  if (tr.approx) {
+    output = list(Id = s$u %*% diag((s$d > eps)*s$d) %*% t(s$v), r = r, ginv = ginv.A)
+  } else {
+    output = list(r = r, ginv = ginv.A)
+  }
   return(output)
 }
