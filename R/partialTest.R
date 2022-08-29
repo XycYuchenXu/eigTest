@@ -49,7 +49,7 @@ partialTest = function(A, cn, cov.arr = NULL, nn = FALSE, k=NULL, warmup = FALSE
   }
 
   if (is.null(k) || k > d || k <= 0 || k != round(k)) {
-    print('Unavailable setup. The number of common components must be an integer within (0, d) for partial test.')
+    print('Unavailable setup. The number of common components must be an integer within (0, d] for partial test.')
     return()
   }
 
