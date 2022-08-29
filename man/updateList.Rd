@@ -7,9 +7,9 @@
 updateList(A, Q)
 }
 \arguments{
-\item{A}{The array of matrices with dimension \code{p}-\code{d}-\code{d}, where \code{p} is the number of matrices, \code{d} is the dimension of the matrices.}
+\item{A}{The array of matrices with dimension \code{p}-\code{L}-\code{L}, where \code{p} is the number of matrices, \code{L} is the dimension of the matrices.}
 
-\item{Q}{The orthogonal matrix of dimension \code{d}-\code{d}.}
+\item{Q}{The orthogonal matrix of dimension \code{L}-\code{d}.}
 }
 \value{
 The array of transformed matrices with dimension \code{p}-\code{d}-\code{d}.
