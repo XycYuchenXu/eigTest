@@ -16,7 +16,6 @@
 truncateSVD = function(A, eps, tr.approx = FALSE){
 
   s = svd(A)
-  A.eps = s$u %*% diag((s$d > eps)*s$d) %*% t(s$v)
   r = sum(s$d > eps)
   d.inv = (s$d > eps)/s$d
   d.inv[is.na(d.inv)] = 0
