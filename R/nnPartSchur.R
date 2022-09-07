@@ -5,6 +5,7 @@
 #' @return The orthogonal matrix \code{Q} of dimension \code{d}-\code{d} with the first column to be the estimated nonnegative common component.
 #' @export
 #'
+#' @import quadprog
 #' @importFrom 'pracma' quadprog
 #'
 #' @examples nnPartSchur(countryCoeff)

@@ -22,9 +22,9 @@ projTest(A, cn, cov.arr = NULL, eps = NULL, refMat = NULL, param.out = FALSE)
 \value{
 A P-value when \code{param.out = FALSE} or a list of test information when \code{param.out = TRUE}.
 \itemize{
-\item statistic The test statistic.
-\item df The degrees of freedom for chi-squared distribution.
-\item pvalue The P-value.
+\item \code{statistic}: The test statistic.
+\item \code{df}: The degrees of freedom for chi-squared distribution.
+\item \code{pvalue} The P-value.
 }
 }
 \description{

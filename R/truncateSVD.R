@@ -6,9 +6,9 @@
 #'
 #' @return A list of information about truncated SVD.
 #' \itemize{
-#' \item Id The truncated approximation of \code{A}. Included only when \code{tr.approx = TRUE}.
-#' \item r The rank of \code{A} after truncation.
-#' \item ginv The general inverse of the truncated SVD approximation.
+#' \item \code{Id}: The truncated approximation of \code{A}. Included only when \code{tr.approx = TRUE}.
+#' \item \code{r}: The rank of \code{A} after truncation.
+#' \item \code{ginv}: The general inverse of the truncated SVD approximation.
 #' }
 #'
 #' @keywords internal

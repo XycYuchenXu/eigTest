@@ -13,12 +13,12 @@
 #'
 #' @return A named vector of P-value(s) when \code{param.out = FALSE}, or a named list of test information when \code{param.out = TRUE}, with name(s) to be \code{'chi'} and/or \code{'gam'}. Test information is a sub-list with elements including:
 #' \itemize{
-#' \item testType The test methods. Either exact chi-squared test \code{'chi'}, or approximated gamma test \code{'gam'}.
-#' \item statistic The test statistic.
-#' \item df The degrees of freedom for chi-squared distribution when \code{testType = 'chi'}.
-#' \item shape The shape parameter in gamma distribution when \code{testType = 'gam'}.
-#' \item rate The rate parameter in gamma distribution when \code{testType = 'gam'}.
-#' \item pvalue The P-value.
+#' \item \code{testType}: The test methods. Either exact chi-squared test \code{'chi'}, or approximated gamma test \code{'gam'}.
+#' \item \code{statistic}: The test statistic.
+#' \item \code{df}: The degrees of freedom for chi-squared distribution when \code{testType = 'chi'}.
+#' \item \code{shape}: The shape parameter in gamma distribution when \code{testType = 'gam'}.
+#' \item \code{rate}: The rate parameter in gamma distribution when \code{testType = 'gam'}.
+#' \item \code{pvalue}: The P-value.
 #' }
 #' @export
 #'
