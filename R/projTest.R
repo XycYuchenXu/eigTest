@@ -57,11 +57,11 @@ projTest = function(A, cn, cov.arr = NULL, eps = NULL,
     SP.D = cbind(SP.D, as.vector(D.temp))
   }
   cov1.svd = truncateSVD(cov1, eps); cov2.svd = truncateSVD(cov2, eps)
-  inner1 = ginv(crossprod(SP.D, cov1.svd$ginv %*% SP.D)); inner2 = ginv(crossprod(SP.C, cov2.svd$ginv %*% SP.C))
-  Q1 = cov1.svd$ginv - cov1.svd$ginv %*% SP.D %*% inner1 %*% t(SP.D) %*% cov1.svd$ginv
-  Q2 = cov2.svd$ginv - cov2.svd$ginv %*% SP.C %*% inner2 %*% t(SP.C) %*% cov2.svd$ginv
+  inner1 = crossprod(SP.D, cov1.svd$ginv %*% SP.D); inner2 = crossprod(SP.C, cov2.svd$ginv %*% SP.C)
+  Q1 = cov1.svd$ginv - cov1.svd$ginv %*% SP.D %*% ginv(inner1) %*% t(SP.D) %*% cov1.svd$ginv
+  Q2 = cov2.svd$ginv - cov2.svd$ginv %*% SP.C %*% ginv(inner2) %*% t(SP.C) %*% cov2.svd$ginv
 
-  r = cov1.svd$r + cov2.svd$r
+  r = cov1.svd$r + cov2.svd$r - sum(svd(inner1)$d > 1e-10) - sum(svd(inner2)$d > 1e-10)
   testVal = crossprod(as.double(X), Q1 %*% as.double(X)) + crossprod(as.double(Y), Q2 %*% as.double(Y))
   testVal = testVal * cn^2
 
