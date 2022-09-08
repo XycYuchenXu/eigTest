@@ -59,7 +59,7 @@ generateMeans = function(d, p, k = d, snr = 10, control.g = FALSE,
   for (i in 1:p) {
     if (!nonneg) {
       Vi = V
-      di = diag(runif(d, -1, 1))
+      di = diag(runif(d, 1, 3) * sample(c(-1,1), d, replace = T))
       if (k < d) {Vi[(k+1):d,] = matrix(runif((d-k)^2, -2, 2), ncol = d-k) %*% orth[-groups,]}
 
     }
