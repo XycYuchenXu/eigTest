@@ -53,7 +53,9 @@ commutatorTest = function(mat.arr, cn, cov.arr = NULL, testType = c('chi', 'gam'
   for (tp in testType) {
     temp = vec.test(y, cn, tp, sigma.y, eps, param.out)
     if (!is.null(temp)) {
-      output = c(output, temp); names(output)[length(output)] = tp
+      if (param.out) {output = list(output, temp)}
+      else {output = c(output, temp)}
+      names(output)[length(output)] = tp
     }
   }
   if (is.null(output)) {

@@ -49,7 +49,9 @@ eigTest = function(A, cn, cov.arr = NULL, V = NULL, testType = c('chi', 'gam'),
   for (tp in testType) {
     temp = vec.test(Varr, cn, tp, cov.arr, eps, param.out)
     if (!is.null(temp)) {
-      output = c(output, temp); names(output)[length(output)] = tp
+      if (param.out) {output = list(output, temp)}
+      else {output = c(output, temp)}
+      names(output)[length(output)] = tp
     }
   }
   if (is.null(output)) {
