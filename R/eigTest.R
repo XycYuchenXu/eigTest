@@ -45,11 +45,12 @@ eigTest = function(A, cn, cov.arr = NULL, V = NULL, testType = c('chi', 'gam'),
   }
   cov.arr = cov.arr[, 1:(d^2 - d), 1:(d^2 - d)]
 
-  output = c();
+  if (param.out) {output = list()}
+  else {output = c()}
   for (tp in testType) {
     temp = vec.test(Varr, cn, tp, cov.arr, eps, param.out)
     if (!is.null(temp)) {
-      if (param.out) {output = list(output, temp)}
+      if (param.out) {output[[length(output) + 1]] = temp}
       else {output = c(output, temp)}
       names(output)[length(output)] = tp
     }

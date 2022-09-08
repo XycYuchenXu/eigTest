@@ -49,11 +49,12 @@ commutatorTest = function(mat.arr, cn, cov.arr = NULL, testType = c('chi', 'gam'
 
   sigma.y = array(tcrossprod(QA, QA %*% covB) + tcrossprod(QB, QB %*% covA), dim = c(1, d^2, d^2))
 
-  output = c();
+  if (param.out) {output = list()}
+  else {output = c()}
   for (tp in testType) {
     temp = vec.test(y, cn, tp, sigma.y, eps, param.out)
     if (!is.null(temp)) {
-      if (param.out) {output = list(output, temp)}
+      if (param.out) {output[[length(output) + 1]] = temp}
       else {output = c(output, temp)}
       names(output)[length(output)] = tp
     }
