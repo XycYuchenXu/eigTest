@@ -50,7 +50,8 @@ generateMeans = function(d, p, k = d, snr = 10, control.g = FALSE,
 
     if (is.null(V) || k < d){
       V = matrix(0, ncol = d, nrow = d)
-      V[1:k,] = matrix(runif(k^2, -2, 2), nrow = k) %*% orth[groups,]
+      coefM = matrix(runif(k^2, -2, 2), nrow = k)
+      V[1:k,] = (diag(k) + coefM[upper.tri(coefM)]) %*% orth[groups,]
     }
   } else {
     if (is.null(v)) {v = rdirichlet(1, rep(1,d))}
@@ -60,7 +61,10 @@ generateMeans = function(d, p, k = d, snr = 10, control.g = FALSE,
     if (!nonneg) {
       Vi = V
       di = diag(runif(d, 1, 3) * sample(c(-1,1), d, replace = T))
-      if (k < d) {Vi[(k+1):d,] = matrix(runif((d-k)^2, -2, 2), ncol = d-k) %*% orth[-groups,]}
+      if (k < d) {
+        coefM = matrix(runif((d-k)^2, -2, 2), ncol = d-k)
+        Vi[(k+1):d,] = (diag(d-k) + coefM[upper.tri(coefM)]) %*% orth[-groups,]
+      }
 
     }
     for (l in 1:means.groups) {
