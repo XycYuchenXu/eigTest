@@ -36,7 +36,7 @@ JDTE = function(A, iter = 5000, tol = 10^(-16)){
   score.old = score.fun(A, p)
   for (i in 1:iter) {
 
-    Z = diag(d)
+    Z = matrix(0, d, d)
 
     for (r in 1:d) {
       for (s in 1:d) {
@@ -51,6 +51,16 @@ JDTE = function(A, iter = 5000, tol = 10^(-16)){
         Z[r,s] = - num/denum
       }
     }
+
+    wnum = 0; wdenum = 0
+    for (j in 1:p) {
+      Oj = tempA[j,,]
+      Cj = Z %*% Oj - Oj %*% Z; diag(Cj) = 0
+      diag(Oj) = 0
+      wdenum = wdenum + norm(Cj, type = 'F')^2
+      wnum = wnum + sum(Oj * Cj)
+    }
+    Z = diag(d) + Z * wnum / wdenum
 
     for (j in 1:p) {
       tempA[j,,] = ginv(Z) %*% tempA[j,,] %*% Z
