@@ -4,7 +4,15 @@
 \alias{projTest}
 \title{Calculate the p-value for projected MLE with specified covariance matrices}
 \usage{
-projTest(A, cn, cov.arr = NULL, eps = NULL, refMat = NULL, param.out = FALSE)
+projTest(
+  A,
+  cn,
+  cov.arr = NULL,
+  eps = NULL,
+  refMat = NULL,
+  poly.sp = TRUE,
+  param.out = FALSE
+)
 }
 \arguments{
 \item{A}{The array of two matrices to be tested with dimension \code{2}-\code{d}-\code{d}. If \code{dim(A)[1] > 2}, only the first two are used.}
@@ -16,6 +24,8 @@ projTest(A, cn, cov.arr = NULL, eps = NULL, refMat = NULL, param.out = FALSE)
 \item{eps}{The threshold of eigenvalues when compute general inverse of covariance matrices. Required when \code{testType = 'chi'} but with default \code{cn^(-2/3)} when unsupplied.}
 
 \item{refMat}{The array of reference matrices with dimension \code{2}-\code{d}-\code{d} that have the same eigenvectors. Default (when \code{is.null(refMat)}) is to use \code{A[2,,]} as reference for \code{A[1,,]} and vice versa. If \code{dim(refMat)[1] = 1}, the only reference matrix is shared.}
+
+\item{poly.sp}{Logical, whether the space matrix is generated from polynomial basis. Default \code{poly.sp = TRUE} to use Legendre polynomials. Otherwise \code{poly.sp = FALSE}, the space matrix is generated with estimated common eigenvectors from \code{JDTE(refMat)}.}
 
 \item{param.out}{Logical, whether the parameters of limiting distribution should be output or not. Default \code{param.out = FALSE} to only output P-value.}
 }

@@ -60,7 +60,7 @@ generateMeans = function(d, p, k = d, snr = 10, control.g = FALSE,
   for (i in 1:p) {
     if (!nonneg) {
       Vi = V
-      di = diag(runif(d, 0.5, 4) * sample(c(-1,1), d, replace = T))
+      di = diag(runif(d, 0.5, d) * sample(c(-1,1), d, replace = T))
       if (k < d) {
         coefM = matrix(runif((d-k)^2, -1, 1), ncol = d-k); coefM[!upper.tri(coefM)] = 0
         Vi[(k+1):d,] = (diag(d-k) + coefM) %*% orth[-groups,]
