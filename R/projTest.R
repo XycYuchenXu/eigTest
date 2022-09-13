@@ -44,18 +44,20 @@ projTest = function(A, cn, cov.arr = NULL, eps = NULL,
 
   X = A[1,,]; Y = A[2,,]
 
-  C.temp = diag(d)
-  D.temp = diag(d)
-  SP.C = as.vector(C.temp)/norm(C.temp, 'F')
-  SP.D = as.vector(D.temp)/norm(D.temp, 'F')
-  for (i in 1:(d-1)) {
-    C.temp = C.temp %*% C
-    D.temp = D.temp %*% D
-    C.temp = C.temp/norm(C.temp, 'F')
-    D.temp = D.temp/norm(D.temp, 'F')
-    SP.C = cbind(SP.C, as.vector(C.temp))
-    SP.D = cbind(SP.D, as.vector(D.temp))
+  C0 = diag(d); D0 = diag(d)
+  C1 = C; D1 = D
+  SP.C = cbind(as.vector(C0), as.vector(C1))
+  SP.D = cbind(as.vector(D0), as.vector(D1))
+  if (d > 2){
+    for (i in 1:(d-2)) {
+      C.temp = ((2*i + 1) * C %*% C1 - i * C0) / (i + 1)
+      D.temp = ((2*i + 1) * D %*% D1 - i * D0) / (i + 1)
+      SP.C = cbind(SP.C, as.vector(C.temp))
+      SP.D = cbind(SP.D, as.vector(D.temp))
+      C0 = C1; D0 = D1; C1 = C.temp; D1 = D.temp
+    }
   }
+
   cov1.svd = truncateSVD(cov1, eps); cov2.svd = truncateSVD(cov2, eps)
   inner1 = crossprod(SP.D, cov1.svd$ginv %*% SP.D); inner2 = crossprod(SP.C, cov2.svd$ginv %*% SP.C)
   Q1 = cov1.svd$ginv - cov1.svd$ginv %*% SP.D %*% ginv(inner1) %*% t(SP.D) %*% cov1.svd$ginv
