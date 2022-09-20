@@ -13,9 +13,11 @@
 #'
 #' @keywords internal
 #'
+#' @import svd
+#'
 truncateSVD = function(A, eps, tr.approx = FALSE){
 
-  s = svdwrapper(A)
+  s = propack.svd(A)
   r = sum(s$d > eps)
   d.inv = (s$d > eps)/s$d
   d.inv[is.na(d.inv)] = 0
@@ -27,16 +29,4 @@ truncateSVD = function(A, eps, tr.approx = FALSE){
     output = list(r = r, ginv = ginv.A)
   }
   return(output)
-}
-
-
-svdwrapper = function( x ){
-  gotit = F
-  try( {svdx = svd(x); gotit=T}, silent = T )
-  if( gotit )return(svdx)
-  try( {svdtx = svd(t(x)); gotit=T}, silent = T )
-  temp    = svdtx$u
-  svdtx$u = svdtx$v
-  svdtx$v = temp
-  svdtx
 }
