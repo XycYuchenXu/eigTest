@@ -16,8 +16,9 @@
 #' @import svd
 #'
 truncateSVD = function(A, eps, tr.approx = FALSE){
-
-  s = propack.svd(A)
+  gotit = F
+  try( {s = svd(A); gotit = T}, silent = T)
+  if (!gotit) {s = propack.svd(A)}
   r = sum(s$d > eps)
   d.inv = (s$d > eps)/s$d
   d.inv[is.na(d.inv)] = 0
