@@ -19,7 +19,7 @@
 #'
 #' @keywords internal
 #'
-#' @import 'stats'
+#' @import stats
 #'
 vec.test = function(V.arr, cn, testType, cov.arr = NULL,
                     eps=NULL, param.out = FALSE){

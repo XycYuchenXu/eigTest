@@ -18,7 +18,7 @@
 #' }
 #' @export
 #'
-#' @import 'stats'
+#' @import stats
 #'
 #' @examples means = generateMeans(5,2)
 #' samples = simuSamples(means, sqrt(100), 1)
