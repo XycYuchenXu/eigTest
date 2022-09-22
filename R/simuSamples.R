@@ -89,7 +89,7 @@ simuSamples = function(mu, cn, reps, nonneg = FALSE,
   acomb3 = function(...) acomb(..., along = 3)
   acomb4 = function(...) acomb(..., along = 4)
 
-
+  cm = NULL; i = NULL; l = NULL
   if (prl) {
     cat('Sampling: \n')
     pb <- txtProgressBar(max = num.size*out.groups*reps*p, style = 3)
