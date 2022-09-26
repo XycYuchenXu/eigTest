@@ -48,8 +48,8 @@ full_samples = simuSamples(mu = full_means,                # mean matrices
                            cn = c(sqrt(100), sqrt(500)),   # convergence rate
                            reps = 200)                     # replicate
 
-eg_full_mat = full_samples[[1]]$mu.bar; print(dim(eg_full_mat))
-eg_full_cov = full_samples[[1]]$cov.bar; print(dim(eg_full_cov))
+eg_full_mat = full_samples[[1]][[1]]; print(dim(eg_full_mat))
+eg_full_cov = full_samples[[1]][[2]]; print(dim(eg_full_cov))
 
 part_means = generateMeans(d = 5,           # square matrix's dimension
                            p = 4,           # number of matrices
@@ -62,8 +62,8 @@ part_samples = simuSamples(mu = part_means,                # mean matrices
                            reps = 200,                     # replicate
                            nonneg = FALSE)                 # nonnegativity
 
-eg_part_mat = part_samples[[1]]$mu.bar; print(dim(eg_part_mat))
-eg_part_cov = part_samples[[1]]$cov.bar; print(dim(eg_part_cov))
+eg_part_mat = part_samples[[1]][[2]]; print(dim(eg_part_mat))
+eg_part_cov = part_samples[[1]][[2]]; print(dim(eg_part_cov))
 ```
 
 
