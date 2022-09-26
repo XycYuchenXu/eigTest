@@ -11,11 +11,12 @@
 #' @param est.cov Logical, whether the covariance matrices are estimated empirically. Default to \code{est.cov = TRUE}.
 #' @param prl Logical, whether to use parallel sampling. Default to \code{prl = FALSE} for not parallelizing. If \code{prl == TRUE}, one must first call \code{registerDoSNOW()} externally.
 #'
-#' @return A list of arrays. When \code{est.cov = FALSE}, only the first array of mean estimators are included in the output list.
+#' @return A list of lists, with length \code{reps}. Every sublist has the following format.
 #' \itemize{
 #' \item \code{mu.bar}: The array of consistent estimators of the mean matrices, with dimension \code{m}-by-\code{q}-by-\code{p}-\code{d}-by-\code{d}, where \code{m} is the number of different rates \code{m = length(cn)}.
 #' \item \code{cov.bar}: The array of consistent estimators of covariance matrices, with dimension \code{m}-by-\code{q}-by-\code{p}-\code{d^2}-by-\code{d^2}, where \code{m} is the number of different rates \code{m = length(cn)}.
 #' }
+#' When \code{est.cov = FALSE}, only the first array of mean estimators are included in the sublist.
 #'
 #' @import utils
 #' @import foreach
@@ -26,14 +27,14 @@
 simuSamples = function(mu, cn, reps, nonneg = FALSE,
                        est.cov = TRUE, prl = FALSE){
 
-  p = dim(mu)[1]
+  p = dim(mu)[1]; matIDs = dimnames(mu)[[1]]
+  out.groups = dim(mu)[2]; snrs = dimnames(mu)[[2]]
   d = dim(mu)[3]
-  out.groups = dim(mu)[2]
   num.size = length(cn)
 
   if (nonneg) {
-    markovProcess = function(P,L){
-      L = floor(L)
+    markovProcess = function(P, L, s, i){
+      L = round(L)
       n = nrow(P)
       Label = matrix(0, nrow = L+1, ncol = 1)
       CountMat = matrix(0, nrow = n, ncol = n)
@@ -42,97 +43,105 @@ simuSamples = function(mu, cn, reps, nonneg = FALSE,
         Label[l] = sample(n,1,prob = P[Label[l-1],],replace = TRUE)
         CountMat[Label[l-1], Label[l]] = CountMat[Label[l-1], Label[l]]+1
       }
-      for (i in 1:n) {
-        sums = 1/sum(CountMat[i,])
+      for (j in 1:n) {
+        sums = 1/sum(CountMat[j,])
         if (is.infinite(sums)) {sums = 0}
-        CountMat[i,] = CountMat[i,]*sums[1]
+        CountMat[j,] = CountMat[j,]*sums[1]
       }
 
       if (est.cov) {
         CovMat = matrix(0, ncol = n^2, nrow = n^2)
         pi = matrix(0, nrow = n, ncol = 1)
-        for (i in 1:n) {
-          pi[i] = sum(Label == i)/(L+1)
+        for (j in 1:n) {
+          pi[j] = sum(Label == j)/(L+1)
         }
         vec = 1/pi
         vec[is.infinite(vec)] = 0
-        for (i in 1:n) {
+        for (j in 1:n) {
           Ei = matrix(0, ncol = n, nrow = n)
-          Ei[i,i] = 1
-          Qi = diag(CountMat[i,]) - matrix(CountMat[i,], nrow = n, ncol = n) * matrix(CountMat[i,], nrow = n, ncol = n, byrow = T)
-          CovMat = CovMat + kronecker(Qi * vec[i], Ei)
+          Ei[j,j] = 1
+          Qi = diag(CountMat[j,]) - matrix(CountMat[j,], nrow = n, ncol = n) * matrix(CountMat[j,], nrow = n, ncol = n, byrow = T)
+          CovMat = CovMat + kronecker(Qi * vec[j], Ei)
         }
-        dim(CovMat) = c(rep(1, 4), dim(CovMat))
+        dim(CovMat) = c(rep(1, 3), dim(CovMat))
       }
-      dim(CountMat) = c(rep(1, 4), dim(CountMat))
-      if (est.cov) {return(list(CountMat, CovMat))}
-      return(list(CountMat))
+      dim(CountMat) = c(rep(1, 3), dim(CountMat))
+      nameList = list(paste0('Sample size n=', L), snrs[s], matIDs[i], NULL, NULL)
+      dimnames(CountMat) = nameList
+      if (est.cov) {
+        dimnames(CovMat) = nameList
+        return(list(mu.bar = CountMat, cov.bar = CovMat))
+      }
+      return(list(mu.bar = CountMat))
     }
   } else {
-    estMat = function(Mat, n){
+    estMat = function(Mat, n, s, i){
       n = floor(n)
       d = nrow(Mat)
       erMat = matrix(0, n, d^2)
-      for (i in 1:n) {
-        erMat[i,] = rnorm(d^2)
+      for (j in 1:n) {
+        erMat[j,] = rnorm(d^2)
       }
       estMat = Mat + matrix(colMeans(erMat), nrow = d)
-      if (est.cov) {CovMat = cov(erMat); dim(CovMat) = c(rep(1, 4), dim(CovMat))}
-      dim(estMat) = c(rep(1, 4), dim(estMat))
-      if (est.cov) {return(list(estMat, CovMat))}
-      return(list(estMat))
+      if (est.cov) {CovMat = cov(erMat); dim(CovMat) = c(rep(1, 3), dim(CovMat))}
+      dim(estMat) = c(rep(1, 3), dim(estMat))
+      nameList = list(paste0('Sample size n=', n), snrs[s], matIDs[i], NULL, NULL)
+      dimnames(estMat) = nameList
+      if (est.cov) {
+        dimnames(CovMat) = nameList
+        return(list(mu.bar = estMat, cov.bar = CovMat))
+      }
+      return(list(mu.bar = estMat))
     }
   }
 
   acomb1 = function(...) acomb(..., along = 1)
   acomb2 = function(...) acomb(..., along = 2)
   acomb3 = function(...) acomb(..., along = 3)
-  acomb4 = function(...) acomb(..., along = 4)
 
-  cm = NULL; i = NULL; l = NULL
+  cm = NULL; i = NULL; s = NULL
   if (prl) {
     cat('Sampling: \n')
     pb <- txtProgressBar(max = num.size*out.groups*reps*p, style = 3)
     progress <- function(n) {setTxtProgressBar(pb, n)}
     opts <- list(progress = progress)
 
-    output = foreach(cm = cn, .combine = acomb1,
-                     .options.snow = opts) %:%
-      foreach(l=1:out.groups, .combine = acomb2) %:%
-      foreach(j=1:reps, .combine = acomb3) %:%
-      foreach(i=1:p, .combine = acomb4) %dopar% {
-        if (nonneg) { out = markovProcess(mu[i,l,,], cm^2) }
-        else { out = estMat(mu[i,l,,], cm^2) }
+    output = foreach(j=1:reps, .options.snow = opts) %:%
+      foreach(cm = cn, .combine = acomb1) %:%
+      foreach(s=1:out.groups, .combine = acomb2) %:%
+      foreach(i=1:p, .combine = acomb3) %dopar% {
+        if (nonneg) { out = markovProcess(mu[i,s,,], cm^2, s, i) }
+        else { out = estMat(mu[i,s,,], cm^2, s, i) }
         out
       }
   } else {
-    output = foreach(cm = cn, .combine = acomb1) %:%
-      foreach(l=1:out.groups, .combine = acomb2) %:%
-      foreach(j=1:reps, .combine = acomb3) %:%
-      foreach(i=1:p, .combine = acomb4) %do% {
-        if (nonneg) { out = markovProcess(mu[i,l,,], cm^2) }
-        else { out = estMat(mu[i,l,,], cm^2) }
+    output = foreach(j=1:reps) %:%
+      foreach(cm = cn, .combine = acomb1) %:%
+      foreach(s=1:out.groups, .combine = acomb2) %:%
+      foreach(i=1:p, .combine = acomb3) %do% {
+        if (nonneg) { out = markovProcess(mu[i,s,,], cm^2, s, i) }
+        else { out = estMat(mu[i,s,,], cm^2, s, i) }
         out
       }
   }
-  names(output)[1] = 'mu.bar'
-  dimnames(output[[1]]) = list(
-    paste0('Sample size n=', round(cn^2)),
-    dimnames(mu)[[2]],
-    paste0('Replica #', 1:reps),
-    dimnames(mu)[[1]],
-    NULL, NULL
-  )
-  if (est.cov) {
-    names(output)[2] = 'cov.bar'
-    dimnames(output[[2]]) = list(
-      paste0('Sample size n=', round(cn^2)),
-      dimnames(mu)[[2]],
-      paste0('Replica #', 1:reps),
-      dimnames(mu)[[1]],
-      NULL, NULL
-    )
-  }
+  # names(output)[1] = 'mu.bar'
+  # dimnames(output[[1]]) = list(
+  #   paste0('Sample size n=', round(cn^2)),
+  #   dimnames(mu)[[2]],
+  #   paste0('Replica #', 1:reps),
+  #   dimnames(mu)[[1]],
+  #   NULL, NULL
+  # )
+  # if (est.cov) {
+  #   names(output)[2] = 'cov.bar'
+  #   dimnames(output[[2]]) = list(
+  #     paste0('Sample size n=', round(cn^2)),
+  #     dimnames(mu)[[2]],
+  #     paste0('Replica #', 1:reps),
+  #     dimnames(mu)[[1]],
+  #     NULL, NULL
+  #   )
+  # }
   return(output)
 
   # for (s in 1:num.size) {
