@@ -17,8 +17,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 To install and load the package, use the code:
 ```{r install, message=FALSE, warning=FALSE}
-devtools::install_github('XycYuchenXu/eigTest', quiet = T)
-library(eigTest)
+fail = TRUE
+try( {library(eigTest); fail = FALSE}, TRUE )
+if (fail) {
+  devtools::install_github('XycYuchenXu/eigTest', quiet = T, build_vignettes = F)
+  library(eigTest)
+}
 ```
 
 ## Simulation samples
