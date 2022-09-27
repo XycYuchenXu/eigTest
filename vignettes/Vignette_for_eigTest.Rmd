@@ -50,7 +50,7 @@ full_means = generateMeans(d = 5,           # square matrix's dimension
 
 full_samples = simuSamples(mu = full_means,                # mean matrices
                            cn = c(sqrt(100), sqrt(500)),   # convergence rate
-                           reps = 200)                     # replicate
+                           reps = 20)                     # replicate
 
 eg_full_mat = full_samples[[1]]$mu.bar; print(dim(eg_full_mat))
 eg_full_cov = full_samples[[1]]$cov.bar; print(dim(eg_full_cov))
@@ -63,7 +63,7 @@ part_means = generateMeans(d = 5,           # square matrix's dimension
 
 part_samples = simuSamples(mu = part_means,                # mean matrices
                            cn = c(sqrt(100), sqrt(500)),   # convergence rate
-                           reps = 200,                     # replicate
+                           reps = 20,                     # replicate
                            nonneg = FALSE)                 # nonnegativity
 
 eg_part_mat = part_samples[[1]]$mu.bar; print(dim(eg_part_mat))

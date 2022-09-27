@@ -24,8 +24,8 @@ A list of lists, with length \code{reps * m * q}, where \code{m} is the number o
 \itemize{
 \item \code{SNR}: The string indicating signal to noise ratio.
 \item \code{CovRate}: The numerical value indicating the corresponding convergence rate in \code{cn}.
-\item \code{mu.bar}: The array of consistent estimators of the mean matrices, with dimension \code{m}-by-\code{q}-by-\code{p}-\code{d}-by-\code{d}, where \code{m} is the number of different rates \code{m = length(cn)}.
-\item \code{cov.bar}: The array of consistent estimators of covariance matrices, with dimension \code{m}-by-\code{q}-by-\code{p}-\code{d^2}-by-\code{d^2}, where \code{m} is the number of different rates \code{m = length(cn)}.
+\item \code{mu.bar}: The array of consistent estimators of the mean matrices, with dimension \code{p}-\code{d}-by-\code{d}.
+\item \code{cov.bar}: The array of consistent estimators of covariance matrices, with dimension \code{p}-\code{d^2}-by-\code{d^2}.
 }
 When \code{est.cov = FALSE}, only the first array of mean estimators are included in the sublist.
 }

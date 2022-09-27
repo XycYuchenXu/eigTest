@@ -120,16 +120,14 @@ simuSamples = function(mu, cn, reps, nonneg = FALSE,
 
     output = foreach(j=1:reps, .options.snow = opts, .combine = c,
                      .multicombine = T) %:%
-      foreach(cm = cn, .combine = c) %:%
-      foreach(s = 1:out.groups, .combine = c) %:%
+      foreach(cm = cn, .combine = c) %:% foreach(s = 1:out.groups) %:%
       foreach(i = 1:p, .combine = acomb) %dopar% {
         if (j %% max(5, reps %/% 10) == 1 && s == 1 && i == 1 && cm == cn[1]) {gc(); gc()}
         return(estMat(mu[i,s,,], cm, s, i))
       }
   } else {
     output = foreach(j=1:reps, .combine = c, .multicombine = T) %:%
-      foreach(cm = cn, .combine = c) %:%
-      foreach(s = 1:out.groups, .combine = c) %:%
+      foreach(cm = cn, .combine = c) %:% foreach(s = 1:out.groups) %:%
       foreach(i = 1:p, .combine = acomb) %do% {
         if (j %% max(5, reps %/% 10) == 1 && s == 1 && i == 1 && cm == cn[1]) {gc(); gc()}
         return(estMat(mu[i,s,,], cm, s, i))
