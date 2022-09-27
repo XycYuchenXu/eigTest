@@ -112,7 +112,7 @@ simuSamples = function(mu, cn, reps, nonneg = FALSE,
       foreach(s = 1:out.groups, .combine = acomb2) %:%
       foreach(i = 1:p, .combine = acomb3) %dopar% {
         out = estMat(mu[i,s,,], cm^2, s, i)
-        if (j %% max(5, reps %/% 10) == 0 && s == out.groups && i == p && cm == tail(cn,1)) gc()
+        if (j %% max(5, reps %/% 10) == 0 && s == out.groups && i == p && cm == tail(cn,1)) {gc(); gc()}
         return(out)
       }
   } else {
@@ -121,7 +121,7 @@ simuSamples = function(mu, cn, reps, nonneg = FALSE,
       foreach(s = 1:out.groups, .combine = acomb2) %:%
       foreach(i = 1:p, .combine = acomb3) %do% {
         out = estMat(mu[i,s,,], cm^2, s, i)
-        if (j %% max(5, reps %/% 10) == 0 && s == out.groups && i == p && cm == tail(cn,1)) gc()
+        if (j %% max(5, reps %/% 10) == 0 && s == out.groups && i == p && cm == tail(cn,1)) {gc(); gc()}
         return(out)
       }
   }
