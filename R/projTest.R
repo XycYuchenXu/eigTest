@@ -79,10 +79,10 @@ projTest = function(A, cn, cov.arr = NULL, eps = NULL, refMat = NULL,
   testVal = testVal * cn^2
 
   if (param.out) {
-    testResult = list(testVal, r, 1 - pchisq(testVal, r))
+    testResult = list(testVal, r, as.numeric(1 - pchisq(testVal, r)))
     names(testResult) = c('statistic', 'df', 'pvalue')
   } else {
-    testResult = 1 - pchisq(testVal, r)
+    testResult = as.numeric(1 - pchisq(testVal, r))
   }
 
   return(testResult)
