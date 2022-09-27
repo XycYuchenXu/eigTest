@@ -43,5 +43,5 @@ Test on the commutator of two matrices
 \examples{
 means = generateMeans(5,2)
 samples = simuSamples(means, sqrt(100), 1)
-commutatorTest(samples[[1]][[1]][1,1,,,], sqrt(400))
+commutatorTest(samples[[1]]$mu.bar, cn = samples[[1]]$CovRate)
 }

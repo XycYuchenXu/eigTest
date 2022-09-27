@@ -52,8 +52,8 @@ full_samples = simuSamples(mu = full_means,                # mean matrices
                            cn = c(sqrt(100), sqrt(500)),   # convergence rate
                            reps = 200)                     # replicate
 
-eg_full_mat = full_samples[[1]][[1]]; print(dim(eg_full_mat))
-eg_full_cov = full_samples[[1]][[2]]; print(dim(eg_full_cov))
+eg_full_mat = full_samples[[1]]$mu.bar; print(dim(eg_full_mat))
+eg_full_cov = full_samples[[1]]$cov.bar; print(dim(eg_full_cov))
 
 part_means = generateMeans(d = 5,           # square matrix's dimension
                            p = 4,           # number of matrices
@@ -66,8 +66,8 @@ part_samples = simuSamples(mu = part_means,                # mean matrices
                            reps = 200,                     # replicate
                            nonneg = FALSE)                 # nonnegativity
 
-eg_part_mat = part_samples[[1]][[1]]; print(dim(eg_part_mat))
-eg_part_cov = part_samples[[1]][[2]]; print(dim(eg_part_cov))
+eg_part_mat = part_samples[[1]]$mu.bar; print(dim(eg_part_mat))
+eg_part_cov = part_samples[[1]]$cov.bar; print(dim(eg_part_cov))
 ```
 
 
@@ -77,15 +77,15 @@ eg_part_cov = part_samples[[1]][[2]]; print(dim(eg_part_cov))
 
 ```{r twoSample, echo=TRUE, message=FALSE, warning=FALSE}
 ## Commutator-based test
-commutatorTest(mat.arr = eg_full_mat[1,1,,,],  # sample matrices
-               cn = sqrt(100),                 # convergence rate
-               cov.arr = eg_full_cov[1,1,,,],  # covariance matrices
+commutatorTest(mat.arr = eg_full_mat,          # sample matrices
+               cn = full_samples[[1]]$CovRate, # convergence rate
+               cov.arr = eg_full_cov,          # covariance matrices
                param.out = TRUE)               # return parameters
 
 ## Log-likelihood ratio test
-projTest(A = eg_part_mat[1,1,,,],        # sample matrices
-         cn = sqrt(100),                 # convergence rate
-         cov.arr = eg_part_cov[1,1,,,],  # covariance matrices
+projTest(A = eg_part_mat,                # sample matrices
+         cn = part_samples[[1]]$CovRate, # convergence rate
+         cov.arr = eg_part_cov,          # covariance matrices
          param.out = TRUE)               # return parameters
 ```
 

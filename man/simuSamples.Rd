@@ -20,8 +20,10 @@ simuSamples(mu, cn, reps, nonneg = FALSE, est.cov = TRUE, prl = FALSE)
 \item{prl}{Logical, whether to use parallel sampling. Default to \code{prl = FALSE} for not parallelizing. If \code{prl == TRUE}, one must first call \code{registerDoSNOW()} externally.}
 }
 \value{
-A list of lists, with length \code{reps}. Every sublist has the following format.
+A list of lists, with length \code{reps * m * q}, where \code{m} is the number of different rates \code{m = length(cn)}. Every sublist has the following format.
 \itemize{
+\item \code{SNR}: The string indicating signal to noise ratio.
+\item \code{CovRate}: The numerical value indicating the corresponding convergence rate in \code{cn}.
 \item \code{mu.bar}: The array of consistent estimators of the mean matrices, with dimension \code{m}-by-\code{q}-by-\code{p}-\code{d}-by-\code{d}, where \code{m} is the number of different rates \code{m = length(cn)}.
 \item \code{cov.bar}: The array of consistent estimators of covariance matrices, with dimension \code{m}-by-\code{q}-by-\code{p}-\code{d^2}-by-\code{d^2}, where \code{m} is the number of different rates \code{m = length(cn)}.
 }

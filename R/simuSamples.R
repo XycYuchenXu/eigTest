@@ -11,16 +11,19 @@
 #' @param est.cov Logical, whether the covariance matrices are estimated empirically. Default to \code{est.cov = TRUE}.
 #' @param prl Logical, whether to use parallel sampling. Default to \code{prl = FALSE} for not parallelizing. If \code{prl == TRUE}, one must first call \code{registerDoSNOW()} externally.
 #'
-#' @return A list of lists, with length \code{reps}. Every sublist has the following format.
+#' @return A list of lists, with length \code{reps * m * q}, where \code{m} is the number of different rates \code{m = length(cn)}. Every sublist has the following format.
 #' \itemize{
-#' \item \code{mu.bar}: The array of consistent estimators of the mean matrices, with dimension \code{m}-by-\code{q}-by-\code{p}-\code{d}-by-\code{d}, where \code{m} is the number of different rates \code{m = length(cn)}.
-#' \item \code{cov.bar}: The array of consistent estimators of covariance matrices, with dimension \code{m}-by-\code{q}-by-\code{p}-\code{d^2}-by-\code{d^2}, where \code{m} is the number of different rates \code{m = length(cn)}.
+#' \item \code{SNR}: The string indicating signal to noise ratio.
+#' \item \code{CovRate}: The numerical value indicating the corresponding convergence rate in \code{cn}.
+#' \item \code{mu.bar}: The array of consistent estimators of the mean matrices, with dimension \code{p}-\code{d}-by-\code{d}.
+#' \item \code{cov.bar}: The array of consistent estimators of covariance matrices, with dimension \code{p}-\code{d^2}-by-\code{d^2}.
 #' }
 #' When \code{est.cov = FALSE}, only the first array of mean estimators are included in the sublist.
 #'
 #' @import utils
 #' @import foreach
 #' @import doSNOW
+#' @import abind
 #' @export
 #'
 #' @examples simuSamples(generateMeans(5,4,3), sqrt(c(50,100)), 50)
@@ -33,8 +36,8 @@ simuSamples = function(mu, cn, reps, nonneg = FALSE,
   num.size = length(cn)
 
   if (nonneg) {
-    estMat = function(Mat, n, s, i){
-      n = round(n)
+    estMat = function(Mat, cm, s, i){
+      n = round(cm^2)
       n = nrow(Mat)
       Label = matrix(0, nrow = n+1, ncol = 1)
       CountMat = matrix(0, nrow = n, ncol = n)
@@ -64,41 +67,49 @@ simuSamples = function(mu, cn, reps, nonneg = FALSE,
           CovMat = CovMat + kronecker(Qi * vec[j], Ei)
           Ei[j,j] = 0
         }
-        dim(CovMat) = c(rep(1, 3), dim(CovMat))
+        dim(CovMat) = c(1, dim(CovMat))
       }
-      dim(CountMat) = c(rep(1, 3), dim(CountMat))
-      nameList = list(paste0('Sample size n=', n), snrs[s], matIDs[i], NULL, NULL)
+      dim(CountMat) = c(1, dim(CountMat))
+      nameList = list(matIDs[i], NULL, NULL)
       dimnames(CountMat) = nameList
       if (est.cov) {
         dimnames(CovMat) = nameList
-        return(list(mu.bar = CountMat, cov.bar = CovMat))
+        return(list(SNR = snrs[s], CovRate = cm, mu.bar = CountMat, cov.bar = CovMat))
       }
-      return(list(mu.bar = CountMat))
+      return(list(SNR = snrs[s], CovRate = cm, mu.bar = CountMat))
     }
   } else {
-    estMat = function(Mat, n, s, i){
-      n = floor(n)
+    estMat = function(Mat, cm, s, i){
+      n = round(cm^2)
       d = nrow(Mat)
       erMat = matrix(0, n, d^2)
       for (j in 1:n) {
         erMat[j,] = rnorm(d^2)
       }
       estMat = Mat + matrix(colMeans(erMat), nrow = d)
-      if (est.cov) {CovMat = cov(erMat); dim(CovMat) = c(rep(1, 3), dim(CovMat))}
-      dim(estMat) = c(rep(1, 3), dim(estMat))
-      nameList = list(paste0('Sample size n=', n), snrs[s], matIDs[i], NULL, NULL)
+      if (est.cov) {CovMat = cov(erMat); dim(CovMat) = c(1, dim(CovMat))}
+      dim(estMat) = c(1, dim(estMat))
+      nameList = list(matIDs[i], NULL, NULL)
       dimnames(estMat) = nameList
       if (est.cov) {
         dimnames(CovMat) = nameList
-        return(list(mu.bar = estMat, cov.bar = CovMat))
+        return(list(SNR = snrs[s], CovRate = cm, mu.bar = estMat, cov.bar = CovMat))
       }
-      return(list(mu.bar = estMat))
+      return(list(SNR = snrs[s], CovRate = cm, mu.bar = estMat))
     }
   }
 
-  acomb1 = function(...) acomb(..., along = 1)
-  acomb2 = function(...) acomb(..., along = 2)
-  acomb3 = function(...) acomb(..., along = 3)
+  acomb = function(...){
+    argl = list(...)
+    out = argl[[1]]
+    if (length(argl) >= 2) {
+      for (i in 2:length(argl)) {
+        out$mu.bar = abind(out$mu.bar, argl[[i]]$mu.bar, along = 1)
+        if (length(out) == 4) {out$cov.bar = abind(out$cov.bar, argl[[i]]$cov.bar, along = 1)}
+      }
+    }
+    return(out)
+  }
 
   cm = NULL; i = NULL; s = NULL; j = NULL
   if (prl) {
@@ -107,23 +118,23 @@ simuSamples = function(mu, cn, reps, nonneg = FALSE,
     progress <- function(n) {setTxtProgressBar(pb, n)}
     opts <- list(progress = progress)
 
-    output = foreach(j=1:reps, .options.snow = opts, .multicombine = T) %:%
-      foreach(cm = cn, .combine = acomb1) %:%
-      foreach(s = 1:out.groups, .combine = acomb2) %:%
-      foreach(i = 1:p, .combine = acomb3) %dopar% {
-        out = estMat(mu[i,s,,], cm^2, s, i)
-        if (j %% max(5, reps %/% 10) == 0 && s == out.groups && i == p && cm == tail(cn,1)) {gc(); gc()}
-        return(out)
+    output = foreach(j=1:reps, .options.snow = opts, .combine = c,
+                     .multicombine = T) %:%
+      foreach(cm = cn, .combine = c) %:%
+      foreach(s = 1:out.groups, .combine = c) %:%
+      foreach(i = 1:p, .combine = acomb) %dopar% {
+        if (j %% max(5, reps %/% 10) == 1 && s == 1 && i == 1 && cm == cn[1]) {gc(); gc()}
+        return(estMat(mu[i,s,,], cm, s, i))
       }
   } else {
-    output = foreach(j=1:reps, .multicombine = T) %:%
-      foreach(cm = cn, .combine = acomb1) %:%
-      foreach(s = 1:out.groups, .combine = acomb2) %:%
-      foreach(i = 1:p, .combine = acomb3) %do% {
-        out = estMat(mu[i,s,,], cm^2, s, i)
-        if (j %% max(5, reps %/% 10) == 0 && s == out.groups && i == p && cm == tail(cn,1)) {gc(); gc()}
-        return(out)
+    output = foreach(j=1:reps, .combine = c, .multicombine = T) %:%
+      foreach(cm = cn, .combine = c) %:%
+      foreach(s = 1:out.groups, .combine = c) %:%
+      foreach(i = 1:p, .combine = acomb) %do% {
+        if (j %% max(5, reps %/% 10) == 1 && s == 1 && i == 1 && cm == cn[1]) {gc(); gc()}
+        return(estMat(mu[i,s,,], cm, s, i))
       }
   }
+  gc(); gc()
   return(output)
 }
