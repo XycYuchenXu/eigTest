@@ -107,7 +107,7 @@ simuSamples = function(mu, cn, reps, nonneg = FALSE,
     progress <- function(n) {setTxtProgressBar(pb, n)}
     opts <- list(progress = progress)
 
-    output = foreach(j=1:reps, .options.snow = opts) %:%
+    output = foreach(j=1:reps, .options.snow = opts, .multicombine = T) %:%
       foreach(cm = cn, .combine = acomb1) %:%
       foreach(s = 1:out.groups, .combine = acomb2) %:%
       foreach(i = 1:p, .combine = acomb3) %dopar% {
@@ -116,7 +116,7 @@ simuSamples = function(mu, cn, reps, nonneg = FALSE,
         return(out)
       }
   } else {
-    output = foreach(j=1:reps) %:%
+    output = foreach(j=1:reps, .multicombine = T) %:%
       foreach(cm = cn, .combine = acomb1) %:%
       foreach(s = 1:out.groups, .combine = acomb2) %:%
       foreach(i = 1:p, .combine = acomb3) %do% {
