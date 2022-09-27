@@ -112,6 +112,7 @@ simuSamples = function(mu, cn, reps, nonneg = FALSE,
       foreach(i=1:p, .combine = acomb3) %dopar% {
         if (nonneg) { out = markovProcess(mu[i,s,,], cm^2, s, i) }
         else { out = estMat(mu[i,s,,], cm^2, s, i) }
+        gc()
         out
       }
   } else {
@@ -121,54 +122,9 @@ simuSamples = function(mu, cn, reps, nonneg = FALSE,
       foreach(i=1:p, .combine = acomb3) %do% {
         if (nonneg) { out = markovProcess(mu[i,s,,], cm^2, s, i) }
         else { out = estMat(mu[i,s,,], cm^2, s, i) }
+        gc()
         out
       }
   }
-  # names(output)[1] = 'mu.bar'
-  # dimnames(output[[1]]) = list(
-  #   paste0('Sample size n=', round(cn^2)),
-  #   dimnames(mu)[[2]],
-  #   paste0('Replica #', 1:reps),
-  #   dimnames(mu)[[1]],
-  #   NULL, NULL
-  # )
-  # if (est.cov) {
-  #   names(output)[2] = 'cov.bar'
-  #   dimnames(output[[2]]) = list(
-  #     paste0('Sample size n=', round(cn^2)),
-  #     dimnames(mu)[[2]],
-  #     paste0('Replica #', 1:reps),
-  #     dimnames(mu)[[1]],
-  #     NULL, NULL
-  #   )
-  # }
   return(output)
-
-  # for (s in 1:num.size) {
-  #   cm = cn[s]
-  #   for (l in 1:out.groups) {
-  #     for (j in 1:reps) {
-  #       for (i in 1:p) {
-  #         if (nonneg) {
-  #           TPM = markovProcess(mu[i,l,,], cm^2)
-  #           if (is.list(TPM)) {
-  #             out.samples[s,l,j,i,,] = TPM[[1]]
-  #             out.cov[s,l,j,i,,] = TPM[[2]]
-  #           } else {
-  #             out.samples[s,l,j,i,,] = TPM
-  #           }
-  #         } else {
-  #           estM = estMat(mu[i,l,,], cm^2)
-  #           if (is.list(estM)) {
-  #             out.samples[s,l,j,i,,] = estM[[1]]
-  #             out.cov[s,l,j,i,,] = estM[[2]]
-  #           }
-  #           out.samples[s,l,j,i,,] = estM
-  #         }
-  #       }
-  #     }
-  #   }
-  # }
-  # if (est.cov) {return(list(mu.bar = out.samples, cov.bar = out.cov))}
-  # else {return(list(mu.bar = out.samples))}
 }
