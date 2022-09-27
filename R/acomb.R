@@ -18,7 +18,7 @@ acomb <- function(..., along) {
       if (length(temp) > 1) {v = abind(v, temp[[2]], along = along)}
     }
   }
-  if (exists('v')) {return(list(m, v))}
-  return(list(m))
+  if (exists('v')) {return(list(mu.bar = m, cov.bar = v))}
+  return(list(mu.bar = m))
 }
 
