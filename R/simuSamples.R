@@ -33,14 +33,14 @@ simuSamples = function(mu, cn, reps, nonneg = FALSE,
   num.size = length(cn)
 
   if (nonneg) {
-    markovProcess = function(P, L, s, i){
-      L = round(L)
-      n = nrow(P)
-      Label = matrix(0, nrow = L+1, ncol = 1)
+    estMat = function(Mat, n, s, i){
+      n = round(n)
+      n = nrow(Mat)
+      Label = matrix(0, nrow = n+1, ncol = 1)
       CountMat = matrix(0, nrow = n, ncol = n)
       Label[1] = sample(n,1)
-      for (l in 2:(L+1)) {
-        Label[l] = sample(n,1,prob = P[Label[l-1],],replace = TRUE)
+      for (l in 2:(n+1)) {
+        Label[l] = sample(n,1,prob = Mat[Label[l-1],],replace = TRUE)
         CountMat[Label[l-1], Label[l]] = CountMat[Label[l-1], Label[l]]+1
       }
       for (j in 1:n) {
@@ -53,20 +53,21 @@ simuSamples = function(mu, cn, reps, nonneg = FALSE,
         CovMat = matrix(0, ncol = n^2, nrow = n^2)
         pi = matrix(0, nrow = n, ncol = 1)
         for (j in 1:n) {
-          pi[j] = sum(Label == j)/(L+1)
+          pi[j] = sum(Label == j)/(n+1)
         }
         vec = 1/pi
         vec[is.infinite(vec)] = 0
+        Ei = matrix(0, ncol = n, nrow = n)
         for (j in 1:n) {
-          Ei = matrix(0, ncol = n, nrow = n)
           Ei[j,j] = 1
           Qi = diag(CountMat[j,]) - matrix(CountMat[j,], nrow = n, ncol = n) * matrix(CountMat[j,], nrow = n, ncol = n, byrow = T)
           CovMat = CovMat + kronecker(Qi * vec[j], Ei)
+          Ei[j,j] = 0
         }
         dim(CovMat) = c(rep(1, 3), dim(CovMat))
       }
       dim(CountMat) = c(rep(1, 3), dim(CountMat))
-      nameList = list(paste0('Sample size n=', L), snrs[s], matIDs[i], NULL, NULL)
+      nameList = list(paste0('Sample size n=', n), snrs[s], matIDs[i], NULL, NULL)
       dimnames(CountMat) = nameList
       if (est.cov) {
         dimnames(CovMat) = nameList
@@ -99,7 +100,7 @@ simuSamples = function(mu, cn, reps, nonneg = FALSE,
   acomb2 = function(...) acomb(..., along = 2)
   acomb3 = function(...) acomb(..., along = 3)
 
-  cm = NULL; i = NULL; s = NULL
+  cm = NULL; i = NULL; s = NULL; j = NULL
   if (prl) {
     cat('Sampling: \n')
     pb <- txtProgressBar(max = num.size*out.groups*reps*p, style = 3)
@@ -108,22 +109,20 @@ simuSamples = function(mu, cn, reps, nonneg = FALSE,
 
     output = foreach(j=1:reps, .options.snow = opts) %:%
       foreach(cm = cn, .combine = acomb1) %:%
-      foreach(s=1:out.groups, .combine = acomb2) %:%
-      foreach(i=1:p, .combine = acomb3) %dopar% {
-        if (nonneg) { out = markovProcess(mu[i,s,,], cm^2, s, i) }
-        else { out = estMat(mu[i,s,,], cm^2, s, i) }
-        gc()
-        out
+      foreach(s = 1:out.groups, .combine = acomb2) %:%
+      foreach(i = 1:p, .combine = acomb3) %dopar% {
+        out = estMat(mu[i,s,,], cm^2, s, i)
+        if (j %% max(5, reps %/% 10) == 0 && s == out.groups && i == p && cm == tail(cn,1)) gc()
+        return(out)
       }
   } else {
     output = foreach(j=1:reps) %:%
       foreach(cm = cn, .combine = acomb1) %:%
-      foreach(s=1:out.groups, .combine = acomb2) %:%
-      foreach(i=1:p, .combine = acomb3) %do% {
-        if (nonneg) { out = markovProcess(mu[i,s,,], cm^2, s, i) }
-        else { out = estMat(mu[i,s,,], cm^2, s, i) }
-        gc()
-        out
+      foreach(s = 1:out.groups, .combine = acomb2) %:%
+      foreach(i = 1:p, .combine = acomb3) %do% {
+        out = estMat(mu[i,s,,], cm^2, s, i)
+        if (j %% max(5, reps %/% 10) == 0 && s == out.groups && i == p && cm == tail(cn,1)) gc()
+        return(out)
       }
   }
   return(output)
