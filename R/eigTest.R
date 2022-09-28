@@ -36,12 +36,12 @@ eigTest = function(A, cn, cov.arr = NULL, V = NULL, testType = c('chi', 'gam'),
 
   S = diag(d^2) - diag(as.vector(diag(d)))
   S = S[-which(as.double(diag(d)) == 1),]
-  SV = S %*% kronecker(t(V), ginv(V))
+  SV = crossprod(t(S), kronecker(t(V), ginv(V)))
 
   Varr = array(0, c(p, d^2 - d))
   for (i in 1:p) {
-    Varr[i,] = SV %*% as.double(A[i,,])
-    cov.arr[i, 1:(d^2 - d), 1:(d^2 - d)] = tcrossprod(SV, SV %*% cov.arr[i,,])
+    Varr[i,] = crossprod(t(SV), as.double(A[i,,]))
+    cov.arr[i, 1:(d^2 - d), 1:(d^2 - d)] = tcrossprod(SV, tcrossprod(SV, cov.arr[i,,]))
   }
   cov.arr = cov.arr[, 1:(d^2 - d), 1:(d^2 - d)]
 

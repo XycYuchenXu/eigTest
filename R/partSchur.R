@@ -33,14 +33,14 @@ partSchur = function(A, k, iter = 5000, tol = 10^(-16)){
 
         mid = matrix(0, nrow = 2, ncol = 2)
         for (j in 1:p) {
-          Mj = crossprod(Qr, A[j,,])
-          mid = mid + tcrossprod(Mj %*% Q[,1])
+          Mj = t(crossprod(Qr, A[j,,]))
+          mid = mid + tcrossprod(crossprod(Mj, Q[,1]))
           for (k in 2:d) {
-            mid = mid - tcrossprod(Mj %*% Q[,k])
+            mid = mid - tcrossprod(crossprod(Mj, Q[,k]))
           }
         }
 
-        Qr = Qr %*% eigen(mid, symmetric = TRUE)$vectors
+        Qr = crossprod(t(Qr), eigen(mid, symmetric = TRUE)$vectors)
         Q[,c(1,r)] = Qr
       }
 
@@ -68,7 +68,7 @@ partSchur = function(A, k, iter = 5000, tol = 10^(-16)){
           minS = tempS; minD = Di
         }
       }
-      Q[,j:d] = Q[,j:d] %*% oneSchur(Ai, Q = minD)
+      Q[,j:d] = crossprod(t(Q[,j:d]), oneSchur(Ai, Q = minD))
       Qi = Q[,-(1:j)]
     }
     return(Q)

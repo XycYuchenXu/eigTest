@@ -22,10 +22,10 @@ truncateSVD = function(A, eps, tr.approx = FALSE){
   r = sum(s$d > eps)
   d.inv = (s$d > eps)/s$d
   d.inv[is.na(d.inv)] = 0
-  ginv.A = s$v %*% diag(d.inv) %*% t(s$u)
+  ginv.A = tcrossprod(tcrossprod(s$v, diag(d.inv)), s$u)
 
   if (tr.approx) {
-    output = list(Id = s$u %*% diag((s$d > eps)*s$d) %*% t(s$v), r = r, ginv = ginv.A)
+    output = list(Id = tcrossprod(tcrossprod(s$u, diag((s$d > eps)*s$d)), s$v), r = r, ginv = ginv.A)
   } else {
     output = list(r = r, ginv = ginv.A)
   }

@@ -44,15 +44,15 @@ projTest = function(A, cn, cov.arr = NULL, eps = NULL, refMat = NULL,
   }
 
   if (poly.sp) {
-    C = refMat[1,,]; D = refMat[2,,]
-    C0 = diag(d); D0 = diag(d)
-    C1 = C / norm(C); D1 = D / norm(C)
+    C = t(refMat[1,,]); D = t(refMat[2,,])
+    C0 = diag(d); D0 = diag(d); C1 = t(C); D1 = t(D)
+    C1 = C1 / norm(C1); D1 = D1 / norm(D1)
     SP.C = cbind(as.vector(C0), as.vector(C1))
     SP.D = cbind(as.vector(D0), as.vector(D1))
     if (d > 2){
       for (i in 1:(d-2)) {
-        C.temp = ((2*i + 1) * C %*% C1 - i * C0) / (i + 1)
-        D.temp = ((2*i + 1) * D %*% D1 - i * D0) / (i + 1)
+        C.temp = ((2*i + 1) * crossprod(C, C1) - i * C0) / (i + 1)
+        D.temp = ((2*i + 1) * crossprod(D, D1) - i * D0) / (i + 1)
         #C.temp = C.temp / norm(C.temp); D.temp = D.temp / norm(D.temp)
         SP.C = cbind(SP.C, as.vector(C.temp / norm(C.temp)))
         SP.D = cbind(SP.D, as.vector(D.temp / norm(D.temp)))
@@ -64,18 +64,20 @@ projTest = function(A, cn, cov.arr = NULL, eps = NULL, refMat = NULL,
     CV_inv = ginv(CV)
     SP.C = matrix(0, d^2, d)
     for (i in 1:d) {
-      SP.C[,i] = CV[,i] %*% t(CV_inv[i,])
+      SP.C[,i] = tcrossprod(CV[,i], CV_inv[i,])
     }
     SP.D = SP.C
   }
 
   cov1.svd = truncateSVD(cov1, eps); cov2.svd = truncateSVD(cov2, eps)
-  inner1 = crossprod(SP.D, cov1.svd$ginv %*% SP.D); inner2 = crossprod(SP.C, cov2.svd$ginv %*% SP.C)
-  Q1 = cov1.svd$ginv - cov1.svd$ginv %*% SP.D %*% ginv(inner1) %*% t(SP.D) %*% cov1.svd$ginv
-  Q2 = cov2.svd$ginv - cov2.svd$ginv %*% SP.C %*% ginv(inner2) %*% t(SP.C) %*% cov2.svd$ginv
+  inner1 = crossprod(SP.D, crossprod(cov1.svd$ginv, SP.D))
+  inner2 = crossprod(SP.C, crossprod(cov2.svd$ginv, SP.C))
+  ginvSPD = crossprod(cov1.svd$ginv, SP.D); ginvSPC = crossprod(cov2.svd$ginv, SP.C)
+  Q1 = cov1.svd$ginv - tcrossprod(ginvSPD, tcrossprod(ginvSPD, ginv(inner1)))
+  Q2 = cov2.svd$ginv - tcrossprod(ginvSPC, tcrossprod(ginvSPC, ginv(inner2)))
 
   r = cov1.svd$r + cov2.svd$r - sum(svd(inner1)$d > 1e-10) - sum(svd(inner2)$d > 1e-10)
-  testVal = crossprod(as.double(X), Q1 %*% as.double(X)) + crossprod(as.double(Y), Q2 %*% as.double(Y))
+  testVal = crossprod(as.double(X), crossprod(Q1, as.double(X))) + crossprod(as.double(Y), crossprod(Q2, as.double(Y)))
   testVal = testVal * cn^2
 
   if (param.out) {

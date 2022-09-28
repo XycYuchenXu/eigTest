@@ -40,14 +40,15 @@ commutatorTest = function(mat.arr, cn, cov.arr = NULL, testType = c('chi', 'gam'
   }
 
   A = mat.arr[1,,]
-  B = mat.arr[2,,]
+  tB = t(mat.arr[2,,])
 
-  y = array(A %*% B - B %*% A, dim = c(1, d^2))
+  y = array(tcrossprod(A, tB) - crossprod(tB, A), dim = c(1, d^2))
 
   QA = kronecker(diag(d), A) - kronecker(t(A), diag(d))
-  QB = kronecker(diag(d), B) - kronecker(t(B), diag(d))
+  QB = kronecker(diag(d), t(tB)) - kronecker(tB, diag(d))
 
-  sigma.y = array(tcrossprod(QA, QA %*% covB) + tcrossprod(QB, QB %*% covA), dim = c(1, d^2, d^2))
+  sigma.y = array(tcrossprod(QA, tcrossprod(QA, covB)) +
+                    tcrossprod(QB, tcrossprod(QB, covA)), dim = c(1, d^2, d^2))
 
   if (param.out) {output = list()}
   else {output = c()}

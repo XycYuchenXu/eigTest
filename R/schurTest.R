@@ -56,12 +56,12 @@ schurTest = function(A, cn, cov.arr = NULL, nn = FALSE, k = NULL, warmup = FALSE
   Mat = as.double(Mat)
   select = diag(Mat)
   S = select[which(Mat == 1),]
-  SV = S %*% kronecker(t(Q), t(Q))
+  SV = crossprod(t(S), kronecker(t(Q), t(Q)))
 
   Varr = array(0, c(p, k*(d-k)))
   for (i in 1:p) {
-    Varr[i,] = S %*% as.double(crossprod(Q, A[i,,] %*% Q))
-    cov.arr[i,1:(k*(d-k)),1:(k*(d-k))] = tcrossprod(SV, SV %*% cov.arr[i,,])
+    Varr[i,] = crossprod(t(S), as.double(crossprod(Q, tcrossprod(A[i,,], t(Q)))))
+    cov.arr[i,1:(k*(d-k)),1:(k*(d-k))] = tcrossprod(SV, crossprod(t(SV), cov.arr[i,,]))
   }
   cov.arr = cov.arr[,1:(k*(d-k)),1:(k*(d-k))]
 

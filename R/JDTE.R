@@ -29,7 +29,7 @@ JDTE = function(A, iter = 5000, tol = 10^(-16)){
   U = eigen(sumA/p, symmetric = TRUE)$vectors
   V = solve(U)
   for (i in 1:p) {
-    A[i,,] = V %*% A[i,,] %*% U
+    A[i,,] = tcrossprod(crossprod(t(V), A[i,,]), t(U))
   }
 
   tempA = A
@@ -54,19 +54,19 @@ JDTE = function(A, iter = 5000, tol = 10^(-16)){
 
     wnum = 0; wdenum = 0
     for (j in 1:p) {
-      Oj = tempA[j,,]
-      Cj = Z %*% Oj - Oj %*% Z; diag(Cj) = 0
+      Oj = t(tempA[j,,])
+      Cj = tcrossprod(Z, Oj) - crossprod(Oj, Z); diag(Cj) = 0
       diag(Oj) = 0
       wdenum = wdenum + norm(Cj, type = 'F')^2
-      wnum = wnum + sum(Oj * Cj)
+      wnum = wnum + sum(t(Oj) * Cj)
     }
     Z = diag(d) + Z * wnum / wdenum
 
     for (j in 1:p) {
-      tempA[j,,] = ginv(Z) %*% tempA[j,,] %*% Z
+      tempA[j,,] = tcrossprod(tcrossprod(ginv(Z), t(tempA[j,,])), t(Z))
     }
 
-    U = U %*% Z
+    U = tcrossprod(U, t(Z))
     score.new = score.fun(tempA, p)
     if (abs(score.new - score.old) < tol) {
       break()

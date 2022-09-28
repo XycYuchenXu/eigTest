@@ -17,7 +17,7 @@ score.fun = function(A, Q){
 
   for (i in 1:p) {
     score.fun = score.fun +
-      norm(crossprod(Q[,-1], A[i,,] %*% Q[,1]), 'F')^2
+      norm(crossprod(Q[,-1], crossprod(t(A[i,,]), Q[,1])), 'F')^2
   }
   return(score.fun)
 }

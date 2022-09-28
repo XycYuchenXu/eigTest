@@ -51,20 +51,21 @@ expmPartSchur = function(A, k, warmup = FALSE, iter = 5000, tol = 10^(-12)){
     matA = 0
     vecB = 0
     for (i in 1:p) {
-      Mi = crossprod(U, A[i,,] %*% U)
+      Mi = crossprod(U, tcrossprod(A[i,,], t(U)))
       Ti = kronecker(diag(d), Mi) - kronecker(t(Mi), diag(d))
-      matA = matA + crossprod(Ti, UL %*% Ti)
-      vecB = vecB + crossprod(Ti, UL %*% as.vector(Mi))
+      matA = matA + crossprod(Ti, crossprod(UL, Ti))
+      vecB = vecB + crossprod(Ti, crossprod(UL, as.vector(Mi)))
     }
     matA = as.matrix(matA)
-    return(matrix(ginv(crossprod(CY, matA %*% CY)) %*% crossprod(CY, vecB), ncol = d))
+    return(matrix(crossprod(ginv(crossprod(CY, crossprod(matA, CY))),
+                            crossprod(CY, vecB)), ncol = d))
   }
 
   scoresUL = function(U){
     S = 0
     for (i in 1:p) {
-      Mi = crossprod(U, A[i,,] %*% U)
-      S = S + norm(UL %*% as.vector(Mi), 'F')^2
+      Mi = crossprod(U, tcrossprod(A[i,,], t(U)))
+      S = S + norm(crossprod(UL, as.vector(Mi)), 'F')^2
     }
     return(S)
   }
@@ -72,7 +73,7 @@ expmPartSchur = function(A, k, warmup = FALSE, iter = 5000, tol = 10^(-12)){
   resultAB = function(U, X){
     minS = Inf; Z = X
     for (i in 1:length(gridNodes)) {
-      Zi = as.matrix(U %*% expm(gridNodes[i] * X))
+      Zi = as.matrix(crossprod(t(U), expm(gridNodes[i] * X)))
       tempS = scoresUL(Zi)
       if (tempS < minS) {
         minS = tempS; Z = Zi

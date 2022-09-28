@@ -51,7 +51,7 @@ generateMeans = function(d, p, k = d, snr = 10, control.g = FALSE,
     if (is.null(V) || k < d){
       V = matrix(0, ncol = d, nrow = d)
       coefM = matrix(runif(k^2, -1, 1), nrow = k); coefM[!upper.tri(coefM)] = 0
-      V[1:k,] = (diag(k) + coefM) %*% orth[groups,]
+      V[1:k,] = crossprod(t(diag(k) + coefM), orth[groups,])
     }
   } else {
     if (is.null(v)) {v = rdirichlet(1, rep(1,d))}
@@ -63,7 +63,7 @@ generateMeans = function(d, p, k = d, snr = 10, control.g = FALSE,
       di = diag(runif(d, 0.5, d) * sample(c(-1,1), d, replace = T))
       if (k < d) {
         coefM = matrix(runif((d-k)^2, -1, 1), ncol = d-k); coefM[!upper.tri(coefM)] = 0
-        Vi[(k+1):d,] = (diag(d-k) + coefM) %*% orth[-groups,]
+        Vi[(k+1):d,] = crossprod(t(diag(d-k) + coefM), orth[-groups,])
       }
 
     }
@@ -88,7 +88,7 @@ generateMeans = function(d, p, k = d, snr = 10, control.g = FALSE,
         mu[i,l,,] = MarkovMat2/total
       } else {
         Vi.perturb = Vi + matrix(rnorm(d^2), nrow = d, ncol = d) * SNR[l]
-        mu[i,l,,] = ginv(Vi.perturb) %*% di %*% Vi.perturb
+        mu[i,l,,] = tcrossprod(ginv(Vi.perturb), crossprod(Vi.perturb, di))
       }
     }
   }

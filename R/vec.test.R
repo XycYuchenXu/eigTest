@@ -53,7 +53,7 @@ vec.test = function(V.arr, cn, testType, cov.arr = NULL,
     for (i in 1:p) {
       vi = V.arr[i,]
       s = truncateSVD(cov.arr[i,,], eps[i])
-      testVal = testVal + crossprod(vi, s$ginv %*% vi) * cn[i]^2
+      testVal = testVal + crossprod(vi, crossprod(s$ginv, vi)) * cn[i]^2
       r = r + s$r
     }
     testResult = list(testType, testVal, r, as.numeric(1 - pchisq(testVal, r)))

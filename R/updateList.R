@@ -12,7 +12,7 @@ updateList = function(A, Q){
   p = dim(A)[1]
   d = dim(Q)[2]
   for (i in 1:p) {
-    A[i,1:d,1:d] = t(Q) %*% A[i,,] %*% Q
+    A[i,1:d,1:d] = tcrossprod(crossprod(Q, A[i,,]), t(Q))
   }
   A = A[,1:d,1:d]
   return(A)
