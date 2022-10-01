@@ -40,7 +40,7 @@ JDTE = function(A, iter = 5000, tol = 10^(-16)){
           denum = denum + (Aj[r,r] - Aj[s,s])^2
           num = num + Aj[r,s]*(Aj[r,r] - Aj[s,s])
         }
-        Z[r,s] = - num/denum
+        if (denum > 0) {Z[r,s] = - num/denum}
       }
     }
 
@@ -52,7 +52,8 @@ JDTE = function(A, iter = 5000, tol = 10^(-16)){
       wdenum = wdenum + sum(Cj^2)
       wnum = wnum + sum(t(Oj) * Cj)
     }
-    Z = diag(d) + Z * wnum / wdenum
+    if (wdenum == 0) {Z = diag(d)}
+    else {Z = diag(d) + Z * wnum / wdenum}
 
     for (j in 1:p) {
       tempA[j,,] = tcrossprod(tcrossprod(ginv(Z), t(tempA[j,,])), t(Z))
