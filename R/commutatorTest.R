@@ -31,24 +31,24 @@ commutatorTest = function(mat.arr, cn, cov.arr = NULL, testType = c('chi', 'gam'
     testType = 'chi'
   }
 
-  if (is.null(cov.arr)) {
-    covA = diag(d^2)
-    covB = diag(d^2)
-  } else {
-    covA = cov.arr[1,,]
-    covB = cov.arr[2,,]
-  }
-
   A = mat.arr[1,,]
   tB = t(mat.arr[2,,])
 
   y = array(tcrossprod(A, tB) - crossprod(tB, A), dim = c(1, d^2))
 
-  QA = kronecker(diag(d), A) - kronecker(t(A), diag(d))
-  QB = kronecker(diag(d), t(tB)) - kronecker(tB, diag(d))
-
-  sigma.y = array(tcrossprod(QA, tcrossprod(QA, covB)) +
-                    tcrossprod(QB, tcrossprod(QB, covA)), dim = c(1, d^2, d^2))
+  if (is.null(cov.arr)) {
+    sigma.y = array(
+      kronecker(diag(d), tcrossprod(A) + crossprod(tB)) +
+        kronecker(crossprod(A) + tcrossprod(tB), diag(d)) -
+        kronecker(A, A) - kronecker(t(A), t(A)) -
+        kronecker(tB, tB) - kronecker(t(tB), t(tB)),
+      dim = c(1, d^2, d^2))
+  } else {
+    QA = kronecker(diag(d), A) - kronecker(t(A), diag(d))
+    QB = kronecker(diag(d), t(tB)) - kronecker(tB, diag(d))
+    sigma.y = array(tcrossprod(QA, tcrossprod(QA, cov.arr[2,,])) +
+                      tcrossprod(QB, tcrossprod(QB, cov.arr[1,,])), dim = c(1, d^2, d^2))
+  }
 
   if (param.out) {output = list()}
   else {output = c()}
