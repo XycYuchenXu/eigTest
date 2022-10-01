@@ -13,14 +13,6 @@
 JDTE = function(A, iter = 5000, tol = 10^(-16)){
 
   d = dim(A)[2]; p = dim(A)[1]
-  score.fun = function(A, p){
-    sc = 0
-    for (i in 1:p) {
-      Ai = A[i,,]
-      sc = sc + norm(Ai - diag(diag(Ai)), type = 'f')^2
-    }
-    sc
-  }
 
   sumA = A[1,,]
   for (i in 2:p) {
@@ -33,7 +25,7 @@ JDTE = function(A, iter = 5000, tol = 10^(-16)){
   }
 
   tempA = A
-  score.old = score.fun(A, p)
+  score.old = score.fun(A)
   for (i in 1:iter) {
 
     Z = matrix(0, d, d)
@@ -67,7 +59,7 @@ JDTE = function(A, iter = 5000, tol = 10^(-16)){
     }
 
     U = tcrossprod(U, t(Z))
-    score.new = score.fun(tempA, p)
+    score.new = score.fun(tempA)
     if (abs(score.new - score.old) < tol) {
       break()
     }
