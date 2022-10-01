@@ -2,7 +2,7 @@
 % Please edit documentation in R/truncateSVD.R
 \name{truncateSVD}
 \alias{truncateSVD}
-\title{Compute truncated SVD of a matrix.}
+\title{Compute truncated SVD of a (positive semi-definite) matrix.}
 \usage{
 truncateSVD(A, eps, tr.approx = FALSE)
 }
@@ -18,10 +18,10 @@ A list of information about truncated SVD.
 \itemize{
 \item \code{Id}: The truncated approximation of \code{A}. Included only when \code{tr.approx = TRUE}.
 \item \code{r}: The rank of \code{A} after truncation.
-\item \code{ginv}: The general inverse of the truncated SVD approximation.
+\item \code{rootdinv.u} The left square root matrix of \code{A}, i.e., the truncated generalized inverse \eqn{A^+ \approx}\code{tcrossprod(rootdinv.u)}.
 }
 }
 \description{
-Compute truncated SVD of a matrix.
+Compute truncated SVD of a (positive semi-definite) matrix.
 }
 \keyword{internal}

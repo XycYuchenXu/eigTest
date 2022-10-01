@@ -70,21 +70,24 @@ projTest = function(A, cn, cov.arr = NULL, eps = NULL, refMat = NULL,
   }
 
   cov1.svd = truncateSVD(cov1, eps); cov2.svd = truncateSVD(cov2, eps)
-  inner1 = crossprod(SP.D, crossprod(cov1.svd$ginv, SP.D))
-  inner2 = crossprod(SP.C, crossprod(cov2.svd$ginv, SP.C))
-  ginvSPD = crossprod(cov1.svd$ginv, SP.D); ginvSPC = crossprod(cov2.svd$ginv, SP.C)
-  Q1 = cov1.svd$ginv - tcrossprod(ginvSPD, tcrossprod(ginvSPD, ginv(inner1)))
-  Q2 = cov2.svd$ginv - tcrossprod(ginvSPC, tcrossprod(ginvSPC, ginv(inner2)))
+  UD = crossprod(cov1.svd$rootdinv.u, SP.D); inner1 = crossprod(UD)
+  UC = crossprod(cov2.svd$rootdinv.u, SP.C); inner2 = crossprod(UC)
+  UX = crossprod(cov1.svd$rootdinv.u, as.double(X))
+  UY = crossprod(cov2.svd$rootdinv.u, as.double(Y))
+  UDX = crossprod(UD, UX); UCY = crossprod(UC, UY)
+
 
   r = cov1.svd$r + cov2.svd$r - sum(svd(inner1)$d > 1e-10) - sum(svd(inner2)$d > 1e-10)
-  testVal = crossprod(as.double(X), crossprod(Q1, as.double(X))) + crossprod(as.double(Y), crossprod(Q2, as.double(Y)))
-  testVal = testVal * cn^2
+  testVal = sum(UX^2) + sum(UY^2) -
+    crossprod(UDX, crossprod(ginv(inner1), UDX)) -
+    crossprod(UCY, crossprod(ginv(inner2), UCY))
+  testVal = as.numeric(testVal * cn^2)
 
   if (param.out) {
-    testResult = list(testVal, r, as.numeric(1 - pchisq(testVal, r)))
+    testResult = list(testVal, r, 1 - pchisq(testVal, r))
     names(testResult) = c('statistic', 'df', 'pvalue')
   } else {
-    testResult = as.numeric(1 - pchisq(testVal, r))
+    testResult = 1 - pchisq(testVal, r)
   }
 
   return(testResult)

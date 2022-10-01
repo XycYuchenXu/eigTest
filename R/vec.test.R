@@ -53,10 +53,11 @@ vec.test = function(V.arr, cn, testType, cov.arr = NULL,
     for (i in 1:p) {
       vi = V.arr[i,]
       s = truncateSVD(cov.arr[i,,], eps[i])
-      testVal = testVal + crossprod(vi, crossprod(s$ginv, vi)) * cn[i]^2
+      testVal = testVal + sum(crossprod(s$rootdinv.u, vi)^2) * cn[i]^2
       r = r + s$r
     }
-    testResult = list(testType, testVal, r, as.numeric(1 - pchisq(testVal, r)))
+    testVal = as.numeric(testVal)
+    testResult = list(testType, testVal, r, 1 - pchisq(testVal, r))
     names(testResult) = c('testType', 'statistic', 'df', 'pvalue')
   } else {
     me = 0
@@ -68,9 +69,8 @@ vec.test = function(V.arr, cn, testType, cov.arr = NULL,
       me = me + sum(diag(sig.i))
       va = va + 2*sum(diag(crossprod(sig.i)))
     }
-    alphaP = me^2/va
-    betaP = me/va
-    testResult = list(testType, testVal, alphaP, betaP, as.numeric(1 - pgamma(testVal, shape = alphaP, rate = betaP)))
+    alphaP = me^2/va; betaP = me/va; testVal = as.numeric(testVal)
+    testResult = list(testType, testVal, alphaP, betaP, 1 - pgamma(testVal, shape = alphaP, rate = betaP))
     names(testResult) = c('testType', 'statistic', 'shape', 'rate', 'pvalue')
   }
 
