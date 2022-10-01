@@ -26,14 +26,6 @@ projTest = function(A, cn, cov.arr = NULL, eps = NULL, refMat = NULL,
 
   p = 2; d = dim(A)[2]
 
-  if (is.null(cov.arr)) {
-    cov1 = diag(d^2)
-    cov2 = diag(d^2)
-  } else {
-    cov1 = cov.arr[1,,]
-    cov2 = cov.arr[2,,]
-  }
-
   X = A[1,,]; Y = A[2,,]
   if (is.null(eps)) {eps = cn^(-2/3)}
 
@@ -69,19 +61,29 @@ projTest = function(A, cn, cov.arr = NULL, eps = NULL, refMat = NULL,
     SP.D = SP.C
   }
 
-  cov1.svd = truncateSVD(cov1, eps); cov2.svd = truncateSVD(cov2, eps)
-  UD = crossprod(cov1.svd$rootdinv.u, SP.D); inner1 = crossprod(UD)
-  UC = crossprod(cov2.svd$rootdinv.u, SP.C); inner2 = crossprod(UC)
-  UX = crossprod(cov1.svd$rootdinv.u, as.double(X))
-  UY = crossprod(cov2.svd$rootdinv.u, as.double(Y))
-  UDX = crossprod(UD, UX); UCY = crossprod(UC, UY)
+  if (is.null(cov.arr)) {
+    inner1 = crossprod(SP.D); inner2 = crossprod(SP.C)
+    UDX = crossprod(SP.D, as.double(X)); UCY = crossprod(SP.C, as.double(Y))
 
+    r = 2 * d^2 - sum(svd(inner1)$d > 1e-10) - sum(svd(inner2)$d > 1e-10)
+    testVal = sum(X^2 + Y^2) -
+      crossprod(UDX, crossprod(ginv(inner1), UDX)) -
+      crossprod(UCY, crossprod(ginv(inner2), UCY))
+    testVal = as.numeric(testVal * cn^2)
+  } else {
+    cov1.svd = truncateSVD(cov.arr[1,,], eps); cov2.svd = truncateSVD(cov.arr[2,,], eps)
+    UD = crossprod(cov1.svd$rootdinv.u, SP.D); inner1 = crossprod(UD)
+    UC = crossprod(cov2.svd$rootdinv.u, SP.C); inner2 = crossprod(UC)
+    UX = crossprod(cov1.svd$rootdinv.u, as.double(X))
+    UY = crossprod(cov2.svd$rootdinv.u, as.double(Y))
+    UDX = crossprod(UD, UX); UCY = crossprod(UC, UY)
 
-  r = cov1.svd$r + cov2.svd$r - sum(svd(inner1)$d > 1e-10) - sum(svd(inner2)$d > 1e-10)
-  testVal = sum(UX^2) + sum(UY^2) -
-    crossprod(UDX, crossprod(ginv(inner1), UDX)) -
-    crossprod(UCY, crossprod(ginv(inner2), UCY))
-  testVal = as.numeric(testVal * cn^2)
+    r = cov1.svd$r + cov2.svd$r - sum(svd(inner1)$d > 1e-10) - sum(svd(inner2)$d > 1e-10)
+    testVal = sum(UX^2) + sum(UY^2) -
+      crossprod(UDX, crossprod(ginv(inner1), UDX)) -
+      crossprod(UCY, crossprod(ginv(inner2), UCY))
+    testVal = as.numeric(testVal * cn^2)
+  }
 
   if (param.out) {
     testResult = list(testVal, r, 1 - pchisq(testVal, r))
