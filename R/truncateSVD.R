@@ -17,12 +17,14 @@
 #'
 truncateSVD = function(A, eps, tr.approx = FALSE){
   gotit = F
-  try( {s = svd(A); gotit = T}, silent = T)
-  if (!gotit) {s = propack.svd(A)}
+  try( {s = eigen(A, symmetric = T); names(s) = c('d', 'u'); gotit = T}, silent = T)
+  if (!gotit) {
+    try( {s = svd(A); gotit = T}, silent = T )
+    if (!gotit) {s = propack.svd(A)}
+  }
   r = sum(s$d > eps)
   d.inv = (s$d > eps)/s$d
   d.inv[is.na(d.inv)] = 0
-#  ginv.A = tcrossprod(tcrossprod(s$v, diag(d.inv)), s$u)
 
   if (tr.approx) {
     output = list(Id = tcrossprod(tcrossprod(s$u, diag((s$d > eps)*s$d)), s$v), r = r, rootdinv.u = t(sqrt(d.inv) * t(s$u)))
