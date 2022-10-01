@@ -123,7 +123,7 @@ simuSamples = function(mu, cn, reps, nonneg = FALSE,
       foreach(cm = cn, .combine = c, .inorder = F) %:%
       foreach(s = 1:out.groups, .inorder = F) %:%
       foreach(i = 1:p, .combine = acomb) %dopar% {
-        if (j %% max(50, reps %/% 5) == 1 && s == 1 && i == 1 && cm == cn[1]) {gc(); gc()}
+        if (j %% max(50, reps %/% 5) == 1 && s == 1 && i == 1 && cm == cn[1]) {gc()}
         return(estMat(mu[i,s,,], cm, s, i))
       }
   } else {
@@ -131,10 +131,10 @@ simuSamples = function(mu, cn, reps, nonneg = FALSE,
       foreach(cm = cn, .combine = c, .inorder = F) %:%
       foreach(s = 1:out.groups, .inorder = F) %:%
       foreach(i = 1:p, .combine = acomb) %do% {
-        if (j %% max(5, reps %/% 10) == 1 && s == 1 && i == 1 && cm == cn[1]) {gc(); gc()}
+        if (j %% max(5, reps %/% 10) == 1 && s == 1 && i == 1 && cm == cn[1]) {gc()}
         return(estMat(mu[i,s,,], cm, s, i))
       }
   }
-  gc(); gc()
+  gc()
   return(output)
 }
