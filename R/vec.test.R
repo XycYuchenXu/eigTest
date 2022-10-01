@@ -64,7 +64,7 @@ vec.test = function(V.arr, cn, testType, cov.arr = NULL,
     va = 0
     for (i in 1:p) {
       vi = V.arr[i,]
-      testVal = testVal + norm(vi, '2')^2 * cn[i]^2
+      testVal = testVal + sum(vi^2) * cn[i]^2
       sig.i = cov.arr[i,,]
       me = me + sum(diag(sig.i))
       va = va + 2*sum(diag(crossprod(sig.i)))

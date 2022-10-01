@@ -49,7 +49,7 @@ JDTE = function(A, iter = 5000, tol = 10^(-16)){
       Oj = t(tempA[j,,])
       Cj = tcrossprod(Z, Oj) - crossprod(Oj, Z); diag(Cj) = 0
       diag(Oj) = 0
-      wdenum = wdenum + norm(Cj, type = 'F')^2
+      wdenum = wdenum + sum(Cj^2)
       wnum = wnum + sum(t(Oj) * Cj)
     }
     Z = diag(d) + Z * wnum / wdenum

@@ -65,7 +65,7 @@ expmPartSchur = function(A, k, warmup = FALSE, iter = 5000, tol = 10^(-12)){
     S = 0
     for (i in 1:p) {
       Mi = crossprod(U, tcrossprod(A[i,,], t(U)))
-      S = S + norm(crossprod(UL, as.vector(Mi)), 'F')^2
+      S = S + sum(crossprod(UL, as.vector(Mi))^2)
     }
     return(S)
   }
