@@ -7,6 +7,8 @@
 #' @return The eigenvector matrix \code{U} with dimension \code{d}-\code{d}.
 #' @export
 #'
+#' @importFrom 'MASS' ginv
+#'
 #' @examples JDTE(countryCoeff)
 JDTE = function(A, iter = 500, tol = 10^(-8)){
 
@@ -17,25 +19,30 @@ JDTE = function(A, iter = 500, tol = 10^(-8)){
 
   score.old = score.fun(A)
   for (i in 1:iter) {
-
+    Z = matrix(0, d, d)
     for (r in 1:d) {
       for (s in 1:d) {
         if (r == s) {next()}
-        denum = 0
-        num = 0
-        for (j in 1:p) {
-          Aj = tempA[j,,]
-          denum = denum + (Aj[r,r] - Aj[s,s])^2
-          num = num + Aj[r,s]*(Aj[r,r] - Aj[s,s])
-        }
+        denum = sum((tempA[,r,r] - tempA[,s,s])^2)
         if (denum > 0) {
-          coeff = - num/denum
-          U[,s] = U[,s] - num/denum * U[,r]
-          tempA[,,s] = tempA[,,s] + coeff * tempA[,,r]
-          tempA[,r,] = tempA[,r,] - coeff * tempA[,s,]
-          tempA[,r,s] = tempA[,r,s] + coeff^2 * tempA[,s,r]
+          Z[r,s] = - sum(tempA[,r,s] * (tempA[,r,r] - tempA[,s,s]))/denum
         }
       }
+    }
+
+    wdenum = 0; wnum = 0
+    for (j in 1:p) {
+      Oj = t(tempA[j,,])
+      Cj = crossprod(Oj, Z) - tcrossprod(Z, Oj); diag(Cj) = 0
+      wdenum = wdenum + sum(Cj^2)
+      wnum = wnum + sum(t(Oj) * Cj)
+    }
+    if (wdenum > 0) {
+      coeff = wnum / wdenum; M = 1 / max(colSums(abs(Z)), rowSums(abs(Z)))
+      if (abs(coeff) > M) {coeff = M * sign(coeff)}
+      Z = diag(d) - coeff * Z; Zinv = solve(Z)
+      U = crossprod(t(U), Z)
+      for (j in 1:p) {tempA[j,,] = crossprod(t(Zinv), tcrossprod(tempA[j,,], t(Z)))}
     }
 
     score.new = score.fun(tempA)
