@@ -28,7 +28,7 @@ projTest(
 
 \item{poly.sp}{Logical, whether the space matrix is generated from polynomial basis. Default \code{poly.sp = TRUE} to use Legendre polynomials. Otherwise \code{poly.sp = FALSE}, the space matrix is generated with common eigenvectors.}
 
-\item{CV}{Matrix of dimension \code{d}-by-\code{d} only functionable when \code{poly.sp = FALSE}, as the supplied reference common eigenvector matrix. Default (when \code{is.null(V)}) is to call \code{V = JDTE(A)}.}
+\item{CV}{Matrix of dimension \code{d}-by-\code{d} only functionable when \code{poly.sp = FALSE}, as the supplied reference common eigenvector matrix. Default (when \code{is.null(V)}) is to call \code{V = JDTE(refMat)}.}
 
 \item{param.out}{Logical, whether the parameters of limiting distribution should be output or not. Default \code{param.out = FALSE} to only output P-value.}
 }

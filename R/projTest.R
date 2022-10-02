@@ -6,7 +6,7 @@
 #' @param eps The threshold of eigenvalues when compute general inverse of covariance matrices. Required when \code{testType = 'chi'} but with default \code{cn^(-2/3)} when unsupplied.
 #' @param refMat The array of reference matrices with dimension \code{2}-\code{d}-\code{d} that have the same eigenvectors. Default (when \code{is.null(refMat)}) is to use \code{A[2,,]} as reference for \code{A[1,,]} and vice versa. If \code{dim(refMat)[1] = 1}, the only reference matrix is shared.
 #' @param poly.sp Logical, whether the space matrix is generated from polynomial basis. Default \code{poly.sp = TRUE} to use Legendre polynomials. Otherwise \code{poly.sp = FALSE}, the space matrix is generated with common eigenvectors.
-#' @param CV Matrix of dimension \code{d}-by-\code{d} only functionable when \code{poly.sp = FALSE}, as the supplied reference common eigenvector matrix. Default (when \code{is.null(V)}) is to call \code{V = JDTE(A)}.
+#' @param CV Matrix of dimension \code{d}-by-\code{d} only functionable when \code{poly.sp = FALSE}, as the supplied reference common eigenvector matrix. Default (when \code{is.null(V)}) is to call \code{V = JDTE(refMat)}.
 #' @param param.out Logical, whether the parameters of limiting distribution should be output or not. Default \code{param.out = FALSE} to only output P-value.
 #'
 #' @return A P-value when \code{param.out = FALSE} or a list of test information when \code{param.out = TRUE}.
@@ -30,7 +30,7 @@ projTest = function(A, cn, cov.arr = NULL, eps = NULL, refMat = NULL,
   X = A[1,,]; Y = A[2,,]
   if (is.null(eps)) {eps = cn^(-2/3)}
 
-  if (is.null(refMat)) {
+  if (is.null(refMat) && (poly.sp || is.null(V))) {
     refMat = A
   } else if (dim(refMat)[1] == 1) {
     refMat = abind(refMat[1,,], refMat[1,,], along = 0)
