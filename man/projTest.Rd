@@ -11,6 +11,7 @@ projTest(
   eps = NULL,
   refMat = NULL,
   poly.sp = TRUE,
+  CV = NULL,
   param.out = FALSE
 )
 }
@@ -25,7 +26,9 @@ projTest(
 
 \item{refMat}{The array of reference matrices with dimension \code{2}-\code{d}-\code{d} that have the same eigenvectors. Default (when \code{is.null(refMat)}) is to use \code{A[2,,]} as reference for \code{A[1,,]} and vice versa. If \code{dim(refMat)[1] = 1}, the only reference matrix is shared.}
 
-\item{poly.sp}{Logical, whether the space matrix is generated from polynomial basis. Default \code{poly.sp = TRUE} to use Legendre polynomials. Otherwise \code{poly.sp = FALSE}, the space matrix is generated with estimated common eigenvectors from \code{JDTE(refMat)}.}
+\item{poly.sp}{Logical, whether the space matrix is generated from polynomial basis. Default \code{poly.sp = TRUE} to use Legendre polynomials. Otherwise \code{poly.sp = FALSE}, the space matrix is generated with common eigenvectors.}
+
+\item{CV}{Matrix of dimension \code{d}-by-\code{d} only functionable when \code{poly.sp = FALSE}, as the supplied reference common eigenvector matrix. Default (when \code{is.null(V)}) is to call \code{V = JDTE(A)}.}
 
 \item{param.out}{Logical, whether the parameters of limiting distribution should be output or not. Default \code{param.out = FALSE} to only output P-value.}
 }

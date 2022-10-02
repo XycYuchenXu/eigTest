@@ -7,22 +7,16 @@
 #' @return The eigenvector matrix \code{U} with dimension \code{d}-\code{d}.
 #' @export
 #'
-#' @importFrom 'MASS' ginv
-#'
 #' @examples JDTE(countryCoeff)
 JDTE = function(A, iter = 500, tol = 10^(-8)){
 
   d = dim(A)[2]; p = dim(A)[1]
   U = eigen(colSums(A), symmetric = T)$vectors
   tempA = A
-  for (i in 1:p) {
-    tempA[i,,] = tcrossprod(crossprod(U, tempA[i,,]), t(U))
-  }
+  for (i in 1:p) {tempA[i,,] = tcrossprod(crossprod(U, tempA[i,,]), t(U))}
 
   score.old = score.fun(A)
   for (i in 1:iter) {
-
-    #Z = matrix(0, d, d)
 
     for (r in 1:d) {
       for (s in 1:d) {
@@ -36,7 +30,6 @@ JDTE = function(A, iter = 500, tol = 10^(-8)){
         }
         if (denum > 0) {
           coeff = - num/denum
-          if (abs(coeff) > 1) {coeff = abs(coeff)}
           U[,s] = U[,s] - num/denum * U[,r]
           tempA[,,s] = tempA[,,s] + coeff * tempA[,,r]
           tempA[,r,] = tempA[,r,] - coeff * tempA[,s,]
@@ -46,9 +39,7 @@ JDTE = function(A, iter = 500, tol = 10^(-8)){
     }
 
     score.new = score.fun(tempA)
-    if (abs(score.new - score.old) < tol) {
-      break()
-    }
+    if (abs(score.new - score.old) < tol) {break()}
     score.old = score.new
   }
   U
