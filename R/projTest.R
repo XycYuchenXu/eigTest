@@ -30,8 +30,8 @@ projTest = function(A, cn, cov.arr = NULL, eps = NULL, refMat = NULL,
   X = A[1,,]; Y = A[2,,]
   if (is.null(eps)) {eps = cn^(-2/3)}
 
-  if (is.null(refMat) && (poly.sp || is.null(CV))) {
-    refMat = A
+  if (is.null(refMat)) {
+    if (poly.sp || is.null(CV)) {refMat = A}
   } else if (dim(refMat)[1] == 1) {
     refMat = abind(refMat[1,,], refMat[1,,], along = 0)
   }
