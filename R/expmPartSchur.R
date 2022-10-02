@@ -10,7 +10,6 @@
 #' @export
 #'
 #' @importFrom 'Matrix' expm
-#' @importFrom 'MASS' ginv
 #'
 #' @examples expmPartSchur(countryCoeff, 2)
 expmPartSchur = function(A, k, warmup = FALSE, iter = 5000, tol = 10^(-12)){
@@ -34,12 +33,12 @@ expmPartSchur = function(A, k, warmup = FALSE, iter = 5000, tol = 10^(-12)){
   CY = c()
   for (i in 1:d) {
     for (j in 1:d) {
-      Ci = ZeroM
       if (i != j) {
-        Ci[i,j] = 1
-        Ci[j,i] = -1
+        ZeroM[i,j] = 1
+        ZeroM[j,i] = -1
       }
-      CY = cbind(CY, as.vector(Ci))
+      CY = cbind(CY, as.vector(ZeroM))
+      ZeroM[i,j] = 0; ZeroM[j,i] = 0
     }
   }
 
@@ -57,7 +56,7 @@ expmPartSchur = function(A, k, warmup = FALSE, iter = 5000, tol = 10^(-12)){
       vecB = vecB + crossprod(Ti, crossprod(UL, as.vector(Mi)))
     }
     matA = as.matrix(matA)
-    return(matrix(crossprod(ginv(crossprod(CY, crossprod(matA, CY))),
+    return(matrix(crossprod(invert(crossprod(CY, crossprod(matA, CY))),
                             crossprod(CY, vecB)), ncol = d))
   }
 

@@ -19,8 +19,6 @@
 #' }
 #' @export
 #'
-#' @importFrom 'MASS' ginv
-#'
 #' @examples eigTest(countryCoeff, cn = sqrt(112), cov.arr = countryCovar, testType = 'gam')
 eigTest = function(A, cn, cov.arr = NULL, V = NULL, testType = c('chi', 'gam'),
                    eps = NULL, param.out = FALSE){
@@ -36,7 +34,10 @@ eigTest = function(A, cn, cov.arr = NULL, V = NULL, testType = c('chi', 'gam'),
 
   S = diag(d^2) - diag(as.vector(diag(d)))
   S = S[-which(as.double(diag(d)) == 1),]
-  SV = crossprod(t(S), kronecker(t(V), ginv(V)))
+
+  gotit = F
+  try( {SV = crossprod(t(S), kronecker(t(V), solve(V))); gotit = T}, silent = T )
+  if (!gotit) {SV = crossprod(t(S), kronecker(t(V), invert(V)))}
 
   Varr = array(0, c(p, d^2 - d))
   for (i in 1:p) {

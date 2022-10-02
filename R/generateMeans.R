@@ -13,7 +13,6 @@
 #'         If \code{control.g = TRUE}, \code{q = length(snr) + 1} otherwise \code{q = 1}.
 #' @export
 #'
-#' @importFrom 'MASS' ginv
 #' @import gtools
 #'
 #' @examples generateMeans(5,8,3)
@@ -88,7 +87,7 @@ generateMeans = function(d, p, k = d, snr = 10, control.g = FALSE,
         mu[i,l,,] = MarkovMat2/total
       } else {
         Vi.perturb = Vi + matrix(rnorm(d^2), nrow = d, ncol = d) * SNR[l]
-        mu[i,l,,] = tcrossprod(ginv(Vi.perturb), crossprod(Vi.perturb, di))
+        mu[i,l,,] = tcrossprod(invert(Vi.perturb), crossprod(Vi.perturb, di))
       }
     }
   }

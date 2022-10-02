@@ -24,8 +24,6 @@
 #' }
 #' @export
 #'
-#' @importFrom 'MASS' ginv
-#'
 #' @examples partialTest(countryCoeff, cn = sqrt(112), cov.arr = countryCovar, k = 2, testType = 'gam')
 partialTest = function(A, cn, cov.arr = NULL, nn = FALSE, k=NULL, warmup = FALSE,
                        Q = NULL, testType = c('chi', 'gam'),
@@ -83,7 +81,7 @@ partialTest = function(A, cn, cov.arr = NULL, nn = FALSE, k=NULL, warmup = FALSE
     B[i,,] = Ai[1:k, 1:k]
   }
   V = JDTE(B)
-  SV = crossprod((diag(k^2) - diag(as.vector(diag(k)))), kronecker(t(V), ginv(V)))
+  SV = crossprod((diag(k^2) - diag(as.vector(diag(k)))), kronecker(t(V), invert(V)))
 
   SW = matrix(0, nrow = k*d, ncol = d*k)
   SW[1:(k^2), 1:(k^2)] = SV

@@ -7,8 +7,6 @@
 #' @return The eigenvector matrix \code{U} with dimension \code{d}-\code{d}.
 #' @export
 #'
-#' @importFrom 'MASS' ginv
-#'
 #' @examples JDTE(countryCoeff)
 JDTE = function(A, iter = 500, tol = 10^(-8)){
 

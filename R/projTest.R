@@ -15,7 +15,6 @@
 #' \item \code{df}: The degrees of freedom for chi-squared distribution.
 #' \item \code{pvalue} The P-value.
 #' }
-#' @importFrom 'MASS' ginv
 #' @importFrom 'abind' abind
 #' @export
 #'
@@ -54,7 +53,7 @@ projTest = function(A, cn, cov.arr = NULL, eps = NULL, refMat = NULL,
     }
   } else {
     if (is.null(CV)) {CV = JDTE(refMat)}
-    CV_inv = ginv(CV)
+    CV_inv = invert(CV)
     SP.C = matrix(0, d^2, d)
     for (i in 1:d) {
       SP.C[,i] = tcrossprod(CV[,i], CV_inv[i,])
@@ -68,8 +67,8 @@ projTest = function(A, cn, cov.arr = NULL, eps = NULL, refMat = NULL,
 
     r = 2 * d^2 - sum(svd(inner1)$d > 1e-10) - sum(svd(inner2)$d > 1e-10)
     testVal = sum(X^2 + Y^2) -
-      crossprod(UDX, crossprod(ginv(inner1), UDX)) -
-      crossprod(UCY, crossprod(ginv(inner2), UCY))
+      crossprod(UDX, crossprod(invert(inner1), UDX)) -
+      crossprod(UCY, crossprod(invert(inner2), UCY))
     testVal = as.numeric(testVal * cn^2)
   } else {
     cov1.svd = truncateSVD(cov.arr[1,,], eps); cov2.svd = truncateSVD(cov.arr[2,,], eps)
@@ -81,8 +80,8 @@ projTest = function(A, cn, cov.arr = NULL, eps = NULL, refMat = NULL,
 
     r = cov1.svd$r + cov2.svd$r - sum(svd(inner1)$d > 1e-10) - sum(svd(inner2)$d > 1e-10)
     testVal = sum(UX^2) + sum(UY^2) -
-      crossprod(UDX, crossprod(ginv(inner1), UDX)) -
-      crossprod(UCY, crossprod(ginv(inner2), UCY))
+      crossprod(UDX, crossprod(invert(inner1), UDX)) -
+      crossprod(UCY, crossprod(invert(inner2), UCY))
     testVal = as.numeric(testVal * cn^2)
   }
 
