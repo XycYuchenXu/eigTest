@@ -4,7 +4,7 @@
 \alias{JDTE}
 \title{JDTE algorithm.}
 \usage{
-JDTE(A, iter = 5000, tol = 10^(-16))
+JDTE(A, iter = 500, tol = 10^(-6))
 }
 \arguments{
 \item{A}{The array of matrices with dimension \code{p}-\code{d}-\code{d}, where \code{p} is the number of matrices, \code{d} is the dimension of the matrices.}

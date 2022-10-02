@@ -10,25 +10,19 @@
 #' @importFrom 'MASS' ginv
 #'
 #' @examples JDTE(countryCoeff)
-JDTE = function(A, iter = 5000, tol = 10^(-16)){
+JDTE = function(A, iter = 500, tol = 10^(-8)){
 
   d = dim(A)[2]; p = dim(A)[1]
-
-  sumA = A[1,,]
-  for (i in 2:p) {
-    sumA = sumA + A[i,,]
-  }
-  U = eigen(sumA/p, symmetric = TRUE)$vectors
-  V = solve(U)
-  for (i in 1:p) {
-    A[i,,] = tcrossprod(crossprod(t(V), A[i,,]), t(U))
-  }
-
+  U = eigen(colSums(A), symmetric = T)$vectors
   tempA = A
+  for (i in 1:p) {
+    tempA[i,,] = tcrossprod(crossprod(U, tempA[i,,]), t(U))
+  }
+
   score.old = score.fun(A)
   for (i in 1:iter) {
 
-    Z = matrix(0, d, d)
+    #Z = matrix(0, d, d)
 
     for (r in 1:d) {
       for (s in 1:d) {
@@ -40,26 +34,17 @@ JDTE = function(A, iter = 5000, tol = 10^(-16)){
           denum = denum + (Aj[r,r] - Aj[s,s])^2
           num = num + Aj[r,s]*(Aj[r,r] - Aj[s,s])
         }
-        if (denum > 0) {Z[r,s] = - num/denum}
+        if (denum > 0) {
+          coeff = - num/denum
+          if (abs(coeff) > 1) {coeff = abs(coeff)}
+          U[,s] = U[,s] - num/denum * U[,r]
+          tempA[,,s] = tempA[,,s] + coeff * tempA[,,r]
+          tempA[,r,] = tempA[,r,] - coeff * tempA[,s,]
+          tempA[,r,s] = tempA[,r,s] + coeff^2 * tempA[,s,r]
+        }
       }
     }
 
-    wnum = 0; wdenum = 0
-    for (j in 1:p) {
-      Oj = t(tempA[j,,])
-      Cj = tcrossprod(Z, Oj) - crossprod(Oj, Z); diag(Cj) = 0
-      diag(Oj) = 0
-      wdenum = wdenum + sum(Cj^2)
-      wnum = wnum + sum(t(Oj) * Cj)
-    }
-    if (wdenum == 0) {Z = diag(d)}
-    else {Z = diag(d) + Z * wnum / wdenum}
-
-    for (j in 1:p) {
-      tempA[j,,] = tcrossprod(tcrossprod(ginv(Z), t(tempA[j,,])), t(Z))
-    }
-
-    U = tcrossprod(U, t(Z))
     score.new = score.fun(tempA)
     if (abs(score.new - score.old) < tol) {
       break()
