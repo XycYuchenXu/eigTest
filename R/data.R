@@ -25,3 +25,21 @@
 #'  countryCovar
 #' }
 "countryCovar"
+
+#' Hudson river daily discharge table.
+#'
+#' @format The table of the Hudson river daily discharge with daily quantile and categories.
+#' @examples
+#' \dontrun{
+#'  hudsonDaily
+#' }
+"hudsonDaily"
+
+#' Hudson river weekly discharge table.
+#'
+#' @format The table of the Hudson river weekly discharge with weekly quantile and categories.
+#' @examples
+#' \dontrun{
+#'  hudsonWeekly
+#' }
+"hudsonWeekly"
