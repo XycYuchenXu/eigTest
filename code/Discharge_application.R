@@ -25,7 +25,7 @@ p1 = ggplot(hudsonPlot, aes(x = datetime)) + facet_wrap(~reso, scales = 'free_x'
   scale_color_discrete(breaks = c('Drought', 'Normal', 'Flooding'),
                        labels = c('Drought (0 - 25)', 'Normal (25 - 75)', 'Flooding (75 - 100)'))
 
-#tikz(file = "implementations/Plots/Streamflow.tikz", standAlone=F, width = 6, height = 4.5)
+#tikz(file = "output/Plots/Streamflow.tikz", standAlone=F, width = 6, height = 4.5)
 p1
 #dev.off()
 
@@ -73,7 +73,7 @@ weeklyTran = as_tibble(matTran[2,,]) %>%
 
 tranMats = rbind(dailyTran, weeklyTran)
 
-#tikz(file = "implementations/Plots/tranMat.tikz", standAlone=F, width =7.5, height = 3)
+#tikz(file = "output/Plots/tranMat.tikz", standAlone=F, width =7.5, height = 3)
 ggplot(tranMats, aes(x = To, y = From, fill = value)) +
   geom_tile(color = 'white')+
   scale_fill_gradient2(low = "white", high = "black", limit = c(0,1), space = "Lab",

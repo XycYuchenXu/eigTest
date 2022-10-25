@@ -42,7 +42,7 @@ groupMat[7:8,7:8] = 'NA'
 groupMat = melt(groupMat, na.rm = T)
 groupMat$value = as.factor(groupMat$value)
 
-#tikz('implementations/Plots/pvalMat.tikz', standAlone = F, width = 5, height = 4.5)
+#tikz('output/Plots/pvalMat.tikz', standAlone = F, width = 5, height = 4.5)
 ggplot(data = pair.test2plot, aes(x = Var2, y = Var1, fill = value)) +
   geom_tile(color = "white")+
   scale_fill_gradient2(low = "white", high = "black",

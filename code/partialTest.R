@@ -50,9 +50,9 @@ data_p = foreach(est_list = simulated_p, .inorder = F, .combine = bind_rows,
                  }
 stopCluster(cl)
 
-save(data_p, file = 'implementations/output/partTest.RData')
+save(data_p, file = 'output/partTest.RData')
 
-#tikz(file = "implementations/Plots/PvaluePartial.tikz", standAlone=F, width = 6, height = 4.5)
+#tikz(file = "output/Plots/PvaluePartial.tikz", standAlone=F, width = 6, height = 4.5)
 ggplot(data_p) +
   geom_histogram(aes(x = pvalue, y = ..density..*binwidth, fill = SNR),
                  breaks = breaks,

@@ -106,4 +106,4 @@ for (i in 1:length(d)) {
 }
 stopCluster(cl)
 
-save(data_highD, file = 'implementations/output/highD_test.RData')
+save(data_highD, file = 'output/highD_test.RData')

@@ -58,12 +58,12 @@ data_m = foreach(est_list = simulated_m, .inorder = F, .combine = bind_rows,
 stopCluster(cl)
 
 data_m$TestType = factor(dataP$TestType, levels = c('Chi_0', 'Chi', 'Gam'))
-save(data_m, file = 'implementations/output/multiTest.RData')
+save(data_m, file = 'output/multiTest.RData')
 
 binwidth = 0.05
 breaks = seq(0, 1, 0.05)
 
-#tikz(file = "implementations/Plots/PvalueMulti.tikz", standAlone=F,width = 7, height = 6)
+#tikz(file = "output/Plots/PvalueMulti.tikz", standAlone=F,width = 7, height = 6)
 ggplot(dataP) +
   geom_histogram(aes(x = P_value, y = ..density..*binwidth, fill = SNR),
                  breaks = breaks,

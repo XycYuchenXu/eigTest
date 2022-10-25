@@ -1,7 +1,7 @@
 ---
 title: 'Vignette for eigTest'
 author: "Yuchen Xu"
-date: "11/10/2020"
+date: "10/2022"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Vignette for eigTest}
@@ -31,11 +31,11 @@ The sample generating process is as follows:
 
 1. Randomly sample a common eigenvector matrix $V(k; d) \in \mathbb{R}^{d \times k}$, where $d$ is the matrix dimension, $k \in \{1, \dots, d\}$ is the number of common components, and the entries are i.i.d. standard normal;
 
-2. Set $V_i(k; d) = V(k; d)$ if $k = d$, otherwise span $V_i(k; d) = (V(k; d), \widetilde{V}_i) \in \R^{d \times d}$ with random but sufficiently distinct $\widetilde{V}_i \in \R^{d \times (d-k)}$ for $i = 1, \dots, p$.
+2. Set $V_i(k; d) = V(k; d)$ if $k = d$, otherwise span $V_i(k; d) = (V(k; d), \widetilde{V}_i) \in \mathbb{R}^{d \times d}$ with random but sufficiently distinct $\widetilde{V}_i \in \mathbb{R}^{d \times (d-k)}$ for $i = 1, \dots, p$.
 
 3. For $i=1, \dots, p$:
   1. Perturb the $i$-th eigenvector matrix $V_i(k; d)$ as $V_i(\rho, k; d) = V_i(k; d) + \rho E_i$ with noise $E_i$ to be independent and standard normal, element-wise.
-  2. Randomly generate non-singular diagonal matrices $D_i \in \R^{d \times d}$ for $i = 1, \dots, p$.
+  2. Randomly generate non-singular diagonal matrices $D_i \in \mathbb{R}^{d \times d}$ for $i = 1, \dots, p$.
 
 4. Generate the target matrices $\mathcal{M}_p(\rho, k; d) = \{\mu_i(\rho, k; d)\} = \{ V_i(\rho, k; d) D_i V_i^{-1}(\rho, k; d)\}_{i=1}^p$.
 
@@ -77,33 +77,50 @@ eg_part_cov = part_samples[[1]]$cov.bar; print(dim(eg_part_cov))
 
 ```{r twoSample, echo=TRUE, message=FALSE, warning=FALSE}
 ## Commutator-based test
-commutatorTest(mat.arr = eg_full_mat,          # sample matrices
-               cn = full_samples[[1]]$CovRate, # convergence rate
-               cov.arr = eg_full_cov,          # covariance matrices
-               param.out = TRUE)               # return parameters
+commutatorTest(mat.arr = eg_full_mat,              # sample matrices
+               cn = full_samples[[1]]$CovRate,     # convergence rate
+               cov.arr = eg_full_cov,              # covariance matrices
+               testType = 'chi',                   # type of test statistic
+               param.out = TRUE)$chi               # return parameters
 
 ## Log-likelihood ratio test
-projTest(A = eg_part_mat,                # sample matrices
-         cn = part_samples[[1]]$CovRate, # convergence rate
-         cov.arr = eg_part_cov,          # covariance matrices
-         param.out = TRUE)               # return parameters
+projTest(A = eg_part_mat,                          # sample matrices
+         cn = part_samples[[1]]$CovRate,           # convergence rate
+         cov.arr = eg_part_cov,                    # covariance matrices
+         param.out = TRUE)                         # return parameters
 ```
 
 ### Common eigenvector estimate
 
-```{r eigEst, eval=FALSE, include=FALSE}
-JDTE()
+```{r eigEst, echo=TRUE, message=FALSE, warning=FALSE}
+V = JDTE(eg_full_mat); V
 ```
 
 ### Multi-sample test
 
-```{r multiSample, eval=FALSE, include=FALSE}
-eigTest()
+```{r multiSample, echo=TRUE, message=FALSE, warning=FALSE}
+eigTest(eg_full_mat,                        # sample matrices
+        cn = full_samples[[1]]$CovRate,     # convergence rate
+        cov.arr = eg_full_cov,              # covariance matrices
+        testType = 'chi',                   # type of test statistic
+        param.out = TRUE)$chi               # return parameters)
+```
+
+### Partially common eigenvector estimate
+
+```{r parteigEst, echo=TRUE, message=FALSE, warning=FALSE}
+V = expmPartSchur(eg_part_mat,        # sample matrices
+                  k = 3)              # number of common components
+V
 ```
 
 ### Partial test
 
-```{r partial, eval=FALSE, include=FALSE}
-
+```{r partial, echo=TRUE, message=FALSE, warning=FALSE}
+partialTest(A = eg_part_mat,                    # sample matrices
+            cn = part_samples[[1]]$CovRate,     # convergence rate
+            cov.arr = eg_part_cov,              # covariance matrices
+            k = 3,                              # number of common components
+            param.out = TRUE)                   # return parameters
 ```
 

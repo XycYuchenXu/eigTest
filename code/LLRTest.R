@@ -80,12 +80,12 @@ data_l = foreach(est_list = simulated_l, .inorder = F, .combine = bind_rows,
                    )
                  }
 stopCluster(cl)
-save(data_l, file = 'implementations/output/LLRTest.RData')
+save(data_l, file = 'output/LLRTest.RData')
 
 binwidth = 0.05
 breaks = seq(0, 1, 0.05)
 
-#tikz(file = "implementations/Plots/PvalueLLR.tikz", standAlone=F,width = 6, height = 4.5)
+#tikz(file = "output/Plots/PvalueLLR.tikz", standAlone=F,width = 6, height = 4.5)
 ggplot(data_l) +
   geom_histogram(aes(x = pvalue, y = ..density..*binwidth, fill = SNR),
                  breaks = breaks,

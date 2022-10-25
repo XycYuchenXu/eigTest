@@ -37,12 +37,12 @@ data_c = foreach(est_list = simulated_c, .inorder = F, .combine = bind_rows,
                  }
 stopCluster(cl)
 
-save(data_c, file = 'implementations/output/commutatorTest.RData')
+save(data_c, file = 'output/commutatorTest.RData')
 
 binwidth = 0.05
 breaks = seq(0, 1, 0.05)
 
-#tikz(file = "implementations/Plots/PvalueCommutator.tikz", standAlone=F,width = 6, height = 3)
+#tikz(file = "output/Plots/PvalueCommutator.tikz", standAlone=F,width = 6, height = 3)
 ggplot(data_c) +
   geom_histogram(aes(x = pvalue, y = ..density..*binwidth, fill = SNR),
                  breaks = breaks,

@@ -1,15 +1,15 @@
 # eigTest (development in progress)
 
 ## Intro & Setup
-Package is developed for testing simultaneous diagonalizability.
+This `R` package is developed for testing simultaneous diagonalizability.
 
-To install, use the code:
+To install, use the code in `R`:
 `devtools::install_github('XycYuchenXu/eigTest', build_vignettes = T)`
 
 ## Usage
 The package has the following functionalities:
 
-1. Check whether the means of two random square matrices (`matrixA` and `matrixB`) with dimension `d`-by-`d` are simultaneously diagonalizable, either considering the commutator of the two matrices (use function `commutatorTest`), or using the log-likelihood ratio test framework (`projTest`). The random matrices are supposed to be consistent estimators of the means with asymptotic normal distribution with limiting covariance matrices (`covMatA` and `covMatB`) and a convergence rate (`cn`). For both functions, one needs to input an array of two matrices (`A` such that `A[1,,] = matrixA` and `A[2,,] = matrixB`), an array of two limiting covariance matrices (`cov.arr` such that `cov.arr[1,,] = covMatA` and `cov.arr[2,,] = covMatB`), and the convergence rate (`cn`).
+1. Check whether the means of two random square matrices (`matrixA` and `matrixB`) with dimension `d`-by-`d` are simultaneously diagonalizable, either considering the commutator of the two matrices (use function `commutatorTest`), or using the log-likelihood ratio test framework (`projTest`), given asymptotic limiting covariance matrices (`covMatA` and `covMatB`) and a convergence rate (`cn`). For both functions, one needs to input an array of two matrices (`A` such that `A[1,,] = matrixA` and `A[2,,] = matrixB`), an array of two limiting covariance matrices (`cov.arr` such that `cov.arr[1,,] = covMatA` and `cov.arr[2,,] = covMatB`), and the convergence rate (`cn`).
 
 2. Given an array of square random matrices (`A`), estimate a common eigenvector matrix `V` (by supplying the array of matrices `A` for function `JDTE`).
 
@@ -24,9 +24,11 @@ The package has the following functionalities:
 7. For more details, read the vignette: `browseVignettes('eigTest')` and the paper 'Testing Simultaneous Diagonalizability'.
 
 ## Implementations
-The folder includes different simulation studies and applications.
+The folder `implementations` includes different simulation studies and applications.
 
 In particular, the simulation studies include examples for commutator-based test, LLR test, multi-sample eigenvector test and partial test.
 
 Applications include VAR examples on macroeconomic data of 8 countries and Markovian model on Hudson river discharge data, both with data supplied in the R package or the data folder.
 
+## Output
+The folder `output` includes the raw p-values replicates from simulation studies in folder `implementations`, and generated plots from both simulations and applications in `implementations`.
