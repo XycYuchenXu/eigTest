@@ -8,8 +8,19 @@ m = nrow(countryMacro[[1]])
 eigTest(countryCoeff, cn = sqrt(m), cov.arr = countryCovar, testType = 'chi')
 eigTest(countryCoeff, cn = sqrt(m), cov.arr = countryCovar, testType = 'gam')
 
-partialTest(countryCoeff, cn = sqrt(m), k = 2, cov.arr = countryCovar, testType = 'chi')
-partialTest(countryCoeff, cn = sqrt(m), k = 2, cov.arr = countryCovar, testType = 'gam')
+partialTest(countryCoeff, cn = sqrt(m), k = 1, warmup = T, cov.arr = countryCovar, testType = 'chi')
+partialTest(countryCoeff, cn = sqrt(m), k = 1, warmup = T, cov.arr = countryCovar, testType = 'gam')
+
+Q = expmPartSchur(countryCoeff, k = 2, warmup = T)
+B = array(0, dim = c(8, 2, 2))
+for (i in 1:8) {
+  B[i,,] = tcrossprod(crossprod(Q, countryCoeff[i,,]), t(Q))[1:k, 1:k]
+}
+V = JDTE(B)
+
+for (i in 1:8) {
+  print(solve(V) %*% B[i,,] %*% V)
+}
 
 ###  pairwise commutator test  ###
 countries = names(countryMacro)
