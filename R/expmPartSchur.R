@@ -32,7 +32,7 @@ expmPartSchur = function(A, k, warmup = FALSE, iter = 5000, tol = 10^(-12)){
 
   CY = c()
   for (i in 1:d) {
-    for (j in i:d) {
+    for (j in 1:d) {
       if (i != j) {
         ZeroM[i,j] = 1
         ZeroM[j,i] = -1
