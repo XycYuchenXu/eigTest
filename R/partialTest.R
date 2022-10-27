@@ -8,7 +8,8 @@
 #' @param nn Logical, whether the matrices \code{A} are regarded as nonnegative transition probability matrices and the the eigenvector elements should be nonnegative.
 #' @param k The number of common components to be tested. When \code{nn=TRUE}, \code{k} can be \code{NULL} or \code{k = 1}, otherwise \code{k} must be an integer within (0, \code{d}]. Will call \code{eigTest} instead if \code{k = d}.
 #' @param warmup Logical, whether use \code{partSchur} for a warm-up initial value, default to \code{FALSE}.
-#' @param Q The orthogonal components to be tested with dimension \code{d}-\code{d}. Default (when \code{is.null(Q)}) will use \code{Q = nnPartSchur(A)} if \code{nn} else \code{Q = expmPartSchur(A, k, warmup = warmup)}.
+#' @param Q The orthogonal components to be tested with dimension \code{d}-\code{d}. Default (when \code{is.null(Q)}) will use \code{Q = nnPartSchur(A)} if \code{nn == TRUE} else \code{Q = expmPartSchur(A, k, warmup = warmup)}.
+#' @param V The \code{k}-\code{k} eigenvector matrix to be tested for the upper diagonal block after orthogonally transformed by \code{Q}. Only applicable when \code{nn == FALSE}. Default (when \code{is.null(V)}) will use \code{V = JDTE(A)} if \code{k == d} else \code{V = JDTE(B)} where \code{B[i,,] = (t(Q) A[i,,] Q)[1:k,1:k]}.
 #' @param testType The test methods, can be exact chi-squared test \code{testType = 'chi'}, and/or approximated gamma test \code{testType = 'gam'}.
 #' @param eps The threshold of eigenvalues when compute general inverse of covariance matrices. Required when \code{testType = 'chi'} but with default \code{cn^(-2/3)} when unsupplied.
 #' @param param.out Logical, whether the parameters of limiting distribution should be output or not. Default \code{param.out = FALSE} to only output P-value.
@@ -26,7 +27,7 @@
 #'
 #' @examples partialTest(countryCoeff, cn = sqrt(112), cov.arr = countryCovar, k = 2, testType = 'gam')
 partialTest = function(A, cn, cov.arr = NULL, nn = FALSE, k=NULL, warmup = FALSE,
-                       Q = NULL, testType = c('chi', 'gam'),
+                       Q = NULL, V = NULL, testType = c('chi', 'gam'),
                        eps = NULL, param.out = FALSE){
 
   d = dim(A)[2]; p = dim(A)[1]
@@ -56,12 +57,25 @@ partialTest = function(A, cn, cov.arr = NULL, nn = FALSE, k=NULL, warmup = FALSE
     return(schurTest(A, cn, cov.arr = cov.arr, k = k, warmup = warmup, Q = Q,
                      testType = testType, eps = eps, param.out = param.out))
   }
-  if (k == d) {
-    return(eigTest(A, cn, cov.arr = cov.arr, testType = testType,
-                   eps = eps, param.out = param.out))
+
+  if (k == d){
+    if (is.null(V)) {V = JDTE(A)}
+  } else {
+    if (is.null(Q)) {Q = expmPartSchur(A, k, warmup = warmup)}
+    if (is.null(V)) {
+      B = array(0, c(p,k,k))
+      for (i in 1:p) {
+        Ai = tcrossprod(crossprod(Q, A[i,,]), t(Q))
+        B[i,,] = Ai[1:k, 1:k]
+      }
+      V = JDTE(B)
+    }
   }
 
-  if (is.null(Q)) {Q = expmPartSchur(A, k, warmup = warmup)}
+  if (k == d) {
+    return(eigTest(A, cn, cov.arr = cov.arr, V = V, testType = testType,
+                   eps = eps, param.out = param.out))
+  }
 
   matB = matrix(0, d, d)
   matC = matrix(0, d, d)
@@ -72,15 +86,7 @@ partialTest = function(A, cn, cov.arr = NULL, nn = FALSE, k=NULL, warmup = FALSE
   SC = diag(as.double(matC))
   SC = SC[which(as.double(matC) == 1),]
   SBC = rbind(SB, SC)
-
   SQ = crossprod(t(SBC), kronecker(t(Q), t(Q)))
-
-  B = array(0, c(p,k,k))
-  for (i in 1:p) {
-    Ai = tcrossprod(crossprod(Q, A[i,,]), t(Q))
-    B[i,,] = Ai[1:k, 1:k]
-  }
-  V = JDTE(B)
   SV = crossprod((diag(k^2) - diag(as.vector(diag(k)))), kronecker(t(V), invert(V)))
 
   SW = matrix(0, nrow = k*d, ncol = d*k)

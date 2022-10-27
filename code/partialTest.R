@@ -33,10 +33,11 @@ data_p = foreach(est_list = simulated_p, .inorder = F, .combine = bind_rows,
 
                    p_vector_partial = array(NA, dim = c(2, d-k+1))
                    for (kk in k:d) {
-                     Qk = expmPartSchur(mu.bar, kk, warmup = T)
+                     if (kk < d) {Qk = expmPartSchur(mu.bar, kk, warmup = T)}
                      p_vector_partial[1, kk-k+1] = partialTest(mu.bar, cn = CovRate,
                                                                cov.arr = cov.bar, Q = Qk,
                                                                k = kk, testType = 'chi')
+                     print(kk)
                      p_vector_partial[2, kk-k+1] = partialTest(mu.bar, cn = CovRate,
                                                                cov.arr = cov.bar, Q = Qk,
                                                                k = kk, testType = 'gam')
