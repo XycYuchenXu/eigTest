@@ -43,7 +43,7 @@ generateMeans = function(d, p, k = d, snr = 10, control.g = FALSE,
     if (is.null(V)) {
       orth = qr.Q(qr(matrix(rnorm(d^2), ncol = d)))
     } else {
-      orth = qr.Q(qr(orth))
+      orth = qr.Q(qr(V))
     }
     groups = sample(d, k)
 
@@ -61,8 +61,8 @@ generateMeans = function(d, p, k = d, snr = 10, control.g = FALSE,
       Vi = V
       di = diag(runif(d, 0.5, d) * sample(c(-1,1), d, replace = T))
       if (k < d) {
-        coefM = matrix(runif((d-k)^2, -1, 1), ncol = d-k); coefM[!upper.tri(coefM)] = 0
-        Vi[(k+1):d,] = crossprod(t(diag(d-k) + coefM), orth[-groups,])
+        coefM = matrix(runif((d-k)^2, -2, 2), ncol = d-k)
+        Vi[(k+1):d,] = crossprod(coefM, orth[-groups,])
       }
 
     }

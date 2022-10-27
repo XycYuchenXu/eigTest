@@ -6,10 +6,11 @@ library(tidyverse)
 #library(tikzDevice)
 
 set.seed(2020)
-samples = 200
+samples = 20
 d = 4
 p = 8
 k = 2
+#SNRS = c(100); n = sqrt(c(100,500))
 SNRS = c(1000, 100, 10)
 n = sqrt(c(100, 1000, 10000))
 means_p = generateMeans(d, p, k, snr = SNRS, control.g = TRUE)
@@ -32,17 +33,18 @@ data_p = foreach(est_list = simulated_p, .inorder = F, .combine = bind_rows,
 
                    p_vector_partial = array(NA, dim = c(2, d-k+1))
                    for (kk in k:d) {
+                     Qk = expmPartSchur(mu.bar, kk, warmup = T)
                      p_vector_partial[1, kk-k+1] = partialTest(mu.bar, cn = CovRate,
-                                                               cov.arr = cov.bar,
+                                                               cov.arr = cov.bar, Q = Qk,
                                                                k = kk, testType = 'chi')
                      p_vector_partial[2, kk-k+1] = partialTest(mu.bar, cn = CovRate,
-                                                               cov.arr = cov.bar,
+                                                               cov.arr = cov.bar, Q = Qk,
                                                                k = kk, testType = 'gam')
                    }
                    dimnames(p_vector_partial) = list(c('Chi', 'Gam'), paste('K =', k:d))
 
                    data_p = melt(p_vector_partial, value.name = 'pvalue', na.rm = T)
-                   colnames(dataP)[1] = c('TestType', 'K')
+                   colnames(data_p)[1:2] = c('TestType', 'K')
 
                    return(data_p %>%
                             mutate(SNR = SNR, SampleSize = round(CovRate^2))
@@ -51,6 +53,8 @@ data_p = foreach(est_list = simulated_p, .inorder = F, .combine = bind_rows,
 stopCluster(cl)
 
 save(data_p, file = 'output/partTest.RData')
+
+breaks = seq(0,1,0.05); binwidth = 0.05
 
 #tikz(file = "output/Plots/PvaluePartial.tikz", standAlone=F, width = 6, height = 4.5)
 ggplot(data_p) +
@@ -69,3 +73,10 @@ ggplot(data_p) +
   scale_fill_discrete()+
   scale_y_continuous(breaks = c(0.05, 0.25, 0.5, 0.75, 1), trans = 'sqrt')
 #dev.off()
+
+
+for (i in 1:p) {
+  print(eigen(means_p[i,1,,]))
+}
+expmPartSchur(means_p[,1,,], 2)
+partialTest(means_p[,1,,], cn = 10, k = 3, testType = 'chi', param.out = T, warmup = T)

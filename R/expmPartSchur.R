@@ -32,13 +32,13 @@ expmPartSchur = function(A, k, warmup = FALSE, iter = 5000, tol = 10^(-12)){
 
   CY = c()
   for (i in 1:d) {
-    for (j in 1:d) {
+    for (j in i:d) {
       if (i != j) {
         ZeroM[i,j] = 1
         ZeroM[j,i] = -1
+        CY = cbind(CY, as.vector(ZeroM))
+        ZeroM[i,j] = 0; ZeroM[j,i] = 0
       }
-      CY = cbind(CY, as.vector(ZeroM))
-      ZeroM[i,j] = 0; ZeroM[j,i] = 0
     }
   }
 
@@ -55,16 +55,17 @@ expmPartSchur = function(A, k, warmup = FALSE, iter = 5000, tol = 10^(-12)){
       matA = matA + crossprod(Ti, crossprod(UL, Ti))
       vecB = vecB + crossprod(Ti, crossprod(UL, as.vector(Mi)))
     }
-    matA = as.matrix(matA)
-    return(matrix(crossprod(invert(crossprod(CY, crossprod(matA, CY))),
-                            crossprod(CY, vecB)), ncol = d))
+    matA = - as.matrix(matA)
+    return(matrix(crossprod(t(CY),
+                            crossprod(invert(crossprod(CY, crossprod(matA, CY))),
+                                      crossprod(CY, vecB))), ncol = d))
   }
 
   scoresUL = function(U){
     S = 0
     for (i in 1:p) {
       Mi = crossprod(U, tcrossprod(A[i,,], t(U)))
-      S = S + sum(crossprod(UL, as.vector(Mi))^2)
+      S = S + sum(Mi[1:k, (k+1):d]^2)
     }
     return(S)
   }

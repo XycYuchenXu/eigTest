@@ -33,21 +33,21 @@ data_m = foreach(est_list = simulated_m, .inorder = F, .combine = bind_rows,
 
                    eigvPLG = JDTE(mu.bar)
 
-                   data_eig = eigTest(mu.bar, cn = CovRate, cov.arr = cov.bar,
-                                      testType = 'chi', param.out = T) %>%
+                   data_eig = eigTest(mu.bar, cn = CovRate, cov.arr = cov.bar, V = eigvPLG,
+                                      testType = 'chi', param.out = T)$chi %>%
                      list2DF() %>% select(pvalue) %>%
-                     mutate(testType = 'chi')
-                   data_eig = eigTest(mu.bar, cn = CovRate, cov.arr = cov.bar,
-                                      testType = 'gam', param.out = T) %>%
+                     mutate(testType = 'Chi')
+                   data_eig = eigTest(mu.bar, cn = CovRate, cov.arr = cov.bar, V = eigvPLG,
+                                      testType = 'gam', param.out = T)$gam %>%
                      list2DF() %>% select(pvalue) %>%
-                     mutate(testType = 'gam') %>% bind_rows(data_eig)
+                     mutate(testType = 'Gam') %>% bind_rows(data_eig)
 
 
                    if (SNR == '1/SNR=0') {
                      data_eig = eigTest(mu.bar, cn = CovRate, cov.arr = cov.bar,
-                                        testType = 'chi', V = v.t, param.out = T) %>%
+                                        testType = 'chi', V = v.t, param.out = T)$chi %>%
                        list2DF() %>% select(pvalue) %>%
-                       mutate(testType = 'chi_0') %>% bind_rows(data_LLR)
+                       mutate(testType = 'Chi_0') %>% bind_rows(data_eig)
                    }
 
                    return(data_eig %>%
@@ -57,20 +57,21 @@ data_m = foreach(est_list = simulated_m, .inorder = F, .combine = bind_rows,
 
 stopCluster(cl)
 
-data_m$TestType = factor(dataP$TestType, levels = c('Chi_0', 'Chi', 'Gam'))
+data_m$testType = factor(data_m$testType, levels = c('Chi_0', 'Chi', 'Gam'))
+data_m$SampleSize = paste0('Sample size $n = 10^', round(log10(data_m$SampleSize)), '$')
 save(data_m, file = 'output/multiTest.RData')
 
 binwidth = 0.05
 breaks = seq(0, 1, 0.05)
 
 #tikz(file = "output/Plots/PvalueMulti.tikz", standAlone=F,width = 7, height = 6)
-ggplot(dataP) +
-  geom_histogram(aes(x = P_value, y = ..density..*binwidth, fill = SNR),
+ggplot(data_m) +
+  geom_histogram(aes(x = pvalue, y = ..density..*binwidth, fill = SNR),
                  breaks = breaks,
                  position = position_dodge()) + theme_bw()+
   ggtitle('P-value histogram from multi-sample test') +
-  facet_grid(vars(TestType), vars(SampleSize),# ncol = 4, dir = 'v',
-             labeller = labeller(TestType = c(`Chi_0` = 'Chi test with $V$',
+  facet_grid(vars(testType), vars(SampleSize),# ncol = 4, dir = 'v',
+             labeller = labeller(testType = c(`Chi_0` = 'Chi test with $V$',
                                               `Chi` = 'Chi test with $\\widehat{V}$',
                                               `Gam` = 'Gamma test with $\\widehat{V}$'))) +
   theme(legend.position = 'bottom', plot.title = element_text(hjust = 0.5),
