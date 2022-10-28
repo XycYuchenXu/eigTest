@@ -1,7 +1,9 @@
 library(eigTest)
 library(tidyverse)
-#library(tikzDevice)
+library(tikzDevice)
 
+
+###### data summary & plot ######
 data(hudsonDaily); data(hudsonWeekly)
 
 hudsonPlot = rbind(cbind(hudsonDaily, reso = 'Daily discharge (2015 - 2020)'),
@@ -29,13 +31,14 @@ p1 = ggplot(hudsonPlot, aes(x = datetime)) + facet_wrap(~reso, scales = 'free_x'
 p1
 #dev.off()
 
-labelTab = cbind(hudsonDaily$Level, hudsonWeekly$Level)
 
+###### transition probabilities ######
+labelTab = cbind(hudsonDaily$Level, hudsonWeekly$Level)
 L = nrow(hudsonWeekly)
 
-p = 2
-matTran = array(0, dim = c(p, 3, 3))
-matCov = array(0, dim = c(p, 9, 9))
+p = 2; d = 3
+matTran = array(0, dim = c(p, d, d))
+matCov = array(0, dim = c(p, d^2, d^2))
 dimnames(matTran) = list(c('Daily', 'Weekly'), c('Drought', 'Normal', 'Flooding'), c('Drought', 'Normal', 'Flooding'))
 dimnames(matCov) = list(c('Daily', 'Weekly'), NULL, NULL)
 
@@ -51,24 +54,24 @@ for (i in 2:L) {
 for (j in 1:p) {
   matTran[j,,] = matTran[j,,]/rowSums(matTran[j,,])
   Label = as.integer(unlist(labelTab[,j]))
-  for (i in 1:3) {
+  for (i in 1:d) {
     pi = sum(Label == i)/L
-    Ei = matrix(0, ncol = 3, nrow = 3)
+    Ei = matrix(0, ncol = d, nrow = d)
     Ei[i,i] = 1
-    Qi = (diag(matTran[j,i,]) - matrix(matTran[j,i,], nrow = 3, ncol = 3) *
-            matrix(matTran[j,i,], nrow = 3, ncol = 3, byrow = T))/pi
+    Qi = (diag(matTran[j,i,]) - matrix(matTran[j,i,], nrow = d, ncol = d) *
+            matrix(matTran[j,i,], nrow = d, ncol = d, byrow = T))/pi
     matCov[j,,] = matCov[j,,] + kronecker(Qi, Ei)
   }
 }
 
 dailyTran = as_tibble(matTran[1,,]) %>%
   mutate(From = colnames(matTran[1,,])) %>%
-  pivot_longer(cols = 1:3, names_to = 'To') %>%
+  pivot_longer(cols = 1:d, names_to = 'To') %>%
   mutate(Resolution = 'Daily')
 
 weeklyTran = as_tibble(matTran[2,,]) %>%
   mutate(From = colnames(matTran[2,,])) %>%
-  pivot_longer(cols = 1:3, names_to = 'To') %>%
+  pivot_longer(cols = 1:d, names_to = 'To') %>%
   mutate(Resolution = 'Weekly')
 
 tranMats = rbind(dailyTran, weeklyTran)
@@ -98,12 +101,23 @@ ggplot(tranMats, aes(x = To, y = From, fill = value)) +
   guides(fill = guide_colorbar(title.vjust = 0.8, barwidth = 9, barheight = 1))
 #dev.off()
 
-partialTest(matTran, cn = sqrt(L-1), cov.arr = matCov, nn = T, k = 1,
+
+###### static distribution estimate / test ######
+# transpose for test setup
+matTran_t = matTran
+for (i in 1:p) {
+  matTran_t[i,,] = t(matTran[i,,])
+}
+matCov_t = matCov[,
+                  as.vector(matrix(1:d^2, ncol = d, byrow = T)),
+                  as.vector(matrix(1:d^2, ncol = d, byrow = T))]
+
+partialTest(matTran_t, cn = sqrt(L-1), cov.arr = matCov_t, nn = T, k = 1,
             testType = 'chi', eps = (L-1)^(-1/3), param.out = T)
-partialTest(matTran, cn = sqrt(L-1), cov.arr = matCov, nn = T, k = 1,
+partialTest(matTran_t, cn = sqrt(L-1), cov.arr = matCov_t, nn = T, k = 1,
             testType = 'gam', param.out = T)
 
-statDist = nnPartSchur(matTran)[,1] %>%
+statDist = nnPartSchur(matTran_t)[,1] %>%
   abs %>% proportions()
-names(statDist) = colnames(matTran[1,,])
+names(statDist) = colnames(matTran_t[1,,])
 statDist

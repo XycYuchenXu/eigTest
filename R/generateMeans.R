@@ -5,9 +5,9 @@
 #' @param k The number of common Schur components. Must be an integer within (0, \code{d}), otherwise set \code{k = d}.
 #' @param snr The positive signal to noise variance ratio (SNR), can be a vector.
 #' @param control.g Logical, whether the control group of samples with perturbed common eigenvectors should be output or not.
-#' @param V The input of eigenvector matrix with dimension \code{d}-\code{d}, needed when \code{nonneg = FALSE}. Default will use random sampling when \code{is.null(V)}.
-#' @param v The input of stationary distribution with length \code{d}, needed when \code{nonneg = TRUE}. Default will use Dirichlet random sampling when \code{is.null(v)}.
-#' @param nonneg Logical, whether the generated matrices should be nonnegative as transition probability matrices.
+#' @param V The input of eigenvector matrix with dimension \code{d}-\code{d}, needed when \code{nn = FALSE}. Default will use random sampling when \code{is.null(V)}.
+#' @param v The input of stationary distribution with length \code{d}, needed when \code{nn = TRUE}. Default will use Dirichlet random sampling when \code{is.null(v)}.
+#' @param nn Logical, whether the generated matrices should be nonnegative as transition probability matrices.
 #'
 #' @return An array of mean matrices: \code{p}-by-\code{q}-by-\code{d}-by-\code{d}, where \code{q} is the number of SNRs.
 #'         If \code{control.g = TRUE}, \code{q = length(snr) + 1} otherwise \code{q = 1}.
@@ -17,7 +17,7 @@
 #'
 #' @examples generateMeans(5,8,3)
 generateMeans = function(d, p, k = d, snr = 10, control.g = FALSE,
-                         V = NULL, v = NULL, nonneg = FALSE) {
+                         V = NULL, v = NULL, nn = FALSE) {
 
   if (k <= 0 || k > d || k != round(k)) {k = d}
   means.groups = 1
@@ -39,7 +39,7 @@ generateMeans = function(d, p, k = d, snr = 10, control.g = FALSE,
                       paste0('1/SNR=', SNR^2),
                       NULL, NULL)
 
-  if (!nonneg) {
+  if (!nn) {
     if (is.null(V)) {
       orth = qr.Q(qr(matrix(rnorm(d^2), ncol = d)))
     } else {
@@ -57,7 +57,7 @@ generateMeans = function(d, p, k = d, snr = 10, control.g = FALSE,
   }
 
   for (i in 1:p) {
-    if (!nonneg) {
+    if (!nn) {
       Vi = V
       di = diag(runif(d, 0.5, d) * sample(c(-1,1), d, replace = T))
       if (k < d) {
@@ -67,7 +67,7 @@ generateMeans = function(d, p, k = d, snr = 10, control.g = FALSE,
 
     }
     for (l in 1:means.groups) {
-      if (nonneg) {
+      if (nn) {
         vv = v + SNR[l]*rdirichlet(1, rep(1,d))
         MarkovMat2 = matrix(0, nrow = d, ncol = d)
         for (j in 1:d) {

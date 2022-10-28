@@ -59,12 +59,12 @@ part_means = generateMeans(d = 5,           # square matrix's dimension
                            p = 4,           # number of matrices
                            k = 3,           # number of components
                            snr = c(10,1),   # vector of SNR in eigenvector
-                           nonneg = FALSE)  # nonnegativity
+                           nn = FALSE)      # nonnegativity
 
 part_samples = simuSamples(mu = part_means,                # mean matrices
                            cn = c(sqrt(100), sqrt(500)),   # convergence rate
-                           reps = 20,                     # replicate
-                           nonneg = FALSE)                 # nonnegativity
+                           reps = 20,                      # replicate
+                           nn = FALSE)                     # nonnegativity
 
 eg_part_mat = part_samples[[1]]$mu.bar; print(dim(eg_part_mat))
 eg_part_cov = part_samples[[1]]$cov.bar; print(dim(eg_part_cov))

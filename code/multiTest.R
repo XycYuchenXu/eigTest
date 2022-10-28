@@ -3,64 +3,76 @@ library(eigTest)
 library(foreach)
 library(doSNOW)
 library(tidyverse)
-#library(tikzDevice)
+library(tikzDevice)
 
-set.seed(2020)
+
+###### generate / load pvalues ######
+# simulate pvalues from scratch
+simu_pval = FALSE
+
 samples = 200
 d = 4
 p = 8
 k = d
 SNRS = c(1000, 100, 10)
 n = sqrt(c(100, 1000, 10000, 100000))
-means_m = generateMeans(d, p, k, snr = SNRS, control.g = TRUE)
-v.t = eigen(means_m[1,1,,])$vectors
 
-numCores = parallel::detectCores()/2
-cl <- makeCluster(numCores)
-registerDoSNOW(cl)
+if (simu_pval) {
+  set.seed(2020)
+  means_m = generateMeans(d, p, k, snr = SNRS, control.g = TRUE)
+  v.t = eigen(means_m[1,1,,])$vectors
 
-simulated_m = simuSamples(means_m, n, samples, prl = T)
+  numCores = parallel::detectCores()/2
+  cl <- makeCluster(numCores)
+  registerDoSNOW(cl)
 
-totL = length(n)*samples*(length(SNRS)+1)
-pb <- txtProgressBar(max = totL, style = 3)
-progress <- function(n) {setTxtProgressBar(pb, n)}
-opts <- list(progress = progress)
+  simulated_m = simuSamples(means_m, n, samples, prl = T)
 
-data_m = foreach(est_list = simulated_m, .inorder = F, .combine = bind_rows,
-                 .options.snow = opts, .packages = c('eigTest', 'tidyverse')) %dopar% {
-                   mu.bar = est_list$mu.bar; cov.bar = est_list$cov.bar
-                   SNR = est_list$SNR; CovRate = est_list$CovRate
+  totL = length(n)*samples*(length(SNRS)+1)
+  pb <- txtProgressBar(max = totL, style = 3)
+  progress <- function(n) {setTxtProgressBar(pb, n)}
+  opts <- list(progress = progress)
 
-                   eigvPLG = JDTE(mu.bar)
+  data_m = foreach(est_list = simulated_m, .inorder = F, .combine = bind_rows,
+                   .options.snow = opts, .packages = c('eigTest', 'tidyverse')) %dopar% {
+                     mu.bar = est_list$mu.bar; cov.bar = est_list$cov.bar
+                     SNR = est_list$SNR; CovRate = est_list$CovRate
 
-                   data_eig = eigTest(mu.bar, cn = CovRate, cov.arr = cov.bar, V = eigvPLG,
-                                      testType = 'chi', param.out = T)$chi %>%
-                     list2DF() %>% select(pvalue) %>%
-                     mutate(testType = 'Chi')
-                   data_eig = eigTest(mu.bar, cn = CovRate, cov.arr = cov.bar, V = eigvPLG,
-                                      testType = 'gam', param.out = T)$gam %>%
-                     list2DF() %>% select(pvalue) %>%
-                     mutate(testType = 'Gam') %>% bind_rows(data_eig)
+                     eigvPLG = JDTE(mu.bar)
 
-
-                   if (SNR == '1/SNR=0') {
-                     data_eig = eigTest(mu.bar, cn = CovRate, cov.arr = cov.bar,
-                                        testType = 'chi', V = v.t, param.out = T)$chi %>%
+                     data_eig = eigTest(mu.bar, cn = CovRate, cov.arr = cov.bar, V = eigvPLG,
+                                        testType = 'chi', param.out = T)$chi %>%
                        list2DF() %>% select(pvalue) %>%
-                       mutate(testType = 'Chi_0') %>% bind_rows(data_eig)
+                       mutate(testType = 'Chi')
+                     data_eig = eigTest(mu.bar, cn = CovRate, cov.arr = cov.bar, V = eigvPLG,
+                                        testType = 'gam', param.out = T)$gam %>%
+                       list2DF() %>% select(pvalue) %>%
+                       mutate(testType = 'Gam') %>% bind_rows(data_eig)
+
+
+                     if (SNR == '1/SNR=0') {
+                       data_eig = eigTest(mu.bar, cn = CovRate, cov.arr = cov.bar,
+                                          testType = 'chi', V = v.t, param.out = T)$chi %>%
+                         list2DF() %>% select(pvalue) %>%
+                         mutate(testType = 'Chi_0') %>% bind_rows(data_eig)
+                     }
+
+                     return(data_eig %>%
+                              mutate(SNR = SNR, SampleSize = round(CovRate^2))
+                     )
                    }
 
-                   return(data_eig %>%
-                            mutate(SNR = SNR, SampleSize = round(CovRate^2))
-                   )
-                 }
+  stopCluster(cl)
 
-stopCluster(cl)
+  data_m$testType = factor(data_m$testType, levels = c('Chi_0', 'Chi', 'Gam'))
+  data_m$SampleSize = paste0('Sample size $n = 10^', round(log10(data_m$SampleSize)), '$')
+  save(data_m, file = 'output/multiTest.RData')
+} else {
+  data_m = load('output/multiTest.RData')
+}
 
-data_m$testType = factor(data_m$testType, levels = c('Chi_0', 'Chi', 'Gam'))
-data_m$SampleSize = paste0('Sample size $n = 10^', round(log10(data_m$SampleSize)), '$')
-save(data_m, file = 'output/multiTest.RData')
 
+###### plot histograms ######
 binwidth = 0.05
 breaks = seq(0, 1, 0.05)
 
