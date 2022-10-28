@@ -6,7 +6,7 @@ library(tidyverse)
 #library(tikzDevice)
 
 set.seed(2020)
-samples = 200
+samples = 10
 d = 4
 p = 8
 k = 2

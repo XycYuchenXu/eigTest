@@ -82,7 +82,7 @@ partialTest = function(A, cn, cov.arr = NULL, nn = FALSE, k=NULL, warmup = FALSE
   matB[1:k, 1:k] = 1
   SB = diag(as.double(matB))
   SB = SB[which(as.double(matB) == 1),]
-  matC[1:k, (k+1):d] = 1
+  matC[(k+1):d, 1:k] = 1
   SC = diag(as.double(matC))
   SC = SC[which(as.double(matC) == 1),]
   SBC = rbind(SB, SC)

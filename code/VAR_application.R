@@ -4,23 +4,54 @@ library(reshape2)
 library(ggplot2)
 #library(tikzDevice)
 
-m = nrow(countryMacro[[1]])
-eigTest(countryCoeff, cn = sqrt(m), cov.arr = countryCovar, testType = 'chi')
-eigTest(countryCoeff, cn = sqrt(m), cov.arr = countryCovar, testType = 'gam')
+m = nrow(countryMacro[[1]]); d = ncol(countryMacro[[1]]); p = length(countryMacro)
 
-partialTest(countryCoeff, cn = sqrt(m), k = 1, warmup = T, cov.arr = countryCovar, testType = 'chi')
-partialTest(countryCoeff, cn = sqrt(m), k = 1, warmup = T, cov.arr = countryCovar, testType = 'gam')
-
-Q = expmPartSchur(countryCoeff, k = 2, warmup = T)
-B = array(0, dim = c(8, 2, 2))
-for (i in 1:8) {
-  B[i,,] = tcrossprod(crossprod(Q, countryCoeff[i,,]), t(Q))[1:k, 1:k]
+# transpose for test setup
+countryCoeff_t = countryCoeff
+for (i in 1:p) {
+  countryCoeff_t[i,,] = t(countryCoeff[i,,])
 }
-V = JDTE(B)
+countryCovar_t = countryCovar[,
+                              as.vector(matrix(1:d^2, ncol = d, byrow = T)),
+                              as.vector(matrix(1:d^2, ncol = d, byrow = T))]
 
-for (i in 1:8) {
-  print(solve(V) %*% B[i,,] %*% V)
+# multi-sample test, Corollary 4.1
+eigTest(countryCoeff_t, cn = sqrt(m), cov.arr = countryCovar_t, testType = 'chi', param.out = T)
+eigTest(countryCoeff_t, cn = sqrt(m), cov.arr = countryCovar_t, testType = 'gam', param.out = T)
+
+# partial test k = 1, Proposition 5.2 & Corollary 5.1
+partialTest(countryCoeff_t, cn = sqrt(m), k = 1, cov.arr = countryCovar_t, testType = 'chi', param.out = T)
+partialTest(countryCoeff_t, cn = sqrt(m), k = 1, cov.arr = countryCovar_t, testType = 'gam', param.out = T)
+
+# partial test k = 2, Corollary 5.1
+partialTest(countryCoeff_t, cn = sqrt(m), k = 2, cov.arr = countryCovar_t, testType = 'gam', param.out = T)
+
+# estimated (partially) common eigenvectors
+V = JDTE(countryCoeff_t)
+V
+
+Q = expmPartSchur(countryCoeff_t, k = 2, warmup = T)
+B = array(0, dim = c(p, d, d))
+for (i in 1:p) {
+  B[i,,] = tcrossprod(crossprod(Q, countryCoeff_t[i,,]), t(Q))
 }
+V = JDTE(B[,1:2, 1:2])
+Q[,1:2] %*% V
+
+
+# continent-wise grouped multi-sample test
+## Asia
+eigTest(countryCoeff_t[1:3,,], cn = sqrt(m), cov.arr = countryCovar_t[1:3,,], testType = 'chi', param.out = T)
+eigTest(countryCoeff_t[1:3,,], cn = sqrt(m), cov.arr = countryCovar_t[1:3,,], testType = 'gam', param.out = T)
+
+## Europe
+eigTest(countryCoeff_t[4:6,,], cn = sqrt(m), cov.arr = countryCovar_t[4:6,,], testType = 'chi', param.out = T)
+eigTest(countryCoeff_t[4:6,,], cn = sqrt(m), cov.arr = countryCovar_t[4:6,,], testType = 'gam', param.out = T)
+
+## NA
+eigTest(countryCoeff_t[7:8,,], cn = sqrt(m), cov.arr = countryCovar_t[7:8,,], testType = 'chi', param.out = T)
+eigTest(countryCoeff_t[7:8,,], cn = sqrt(m), cov.arr = countryCovar_t[7:8,,], testType = 'gam', param.out = T)
+
 
 ###  pairwise commutator test  ###
 countries = names(countryMacro)

@@ -52,7 +52,7 @@ schurTest = function(A, cn, cov.arr = NULL, nn = FALSE, k = NULL, warmup = FALSE
   }
 
   Mat = matrix(0, d, d)
-  Mat[1:k,(k+1):d] = 1
+  Mat[(k+1):d,1:k] = 1
   Mat = as.double(Mat)
   select = diag(Mat)
   S = select[which(Mat == 1),]

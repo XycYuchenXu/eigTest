@@ -43,7 +43,7 @@ expmPartSchur = function(A, k, warmup = FALSE, iter = 5000, tol = 10^(-12)){
   }
 
   UL = ZeroM
-  UL[1:k, (k+1):d] = 1
+  UL[(k+1):d, 1:k] = 1
   UL = diag(as.vector(UL))
 
   listAB = function(U){
@@ -60,20 +60,11 @@ expmPartSchur = function(A, k, warmup = FALSE, iter = 5000, tol = 10^(-12)){
                             crossprod(CY, vecB)), ncol = d))
   }
 
-  scoresUL = function(U){
-    S = 0
-    for (i in 1:p) {
-      Mi = crossprod(U, tcrossprod(A[i,,], t(U)))
-      S = S + sum(Mi[1:k, (k+1):d]^2)
-    }
-    return(S)
-  }
-
   resultAB = function(U, X){
     minS = Inf; Z = X
     for (i in 1:length(gridNodes)) {
       Zi = as.matrix(crossprod(t(U), expm(gridNodes[i] * X)))
-      tempS = scoresUL(Zi)
+      tempS = score.fun(A, Zi, k)
       if (tempS < minS) {
         minS = tempS; Z = Zi
       }
@@ -81,7 +72,7 @@ expmPartSchur = function(A, k, warmup = FALSE, iter = 5000, tol = 10^(-12)){
     return(list(Z, minS))
   }
 
-  score.old = scoresUL(Ui)
+  score.old = score.fun(A, Ui, k)
   for (i in 1:iter) {
     Xi = listAB(Ui)
     solAB = resultAB(Ui, Xi)

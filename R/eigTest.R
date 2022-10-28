@@ -35,9 +35,7 @@ eigTest = function(A, cn, cov.arr = NULL, V = NULL, testType = c('chi', 'gam'),
   S = diag(d^2) - diag(as.vector(diag(d)))
   S = S[-which(as.double(diag(d)) == 1),]
 
-  gotit = F
-  try( {SV = crossprod(t(S), kronecker(t(V), solve(V))); gotit = T}, silent = T )
-  if (!gotit) {SV = crossprod(t(S), kronecker(t(V), invert(V)))}
+  SV = crossprod(t(S), kronecker(t(V), invert(V)))
 
   Varr = array(0, c(p, d^2 - d))
   for (i in 1:p) {

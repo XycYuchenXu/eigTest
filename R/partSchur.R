@@ -33,7 +33,7 @@ partSchur = function(A, k, iter = 5000, tol = 10^(-16)){
 
         mid = matrix(0, nrow = 2, ncol = 2)
         for (j in 1:p) {
-          Mj = t(crossprod(Qr, A[j,,]))
+          Mj = tcrossprod(A[j,,], t(Qr))
           mid = mid + tcrossprod(crossprod(Mj, Q[,1]))
           for (k in 2:d) {
             mid = mid - tcrossprod(crossprod(Mj, Q[,k]))
