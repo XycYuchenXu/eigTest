@@ -12,7 +12,7 @@ generateMeans(
   control.g = FALSE,
   V = NULL,
   v = NULL,
-  nonneg = FALSE
+  nn = FALSE
 )
 }
 \arguments{
@@ -26,11 +26,11 @@ generateMeans(
 
 \item{control.g}{Logical, whether the control group of samples with perturbed common eigenvectors should be output or not.}
 
-\item{V}{The input of eigenvector matrix with dimension \code{d}-\code{d}, needed when \code{nonneg = FALSE}. Default will use random sampling when \code{is.null(V)}.}
+\item{V}{The input of eigenvector matrix with dimension \code{d}-\code{d}, needed when \code{nn = FALSE}. Default will use random sampling when \code{is.null(V)}.}
 
-\item{v}{The input of stationary distribution with length \code{d}, needed when \code{nonneg = TRUE}. Default will use Dirichlet random sampling when \code{is.null(v)}.}
+\item{v}{The input of stationary distribution with length \code{d}, needed when \code{nn = TRUE}. Default will use Dirichlet random sampling when \code{is.null(v)}.}
 
-\item{nonneg}{Logical, whether the generated matrices should be nonnegative as transition probability matrices.}
+\item{nn}{Logical, whether the generated matrices should be nonnegative as transition probability matrices.}
 }
 \value{
 An array of mean matrices: \code{p}-by-\code{q}-by-\code{d}-by-\code{d}, where \code{q} is the number of SNRs.
