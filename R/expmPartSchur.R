@@ -2,7 +2,7 @@
 #'
 #' @param A The array of matrices with dimension \code{p}-\code{d}-\code{d}, where \code{p} is the number of matrices, \code{d} is the dimension of the matrices.
 #' @param k The number of common Schur components. Must be an integer within (0, \code{d}).
-#' @param warmup Logical, whether use \code{partSchur} for a warm-up initial value, default to \code{FALSE}.
+#' @param warmup Logical, whether use \code{partSchur} for a warm-up initial value, default to \code{warmup = FALSE}.
 #' @param iter The maximum iteration number.
 #' @param tol The tolerance error for iteration termination.
 #'

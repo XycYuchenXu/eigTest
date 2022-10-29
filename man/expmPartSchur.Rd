@@ -11,7 +11,7 @@ expmPartSchur(A, k, warmup = FALSE, iter = 5000, tol = 10^(-12))
 
 \item{k}{The number of common Schur components. Must be an integer within (0, \code{d}).}
 
-\item{warmup}{Logical, whether use \code{partSchur} for a warm-up initial value, default to \code{FALSE}.}
+\item{warmup}{Logical, whether use \code{partSchur} for a warm-up initial value, default to \code{warmup = FALSE}.}
 
 \item{iter}{The maximum iteration number.}
 

@@ -3,7 +3,7 @@
 #' @param V.arr The array of vectors, with dimension \code{p}-\code{L}, where \code{p} is the number of vectors, \code{L} is the vector length.
 #' @param cn The convergence rate(s) to normality. Assume \code{n} is the sample size, usually CLT indicates \code{cn = sqrt(n)} for consistent estimators. If \code{length(cn) < p}, all vectors share the same rate \code{cn[1]}, otherwise \code{cn = cn[1:p]}.
 #' @param testType The test methods, can be exact chi-squared test \code{testType = 'chi'}, and/or approximated gamma test \code{testType = 'gam'}.
-#' @param cov.arr The array of covariance matrices corresponding to the vectors with dimension \code{p}-\code{L^2}-\code{L^2}, default will use identity matrices when \code{is.null(cov.arr)}.
+#' @param cov.arr The array of covariance matrices corresponding to the vectors with dimension \code{p}-\code{L^2}-\code{L^2}, default will use identity matrices when \code{is.null(cov.arr) = TRUE}.
 #' @param eps The threshold of eigenvalues when compute general inverse of covariance matrices. Required when \code{testType = 'chi'} but with default \code{cn^(-2/3)} when unsupplied.
 #' @param param.out Logical, whether the parameters of limiting distribution should be output or not. Default \code{param.out = FALSE} to only output P-value.
 #'

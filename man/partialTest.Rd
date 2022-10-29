@@ -31,9 +31,9 @@ partialTest(
 
 \item{warmup}{Logical, whether use \code{partSchur} for a warm-up initial value, default to \code{FALSE}.}
 
-\item{Q}{The orthogonal components to be tested with dimension \code{d}-\code{d}. Default (when \code{is.null(Q)}) will use \code{Q = nnPartSchur(A)} if \code{nn == TRUE} else \code{Q = expmPartSchur(A, k, warmup = warmup)}.}
+\item{Q}{The orthogonal components to be tested with dimension \code{d}-\code{d}. Default (when \code{is.null(Q)}) will use \code{Q = nnPartSchur(A)} if \code{nn = TRUE} else \code{Q = expmPartSchur(A, k, warmup = warmup)}.}
 
-\item{V}{The \code{k}-\code{k} eigenvector matrix to be tested for the upper diagonal block after orthogonally transformed by \code{Q}. Only applicable when \code{nn == FALSE}. Default (when \code{is.null(V)}) will use \code{V = JDTE(A)} if \code{k == d} else \code{V = JDTE(B)} where \code{B[i,,] = (t(Q) A[i,,] Q)[1:k,1:k]}.}
+\item{V}{The \code{k}-\code{k} eigenvector matrix to be tested for the upper diagonal block after orthogonally transformed by \code{Q}. Only applicable when \code{nn = FALSE}. Default (when \code{is.null(V)}) will use \code{V = JDTE(A)} if \code{k = d} else \code{V = JDTE(B)} where \code{B[i,,] = (t(Q) A[i,,] Q)[1:k,1:k]}.}
 
 \item{testType}{The test methods, can be exact chi-squared test \code{testType = 'chi'}, and/or approximated gamma test \code{testType = 'gam'}.}
 

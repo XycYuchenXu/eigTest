@@ -8,7 +8,7 @@ library(tikzDevice)
 
 ###### generate / load pvalues ######
 # simulate pvalues from scratch
-simu_pval = FALSE
+simu_pval = T#FALSE
 
 d = 5
 p = 2
@@ -20,18 +20,18 @@ n = sqrt(c(50, 100, 250))
 if (simu_pval) {
   set.seed(7202)
   means_l = generateMeans(d, p, k, snr = SNRS, control.g = TRUE)
-  simulated_l = simuSamples(means_l, n, samples)
+
+  numCores = parallel::detectCores()
+  cl <- makeCluster(numCores)
+  registerDoSNOW(cl)
+  simulated_l = simuSamples(means_l, n, samples, prl = T)
 
   eigvORC = JDTE(means_l[,1,,], iter = 1000)
 
-  numCores = parallel::detectCores()/2
   totL = length(n)*samples*(length(SNRS)+1)
   pb <- txtProgressBar(max = totL, style = 3)
   progress <- function(n) {setTxtProgressBar(pb, n)}
   opts <- list(progress = progress)
-
-  cl <- makeCluster(numCores)
-  registerDoSNOW(cl)
 
   data_l = foreach(est_list = simulated_l, .inorder = F, .combine = bind_rows,
                    .options.snow = opts, .packages = c('eigTest', 'tidyverse')) %dopar% {
@@ -83,7 +83,8 @@ if (simu_pval) {
                      }
                      #                       })
                      return(data_LLR %>%
-                              mutate(SNR = SNR, SampleSize = round(CovRate^2))
+                              mutate(SNR = SNR,
+                                     SampleSize = paste0('Sample size $n = ', round(CovRate^2), '$'))
                      )
                    }
   stopCluster(cl)
@@ -98,7 +99,7 @@ binwidth = 0.05
 breaks = seq(0, 1, 0.05)
 
 #tikz(file = "output/Plots/PvalueLLR.tikz", standAlone=F,width = 6, height = 4.5)
-ggplot(data_l) +
+ggplot(data_l %>% filter(covType == 'Plugin')) +
   geom_histogram(aes(x = pvalue, y = ..density..*binwidth, fill = SNR),
                  breaks = breaks,
                  position = position_dodge()) + theme_bw()+

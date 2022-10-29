@@ -5,8 +5,8 @@
 #' @param k The number of common Schur components. Must be an integer within (0, \code{d}), otherwise set \code{k = d}.
 #' @param snr The positive signal to noise variance ratio (SNR), can be a vector.
 #' @param control.g Logical, whether the control group of samples with perturbed common eigenvectors should be output or not.
-#' @param V The input of eigenvector matrix with dimension \code{d}-\code{d}, needed when \code{nn = FALSE}. Default will use random sampling when \code{is.null(V)}.
-#' @param v The input of stationary distribution with length \code{d}, needed when \code{nn = TRUE}. Default will use Dirichlet random sampling when \code{is.null(v)}.
+#' @param V The input of eigenvector matrix with dimension \code{d}-\code{d}, needed when \code{nn = FALSE}. Default will use random sampling when \code{is.null(V) = TRUE}.
+#' @param v The input of stationary distribution with length \code{d}, needed when \code{nn = TRUE}. Default will use Dirichlet random sampling when \code{is.null(v) = TRUE}.
 #' @param nn Logical, whether the generated matrices should be nonnegative as transition probability matrices.
 #'
 #' @return An array of mean matrices: \code{p}-by-\code{q}-by-\code{d}-by-\code{d}, where \code{q} is the number of SNRs.
@@ -50,7 +50,7 @@ generateMeans = function(d, p, k = d, snr = 10, control.g = FALSE,
     if (is.null(V) || k < d){
       V = matrix(0, ncol = d, nrow = d)
       coefM = matrix(runif(k^2, -1, 1), nrow = k); coefM[!upper.tri(coefM)] = 0
-      V[1:k,] = crossprod(t(diag(k) + coefM), orth[groups,])
+      V[,1:k] = tcrossprod(orth[,groups], diag(k) + coefM)
     }
   } else {
     if (is.null(v)) {v = rdirichlet(1, rep(1,d))}
@@ -62,7 +62,7 @@ generateMeans = function(d, p, k = d, snr = 10, control.g = FALSE,
       di = diag(runif(d, 0.5, d) * sample(c(-1,1), d, replace = T))
       if (k < d) {
         coefM = matrix(runif((d-k)^2, -2, 2), ncol = d-k)
-        Vi[(k+1):d,] = crossprod(coefM, orth[-groups,])
+        Vi[,(k+1):d] = tcrossprod(orth[,-groups], coefM)
       }
 
     }

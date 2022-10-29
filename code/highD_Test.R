@@ -102,7 +102,7 @@ if (simu_pval) {
                        #                       })
                        return(data_LLR %>%
                                 mutate(SNR = SNR, Dimension = d[i],
-                                       SampleSize = round(CovRate^2),
+                                       SampleSize = paste0('Sample size $n = ', round(CovRate^2), '$'),
                                        testType = 'LLR') %>%
                                 bind_rows(data_temp)
                        )

@@ -13,7 +13,7 @@ vec.test(V.arr, cn, testType, cov.arr = NULL, eps = NULL, param.out = FALSE)
 
 \item{testType}{The test methods, can be exact chi-squared test \code{testType = 'chi'}, and/or approximated gamma test \code{testType = 'gam'}.}
 
-\item{cov.arr}{The array of covariance matrices corresponding to the vectors with dimension \code{p}-\code{L^2}-\code{L^2}, default will use identity matrices when \code{is.null(cov.arr)}.}
+\item{cov.arr}{The array of covariance matrices corresponding to the vectors with dimension \code{p}-\code{L^2}-\code{L^2}, default will use identity matrices when \code{is.null(cov.arr) = TRUE}.}
 
 \item{eps}{The threshold of eigenvalues when compute general inverse of covariance matrices. Required when \code{testType = 'chi'} but with default \code{cn^(-2/3)} when unsupplied.}
 

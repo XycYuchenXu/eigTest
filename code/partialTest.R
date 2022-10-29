@@ -10,7 +10,7 @@ library(tikzDevice)
 # simulate pvalues from scratch
 simu_pval = FALSE
 
-samples = 200
+samples = 20
 d = 4
 p = 8
 k = 2
@@ -61,13 +61,16 @@ if (simu_pval) {
                      dimnames(p_vector_partial) = list(c('Chi', 'Gam'), paste('K =', k:d))
 
                      data_p = melt(p_vector_partial, value.name = 'pvalue', na.rm = T)
-                     colnames(data_p)[1:2] = c('TestType', 'K')
+                     colnames(data_p)[1:2] = c('testType', 'K')
 
                      return(data_p %>%
                               mutate(SNR = SNR, SampleSize = round(CovRate^2))
                      )
                    }
   stopCluster(cl)
+
+  data_p$testType = factor(data_p$testType, levels = c('Chi', 'Gam'))
+  data_p$SampleSize = paste0('Sample size $n = 10^', round(log10(data_p$SampleSize)), '$')
   save(data_p, file = 'output/partTest.RData')
 } else {
   data_p = load('output/partTest.RData')
@@ -83,8 +86,8 @@ ggplot(data_p %>% filter(K == 'K = 2')) +
                  breaks = breaks,
                  position = position_dodge()) + theme_bw()+
   ggtitle('P-value histogram from partial test') +
-  facet_grid(vars(TestType), vars(SampleSize), #ncol = length(n), dir = 'v',
-             labeller = labeller(TestType = c(`Chi` = 'Chi test with $\\widehat{V}$',
+  facet_grid(vars(testType), vars(SampleSize), #ncol = length(n), dir = 'v',
+             labeller = labeller(testType = c(`Chi` = 'Chi test with $\\widehat{V}$',
                                               `Gam` = 'Gamma test with $\\widehat{V}$'))) +
   theme(legend.position = 'bottom', plot.title = element_text(hjust = 0.5),
         strip.background =element_rect(size = 0),

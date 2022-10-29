@@ -8,7 +8,7 @@ library(tikzDevice)
 
 ###### generate / load pvalues ######
 # simulate pvalues from scratch
-simu_pval = FALSE
+simu_pval = T#FALSE
 
 d = 5
 p = 2
@@ -20,16 +20,17 @@ n = sqrt(c(50, 100, 250))
 if (simu_pval) {
   set.seed(7202)
   means_c = generateMeans(d, p, k, snr = SNRS, control.g = TRUE)
-  simulated_c = simuSamples(means_c, n, samples)
 
   numCores = parallel::detectCores()
+  cl <- makeCluster(numCores)
+  registerDoSNOW(cl)
+  simulated_c = simuSamples(means_c, n, samples, prl = T)
+
   totL = length(n)*samples*(length(SNRS)+1)
   pb <- txtProgressBar(max = totL, style = 3)
   progress <- function(n) {setTxtProgressBar(pb, n)}
   opts <- list(progress = progress)
 
-  cl <- makeCluster(numCores)
-  registerDoSNOW(cl)
   data_c = foreach(est_list = simulated_c, .inorder = F, .combine = bind_rows,
                    .options.snow = opts, .packages = c('eigTest', 'tidyverse')) %dopar% {
                      mu.bar = est_list$mu.bar; cov.bar = est_list$cov.bar
@@ -38,7 +39,8 @@ if (simu_pval) {
                      data_temp = commutatorTest(mu.bar, cn = CovRate, cov.arr = cov.bar,
                                                 param.out = T)[[1]] %>%
                        list2DF() %>% select(pvalue) %>%
-                       mutate(SNR = SNR, SampleSize = round(CovRate^2))
+                       mutate(SNR = SNR,
+                              SampleSize = paste0('Sample size $n = ', round(CovRate^2), '$'))
 
                      return(data_temp)
                    }

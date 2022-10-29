@@ -26,9 +26,9 @@ generateMeans(
 
 \item{control.g}{Logical, whether the control group of samples with perturbed common eigenvectors should be output or not.}
 
-\item{V}{The input of eigenvector matrix with dimension \code{d}-\code{d}, needed when \code{nn = FALSE}. Default will use random sampling when \code{is.null(V)}.}
+\item{V}{The input of eigenvector matrix with dimension \code{d}-\code{d}, needed when \code{nn = FALSE}. Default will use random sampling when \code{is.null(V) = TRUE}.}
 
-\item{v}{The input of stationary distribution with length \code{d}, needed when \code{nn = TRUE}. Default will use Dirichlet random sampling when \code{is.null(v)}.}
+\item{v}{The input of stationary distribution with length \code{d}, needed when \code{nn = TRUE}. Default will use Dirichlet random sampling when \code{is.null(v) = TRUE}.}
 
 \item{nn}{Logical, whether the generated matrices should be nonnegative as transition probability matrices.}
 }
