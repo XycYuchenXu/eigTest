@@ -17,9 +17,6 @@ partSchur = function(A, k, iter = 5000, tol = 10^(-16)){
     return()
   }
 
-  for (i in 1:p) {
-    A[i,,] = t(A[i,,])
-  }
   if (k >= d) {k = d}
 
   oneSchur = function(A, d = dim(A)[2], Q = diag(d)){
@@ -34,7 +31,7 @@ partSchur = function(A, k, iter = 5000, tol = 10^(-16)){
         mid = matrix(0, nrow = 2, ncol = 2)
         for (j in 1:p) {
           Mj = tcrossprod(A[j,,], t(Qr))
-          mid = mid + tcrossprod(crossprod(Mj, Q[,1]))
+          mid = mid + tcrossprod(crossprod(crossprod(A[j,,], Qr), Q[,1]))
           for (k in 2:d) {
             mid = mid - tcrossprod(crossprod(Mj, Q[,k]))
           }

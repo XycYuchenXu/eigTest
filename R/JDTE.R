@@ -15,7 +15,7 @@ JDTE = function(A, iter = 500, tol = 10^(-8)){
   tempA = A
   for (i in 1:p) {tempA[i,,] = tcrossprod(crossprod(U, tempA[i,,]), t(U))}
 
-  score.old = score.fun(A)
+  score.old = score.fun(tempA)
   for (i in 1:iter) {
     Z = matrix(0, d, d)
     for (r in 1:d) {

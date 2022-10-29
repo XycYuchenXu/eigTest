@@ -38,42 +38,42 @@ simuSamples = function(mu, cn, reps, nn = FALSE,
   if (nn) {
     estMat = function(Mat, cm, s, i){
       n = round(cm^2)
-      n = nrow(Mat)
+      d = nrow(Mat)
       Label = matrix(0, nrow = n+1, ncol = 1)
-      CountMat = matrix(0, nrow = n, ncol = n)
-      Label[1] = sample(n,1)
+      CountMat = matrix(0, nrow = d, ncol = d)
+      Label[1] = sample(d,1)
       for (l in 2:(n+1)) {
-        Label[l] = sample(n,1,prob = Mat[Label[l-1],],replace = TRUE)
+        Label[l] = sample(d,1,prob = Mat[,Label[l-1]],replace = TRUE)
         CountMat[Label[l-1], Label[l]] = CountMat[Label[l-1], Label[l]]+1
       }
-      for (j in 1:n) {
-        sums = 1/sum(CountMat[j,])
-        if (is.infinite(sums)) {sums = 0}
-        CountMat[j,] = CountMat[j,]*sums[1]
-      }
+      sums = 1 / rowSums(CountMat)
+      sums[is.infinite(sums)] = 0
+      CountMat = CountMat * sums
 
       if (est.cov) {
-        CovMat = matrix(0, ncol = n^2, nrow = n^2)
-        pi = matrix(0, nrow = n, ncol = 1)
-        for (j in 1:n) {
+        CovMat = matrix(0, ncol = d^2, nrow = d^2)
+        pi = matrix(0, nrow = d, ncol = 1)
+        for (j in 1:d) {
           pi[j] = sum(Label == j)/(n+1)
         }
         vec = 1/pi
         vec[is.infinite(vec)] = 0
-        Ei = matrix(0, ncol = n, nrow = n)
-        for (j in 1:n) {
+        Ei = matrix(0, ncol = d, nrow = d)
+        for (j in 1:d) {
           Ei[j,j] = 1
-          Qi = diag(CountMat[j,]) - matrix(CountMat[j,], nrow = n, ncol = n) * matrix(CountMat[j,], nrow = n, ncol = n, byrow = T)
+          Qi = diag(CountMat[j,]) - matrix(CountMat[j,], nrow = d, ncol = d) * matrix(CountMat[j,], nrow = d, ncol = d, byrow = T)
           CovMat = CovMat + kronecker(Qi * vec[j], Ei)
           Ei[j,j] = 0
         }
+        CovMat = CovMat[as.vector(matrix(1:d^2, ncol = d, byrow = T)),
+                        as.vector(matrix(1:d^2, ncol = d, byrow = T))]
         dim(CovMat) = c(1, dim(CovMat))
       }
+      CountMat = t(CountMat)
       dim(CountMat) = c(1, dim(CountMat))
-      nameList = list(matIDs[i], NULL, NULL)
-      dimnames(CountMat) = nameList
+      dimnames(CountMat) = list(matIDs[i], NULL, NULL)
       if (est.cov) {
-        dimnames(CovMat) = nameList
+        dimnames(CovMat) = dimnames(CountMat)
         return(list(SNR = snrs[s], CovRate = cm, mu.bar = CountMat, cov.bar = CovMat))
       }
       return(list(SNR = snrs[s], CovRate = cm, mu.bar = CountMat))
@@ -89,10 +89,9 @@ simuSamples = function(mu, cn, reps, nn = FALSE,
       estMat = Mat + matrix(colMeans(erMat), nrow = d)
       if (est.cov) {CovMat = cov(erMat); dim(CovMat) = c(1, dim(CovMat))}
       dim(estMat) = c(1, dim(estMat))
-      nameList = list(matIDs[i], NULL, NULL)
-      dimnames(estMat) = nameList
+      dimnames(estMat) = list(matIDs[i], NULL, NULL)
       if (est.cov) {
-        dimnames(CovMat) = nameList
+        dimnames(CovMat) = dimnames(estMat)
         return(list(SNR = snrs[s], CovRate = cm, mu.bar = estMat, cov.bar = CovMat))
       }
       return(list(SNR = snrs[s], CovRate = cm, mu.bar = estMat))

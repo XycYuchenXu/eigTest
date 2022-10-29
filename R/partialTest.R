@@ -65,8 +65,7 @@ partialTest = function(A, cn, cov.arr = NULL, nn = FALSE, k=NULL, warmup = FALSE
     if (is.null(V)) {
       B = array(0, c(p,k,k))
       for (i in 1:p) {
-        Ai = tcrossprod(crossprod(Q, A[i,,]), t(Q))
-        B[i,,] = Ai[1:k, 1:k]
+        B[i,,] = tcrossprod(crossprod(Q[,1:k], A[i,,]), t(Q[,1:k]))
       }
       V = JDTE(B)
     }
@@ -82,18 +81,15 @@ partialTest = function(A, cn, cov.arr = NULL, nn = FALSE, k=NULL, warmup = FALSE
   matB[1:k, 1:k] = 1
   SB = diag(as.double(matB))
   SB = SB[which(as.double(matB) == 1),]
+  SVB = tcrossprod(crossprod((diag(k^2) - diag(as.vector(diag(k)))),
+                             kronecker(t(V), invert(V))),
+                   t(SB))
+
   matC[(k+1):d, 1:k] = 1
   SC = diag(as.double(matC))
   SC = SC[which(as.double(matC) == 1),]
-  SBC = rbind(SB, SC)
-  SQ = crossprod(t(SBC), kronecker(t(Q), t(Q)))
-  SV = crossprod((diag(k^2) - diag(as.vector(diag(k)))), kronecker(t(V), invert(V)))
 
-  SW = matrix(0, nrow = k*d, ncol = d*k)
-  SW[1:(k^2), 1:(k^2)] = SV
-  SW[(k^2+1):(k*d), (k^2+1):(k*d)] = diag(k*(d-k))
-
-  SWQ = crossprod(t(SW), SQ)
+  SWQ = tcrossprod(rbind(SVB, SC), kronecker(Q, Q))
   Varr = array(0, c(p, k*d))
   for (i in 1:p) {
     Varr[i,] = crossprod(t(SWQ), as.double(A[i,,]))

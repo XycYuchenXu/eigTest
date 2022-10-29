@@ -84,10 +84,10 @@ generateMeans = function(d, p, k = d, snr = 10, control.g = FALSE,
         for (j in 1:d) {
           MarkovMat2[j,j] =  total - sumsMat2[j]
         }
-        mu[i,l,,] = MarkovMat2/total
+        mu[i,l,,] = t(MarkovMat2/total)
       } else {
         Vi.perturb = Vi + matrix(rnorm(d^2), nrow = d, ncol = d) * SNR[l]
-        mu[i,l,,] = tcrossprod(invert(Vi.perturb), crossprod(Vi.perturb, di))
+        mu[i,l,,] = tcrossprod(Vi.perturb, crossprod(invert(Vi.perturb), di))
       }
     }
   }
