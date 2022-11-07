@@ -1,7 +1,8 @@
 library(eigTest)
 library(tidyverse)
 library(tikzDevice)
-
+library(ggpattern)
+library(latex2exp)
 
 ###### data summary & plot ######
 data(hudsonDaily); data(hudsonWeekly)
@@ -9,16 +10,30 @@ data(hudsonDaily); data(hudsonWeekly)
 hudsonPlot = rbind(cbind(hudsonDaily, reso = 'Daily discharge (2015 - 2020)'),
                    cbind(hudsonWeekly, reso = 'Weekly discharge (1979 - 2014)'))
 
-p1 = ggplot(hudsonPlot, aes(x = datetime)) + facet_wrap(~reso, scales = 'free_x', ncol = 1) +
-  geom_ribbon(aes(ymin = rep(0, length(datetime)), ymax = p25_va, fill = 'Drought'), alpha = 0.3) +
-  geom_ribbon(aes(ymax = rep(Inf, length(datetime)), ymin = p75_va, fill = 'Flooding'), alpha = 0.3) +
-  geom_ribbon(aes(ymin=p25_va, ymax=p75_va, fill = 'Normal'), alpha=0.5) +
+tikz(file = "output/Plots/tikz/Streamflow.tikz", standAlone=F, width = 7, height = 4.5)
+ggplot(hudsonPlot, aes(x = datetime)) + facet_wrap(~reso, scales = 'free_x', ncol = 1) +
+  geom_ribbon_pattern(aes(ymin = rep(0, length(datetime)),
+                          ymax = p25_va, fill = 'Drought'), alpha = 0.3,
+                      pattern = 'stripe', pattern_angle = 45, pattern_alpha = 0.1,
+                      pattern_size = 0.1, pattern_fill = 'black', pattern_spacing = 0.05) +
+  geom_ribbon_pattern(aes(ymax = rep(Inf, length(datetime)),
+                          ymin = p75_va, fill = 'Flooding'), alpha = 0.3,
+                      pattern = 'stripe', pattern_angle = 135, pattern_alpha = 0.1,
+                      pattern_size = 0.1, pattern_fill = 'black', pattern_spacing = 0.05) +
+  geom_ribbon(aes(ymin=p25_va, ymax=p75_va, fill = 'Normal'), alpha=0.7) +
   xlab('Date') +
-  #ggtitle('Daily discharge (2015 - 2020)')+
   labs(color = 'State', fill = 'State') +
-  geom_path(aes(y = Discharge), size = 0.3) +
-  theme(legend.position = 'bottom', legend.title = element_blank(), strip.text = element_text(size = 15),
-        plot.title = element_text(hjust = 0.5), strip.background = element_blank()) +
+  guides(fill=guide_legend(override.aes = list(
+    alpha = c(0.3, 0.7, 0.3),
+    pattern = c('stripe', 'none', 'stripe'),
+    pattern_angle = c(45, 0, 135), pattern_alpha = 0.1,
+    pattern_size = 0.1, pattern_fill = 'black', pattern_spacing = 0.015
+  ))) + geom_path(aes(y = Discharge), linewidth = 0.3) +
+  theme(legend.position = 'bottom', legend.title = element_blank(),
+        strip.text = element_text(size = 15),
+        plot.title = element_text(hjust = 0.5),
+        legend.text = element_text(margin = margin(r = 5, unit = 'mm')),
+        strip.background = element_blank()) +
   scale_fill_discrete(breaks = c('Drought', 'Normal', 'Flooding'),
                       labels = c('Drought (0 - 25)', 'Normal (25 - 75)', 'Flooding (75 - 100)')) +
   geom_point(aes(y = as.double(Level)*15000 - 15000, color = as.character(Level)), size = 1, shape = 4) +
@@ -26,10 +41,40 @@ p1 = ggplot(hudsonPlot, aes(x = datetime)) + facet_wrap(~reso, scales = 'free_x'
                      sec.axis = sec_axis(~., breaks = (1:3)*15000 - 15000, labels = c('Drought', 'Normal', 'Flooding'))) +
   scale_color_discrete(breaks = c('Drought', 'Normal', 'Flooding'),
                        labels = c('Drought (0 - 25)', 'Normal (25 - 75)', 'Flooding (75 - 100)'))
+dev.off()
 
-#tikz(file = "output/Plots/Streamflow.tikz", standAlone=F, width = 6, height = 4.5)
+p1 = ggplot(hudsonPlot, aes(x = datetime)) + facet_wrap(~reso, scales = 'free_x', ncol = 1) +
+  geom_ribbon_pattern(aes(ymin = rep(0, length(datetime)),
+                          ymax = p25_va, fill = 'Drought'), alpha = 0.3,
+                      pattern = 'stripe', pattern_angle = 45, pattern_alpha = 0.1,
+                      pattern_size = 0.05, pattern_fill = 'black', pattern_spacing = 0.05) +
+  geom_ribbon_pattern(aes(ymax = rep(Inf, length(datetime)),
+                          ymin = p75_va, fill = 'Flooding'), alpha = 0.3,
+                      pattern = 'stripe', pattern_angle = 135, pattern_alpha = 0.1,
+                      pattern_size = 0.05, pattern_fill = 'black', pattern_spacing = 0.05) +
+  geom_ribbon(aes(ymin=p25_va, ymax=p75_va, fill = 'Normal'), alpha=0.7) +
+  xlab('Date') +
+  labs(color = 'State', fill = 'State') +
+  guides(fill=guide_legend(override.aes = list(
+    alpha = c(0.3, 0.7, 0.3),
+    pattern = c('stripe', 'none', 'stripe'),
+    pattern_angle = c(45, 0, 135), pattern_alpha = 0.1,
+    pattern_size = 0.1, pattern_fill = 'black', pattern_spacing = 0.015
+  ))) + geom_path(aes(y = Discharge), linewidth = 0.3) +
+  theme(legend.position = 'bottom', legend.title = element_blank(),
+        strip.text = element_text(size = 15),
+        plot.title = element_text(hjust = 0.5),
+        legend.text = element_text(margin = margin(r = 5, unit = 'mm')),
+        strip.background = element_blank()) +
+  scale_fill_discrete(breaks = c('Drought', 'Normal', 'Flooding'),
+                      labels = c('Drought (0 - 25)', 'Normal (25 - 75)', 'Flooding (75 - 100)')) +
+  geom_point(aes(y = as.double(Level)*15000 - 15000, color = as.character(Level)), size = 1, shape = 4) +
+  scale_y_continuous(TeX("Discharge ($ft^3/s$)"),
+                     sec.axis = sec_axis(~., breaks = (1:3)*15000 - 15000, labels = c('Drought', 'Normal', 'Flooding'))) +
+  scale_color_discrete(breaks = c('Drought', 'Normal', 'Flooding'),
+                       labels = c('Drought (0 - 25)', 'Normal (25 - 75)', 'Flooding (75 - 100)'))
 p1
-#dev.off()
+ggsave(filename = 'output/Plots/png/Streamflow.png', p1, width = 7, height = 4.5, units = 'in')
 
 
 ###### transition probabilities ######
@@ -76,7 +121,7 @@ weeklyTran = as_tibble(matTran[2,,]) %>%
 
 tranMats = rbind(dailyTran, weeklyTran)
 
-#tikz(file = "output/Plots/tranMat.tikz", standAlone=F, width =7.5, height = 3)
+tikz(file = "output/Plots/tikz/tranMat.tikz", standAlone=F, width =7.5, height = 4)
 ggplot(tranMats, aes(x = To, y = From, fill = value)) +
   geom_tile(color = 'white')+
   scale_fill_gradient2(low = "white", high = "black", limit = c(0,1), space = "Lab",
@@ -91,7 +136,7 @@ ggplot(tranMats, aes(x = To, y = From, fill = value)) +
         axis.text.x = element_text(),
         axis.title.y = element_text(vjust = -3.5),
         legend.position = 'bottom', strip.text = element_text(),
-        #panel.grid.major = element_blank(),
+        legend.title = element_text(margin = margin(r = 3, unit = 'mm')),
         panel.background = element_blank(),
         legend.box.margin = margin(0,0,0,0), legend.margin = margin(0,0,0,0),
         panel.border = element_blank())+
@@ -99,7 +144,32 @@ ggplot(tranMats, aes(x = To, y = From, fill = value)) +
   scale_y_discrete(limits = colnames(matTran[1,,])) +
   scale_x_discrete(limits = colnames(matTran[2,,])) +
   guides(fill = guide_colorbar(title.vjust = 0.8, barwidth = 9, barheight = 1))
-#dev.off()
+dev.off()
+
+p2 = ggplot(tranMats, aes(x = To, y = From, fill = value)) +
+  geom_tile(color = 'white')+
+  scale_fill_gradient2(low = "white", high = "black", limit = c(0,1), space = "Lab",
+                       name="probability:") +
+  theme_minimal()+ facet_wrap(~Resolution, ncol = 2) +
+  geom_text(aes(label = sprintf("%0.3f", round(value, digits = 3)),
+                color = value > 0.5), size = 4)+
+  ggtitle('Transition probability matrices') +
+  scale_color_manual(guide = 'none', values = c("black", "white")) +
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.text.y = element_text(angle = 45, vjust = 3.5, hjust = 0.1),
+        axis.text.x = element_text(),
+        axis.title.y = element_text(vjust = -3.5),
+        legend.position = 'bottom', strip.text = element_text(),
+        legend.title = element_text(margin = margin(r = 3, unit = 'mm')),
+        panel.background = element_blank(),
+        legend.box.margin = margin(0,0,0,0), legend.margin = margin(0,0,0,0),
+        panel.border = element_blank())+
+  coord_fixed() +
+  scale_y_discrete(limits = colnames(matTran[1,,])) +
+  scale_x_discrete(limits = colnames(matTran[2,,])) +
+  guides(fill = guide_colorbar(title.vjust = 0.8, barwidth = 9, barheight = 1))
+p2
+ggsave(filename = 'output/Plots/png/tranMat.png', p2, width = 7.5, height = 4, units = 'in')
 
 
 ###### static distribution estimate / test ######
