@@ -3,26 +3,23 @@
 #' @param d The dimension of matrices.
 #' @param p The number of matrices.
 #' @param k The number of common Schur components. Must be an integer within (0, \code{d}), otherwise set \code{k = d}.
-#' @param snr The positive signal to noise variance ratio (SNR), can be a vector.
-#' @param control.g Logical, whether the control group of samples with perturbed common eigenvectors should be output or not.
+#' @param snr The positive signal to noise variance ratio (SNR), can be a vector. Default \code{is.null(snr) = TRUE} will only generate means with non-perturbed eigenvectors.
 #' @param V The input of eigenvector matrix with dimension \code{d}-\code{d}, needed when \code{nn = FALSE}. Default will use random sampling when \code{is.null(V) = TRUE}.
 #' @param v The input of stationary distribution with length \code{d}, needed when \code{nn = TRUE}. Default will use Dirichlet random sampling when \code{is.null(v) = TRUE}.
 #' @param nn Logical, whether the generated matrices should be nonnegative as transition probability matrices.
 #'
-#' @return An array of mean matrices: \code{p}-by-\code{q}-by-\code{d}-by-\code{d}, where \code{q} is the number of SNRs.
-#'         If \code{control.g = TRUE}, \code{q = length(snr) + 1} otherwise \code{q = 1}.
+#' @return An array of mean matrices: \code{p}-by-\code{q}-by-\code{d}-by-\code{d}, where \code{q} is the number of SNRs: \code{q = length(snr) + 1}.
 #' @export
 #'
 #' @import gtools
 #'
 #' @examples generateMeans(5,8,3)
-generateMeans = function(d, p, k = d, snr = 10, control.g = FALSE,
-                         V = NULL, v = NULL, nn = FALSE) {
+generateMeans = function(d, p, k = d, snr = NULL, V = NULL, v = NULL, nn = FALSE) {
 
   if (k <= 0 || k > d || k != round(k)) {k = d}
   means.groups = 1
   SNR = 0
-  if (control.g) {
+  if (is.null(snr) == FALSE) {
     means.groups = length(snr) + means.groups
     for (l in 1:(means.groups - 1)) {
       if (snr[l] <= 0) {

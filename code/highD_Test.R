@@ -32,7 +32,7 @@ if (simu_pval) {
     if (i == 1) {cat(paste('Dimension d =', d[i], ': \n'))}
     else {cat(paste('\nDimension d =', d[i], ': \n'))}
 
-    means = generateMeans(d[i], p, snr = SNRS, control.g = T)
+    means = generateMeans(d[i], p, snr = SNRS)
     simulated = simuSamples(means, n, samples, prl = T)
     gc()
     cat('\nTesting: \n')

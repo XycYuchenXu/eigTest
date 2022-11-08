@@ -4,16 +4,7 @@
 \alias{generateMeans}
 \title{Generate mean matrices for simulation samples}
 \usage{
-generateMeans(
-  d,
-  p,
-  k = d,
-  snr = 10,
-  control.g = FALSE,
-  V = NULL,
-  v = NULL,
-  nn = FALSE
-)
+generateMeans(d, p, k = d, snr = NULL, V = NULL, v = NULL, nn = FALSE)
 }
 \arguments{
 \item{d}{The dimension of matrices.}
@@ -22,9 +13,7 @@ generateMeans(
 
 \item{k}{The number of common Schur components. Must be an integer within (0, \code{d}), otherwise set \code{k = d}.}
 
-\item{snr}{The positive signal to noise variance ratio (SNR), can be a vector.}
-
-\item{control.g}{Logical, whether the control group of samples with perturbed common eigenvectors should be output or not.}
+\item{snr}{The positive signal to noise variance ratio (SNR), can be a vector. Default \code{is.null(snr) = TRUE} will only generate means with non-perturbed eigenvectors.}
 
 \item{V}{The input of eigenvector matrix with dimension \code{d}-\code{d}, needed when \code{nn = FALSE}. Default will use random sampling when \code{is.null(V) = TRUE}.}
 
@@ -33,8 +22,7 @@ generateMeans(
 \item{nn}{Logical, whether the generated matrices should be nonnegative as transition probability matrices.}
 }
 \value{
-An array of mean matrices: \code{p}-by-\code{q}-by-\code{d}-by-\code{d}, where \code{q} is the number of SNRs.
-        If \code{control.g = TRUE}, \code{q = length(snr) + 1} otherwise \code{q = 1}.
+An array of mean matrices: \code{p}-by-\code{q}-by-\code{d}-by-\code{d}, where \code{q} is the number of SNRs: \code{q = length(snr) + 1}.
 }
 \description{
 Generate mean matrices for simulation samples

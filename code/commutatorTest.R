@@ -20,7 +20,7 @@ n = sqrt(c(50, 250, 1000))
 
 if (simu_pval) {
   set.seed(4000)
-  means_c = generateMeans(d, p, k, snr = SNRS, control.g = TRUE)
+  means_c = generateMeans(d, p, k, snr = SNRS)
 
   numCores = parallel::detectCores()
   cl <- makeCluster(numCores)

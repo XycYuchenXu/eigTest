@@ -20,7 +20,7 @@ n = sqrt(c(100, 1000, 10000, 100000))
 
 if (simu_pval) {
   set.seed(2020)
-  means_m = generateMeans(d, p, k, snr = SNRS, control.g = TRUE)
+  means_m = generateMeans(d, p, k, snr = SNRS)
   v.t = eigen(means_m[1,1,,])$vectors
 
   numCores = parallel::detectCores()
