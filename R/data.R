@@ -1,76 +1,57 @@
 #' Macroeconomic Data
 #'
-#' Standardized Macroeconomic Quarterly Data for 8 Countries.
-#' Available from \insertCite{ceic,oecd;textual}{eigTest}.
-#' See \insertCite{xu2021testing;textual}{eigTest}.
+#' @description
+#' \itemize{
+#' \item `countryMacro` - Standardized Macroeconomic Quarterly Data for 8 Countries.
+#' \item `countryCoeff` - Estimated coefficient matrices of 8 countries' VAR(1) models.
+#' \item `countryCovar` - Estimated covariance matrices of the 8 coefficient matrices' estimates.
+#' }
+#' Data are accessed from \insertCite{ceic,oecd;textual}{eigTest}.
+#' See \insertCite{xu2021testing;textual}{eigTest} for processing details.
 #'
-#' @source CEIC
-#' @format The list of multivariate time series.
+#' @source CEIC, OECD
+#' @format `countryMacro` - The length-8 \code{list} of multivariate time series.
+#'
 #' @importFrom 'Rdpack' reprompt
+#' @rdname MacroeconomicData
 #' @references
 #' \insertAllCited{}
-#' @examples
-#' \dontrun{
-#'  countryMacro
-#' }
+#' @examples countryMacro; countryCoeff; countryCovar
 "countryMacro"
 
 #' Macroeconomic VAR Model Data
 #'
-#' Estimated coefficient matrices of 8 countries' VAR(1) models.
-#' See \insertCite{xu2021testing;textual}{eigTest}.
-#'
-#' @format The array of coefficient matrices for country-wise macroeconomic VAR(1) models.
-#' @importFrom 'Rdpack' reprompt
-#' @references
-#' \insertAllCited{}
-#' @examples
-#' \dontrun{
-#'  countryCoeff
-#' }
+#' @format `countryCoeff` - The 8 x 3 x 3 \code{array} of coefficient matrices for country-wise macroeconomic VAR(1) models.
+#' @rdname MacroeconomicData
 "countryCoeff"
 
 #' Macroeconomic VAR Model Data
 #'
-#' Asymptotic covariance matrices of the 8 coefficient matrices' estimates.
-#' See \insertCite{xu2021testing;textual}{eigTest}.
-#'
-#' @format The array of covariance matrices of the estimated VAR(1) coefficient matrices.
-#' @importFrom 'Rdpack' reprompt
-#' @references
-#' \insertAllCited{}
-#' @examples
-#' \dontrun{
-#'  countryCovar
-#' }
+#' @format `countryCovar` - The 8 x 9 x 9 \code{array} of covariance matrices of the estimated VAR(1) coefficient matrices.
+#' @rdname MacroeconomicData
 "countryCovar"
 
 #' Streamflow Discharge Data
 #'
-#' Hudson river daily discharge table available from \insertCite{usgs}{eigTest}.
-#' See \insertCite{xu2021testing;textual}{eigTest}.
+#' @description Hudson river discharges with quantiles and categories, consisting 1827 rows and 6 columns.
+#' \itemize{
+#' \item `hudsonDaily` - The discharge table of daily data.
+#' \item `hudsonWeekly` - The discharge table of weekly data.
+#' }
+#' Data are accessed from \insertCite{usgs;textual}{eigTest}.
+#' See \insertCite{xu2021testing;textual}{eigTest} for processing details.
 #'
-#' @format The table of the Hudson river daily discharge with daily quantile and categories.
+#' @format NULL
+#'
 #' @importFrom 'Rdpack' reprompt
+#' @rdname StreamflowDischarge
 #' @references
 #' \insertAllCited{}
-#' @examples
-#' \dontrun{
-#'  hudsonDaily
-#' }
+#' @examples hudsonDaily; hudsonWeekly
 "hudsonDaily"
 
 #' Streamflow Discharge Data
 #'
-#' Hudson river weekly discharge table available from \insertCite{usgs}{eigTest}.
-#' See \insertCite{xu2021testing;textual}{eigTest}.
-#'
-#' @format The table of the Hudson river weekly discharge with weekly quantile and categories.
-#' @importFrom 'Rdpack' reprompt
-#' @references
-#' \insertAllCited{}
-#' @examples
-#' \dontrun{
-#'  hudsonWeekly
-#' }
+#' @format NULL
+#' @rdname StreamflowDischarge
 "hudsonWeekly"
