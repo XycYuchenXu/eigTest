@@ -2,7 +2,6 @@
 #'
 #' @description
 #' \itemize{
-#' \item \code{countryMacro} - Standardized Macroeconomic Quarterly Data for 8 Countries.
 #' \item \code{countryCoeff} - Estimated coefficient matrices of 8 countries' VAR(1) models.
 #' \item \code{countryCovar} - Estimated covariance matrices of the 8 coefficient matrices' estimates.
 #' }
@@ -10,22 +9,16 @@
 #' See \insertCite{xu2021testing;textual}{eigTest} for processing details.
 #'
 #' @source CEIC, OECD
-#' @format `countryMacro` - The length-8 \code{list} of multivariate time series.
+#' @format `countryCoeff` - The 8 x 3 x 3 \code{array} of coefficient matrices for country-wise macroeconomic VAR(1) models.
 #'
 #' @importFrom 'Rdpack' reprompt
 #' @rdname MacroeconomicData
 #' @references
 #' \insertAllCited{}
-#' @examples countryMacro; countryCoeff; countryCovar
-"countryMacro"
-
-#' Macroeconomic VAR Model Data
-#'
-#' @format `countryCoeff` - The 8 x 3 x 3 \code{array} of coefficient matrices for country-wise macroeconomic VAR(1) models.
-#' @rdname MacroeconomicData
+#' @examples countryCoeff; countryCovar
 "countryCoeff"
 
-#' Macroeconomic VAR Model Data
+#' Macroeconomic Data
 #'
 #' @format `countryCovar` - The 8 x 9 x 9 \code{array} of covariance matrices of the estimated VAR(1) coefficient matrices.
 #' @rdname MacroeconomicData
