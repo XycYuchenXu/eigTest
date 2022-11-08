@@ -2,7 +2,7 @@
 % Please edit documentation in R/nnPartSchur.R
 \name{nnPartSchur}
 \alias{nnPartSchur}
-\title{Joint Schur decomposition for the non-negative leading component}
+\title{Optimization of the Common Non-negative Leading Eigenvector}
 \usage{
 nnPartSchur(A)
 }
@@ -13,11 +13,12 @@ nnPartSchur(A)
 The orthogonal matrix \code{Q} of dimension \code{d}-\code{d} with the first column to be the estimated nonnegative common component.
 }
 \description{
-Joint Schur decomposition for the non-negative leading component
+Joint Schur decomposition, usually applicable on non-negative square matrices such as transition probability matrices, to estimate the common leading eigenvector.
+See \insertCite{xu2021testing;textual}{eigTest}.
 }
 \examples{
 nnPartSchur(countryCoeff)
 }
 \references{
-\insertRef{xu2021testing}{eigTest}
+\insertAllCited{}
 }

@@ -1,4 +1,7 @@
-#' JDTE algorithm.
+#' JDTE Algorithm
+#'
+#' Optimize the common eigenvectors for a set of square asymmetric matrices.
+#' The `(W)JDTE` algorithm, developed by \insertCite{andre;textual}{eigTest}, is implemented.
 #'
 #' @param A The array of matrices with dimension \code{p}-\code{d}-\code{d}, where \code{p} is the number of matrices, \code{d} is the dimension of the matrices.
 #' @param iter The maximum iteration times.
@@ -10,8 +13,7 @@
 #' @export
 #'
 #' @references
-#'     \insertRef{xu2021testing}{eigTest}
-#'     \insertRef{andre}{eigTest}
+#' \insertAllCited{}
 #'
 #' @examples JDTE(countryCoeff)
 JDTE = function(A, iter = 500, tol = 10^(-8)){

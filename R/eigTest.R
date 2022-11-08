@@ -1,9 +1,12 @@
-#' Test Whole Set of Eigenvectors
+#' Test Common Eigenvectors for Multiple Matrices
+#'
+#' With approximated common eigenvector `V`, test whether the off-diagonal entries are annihilated after similarity transformations.
+#' See \insertCite{xu2021testing;textual}{eigTest}.
 #'
 #' @param A The array of matrices with dimension \code{p}-\code{d}-\code{d}, where \code{p} is the number of matrices, \code{d} is the dimension of the matrices.
 #' @param cn The convergence rate(s) to normality. Assume \code{n} is the sample size, usually CLT indicates \code{cn = sqrt(n)} for consistent estimators. If \code{length(cn) < p}, all matrices share the same rate \code{cn[1]}, otherwise \code{cn = cn[1:p]}.
 #' @param cov.arr The array of covariance matrices corresponding to the vectors with dimension \code{p}-\code{d^2}-\code{d^2}, default will use identity matrices when \code{is.null(cov.arr)}.
-#' @param V The eigenvectors to be tested with dimension \code{d}-\code{d}. Default will use \code{V = JDTE(A)} when \code{is.null(V)}.
+#' @param V The eigenvectors to be tested with dimension \code{d}-\code{d}. Default will use \code{V = JDTE(A)} when \code{is.null(V)} \insertCite{andre}{eigTest}.
 #' @param testType The test methods, can be exact chi-squared test \code{testType = 'chi'}, and/or approximated gamma test \code{testType = 'gam'}.
 #' @param eps The threshold of eigenvalues when compute general inverse of covariance matrices. Required when \code{testType = 'chi'} but with default \code{cn^(-2/3)} when unsupplied.
 #' @param param.out Logical, whether the parameters of limiting distribution should be output or not. Default \code{param.out = FALSE} to only output P-value.
@@ -22,8 +25,7 @@
 #' @importFrom 'Rdpack' reprompt
 #'
 #' @references
-#'     \insertRef{xu2021testing}{eigTest}
-#'     \insertRef{andre}{eigTest}
+#' \insertAllCited{}
 #'
 #' @examples eigTest(countryCoeff, cn = sqrt(112), cov.arr = countryCovar, testType = 'gam')
 eigTest = function(A, cn, cov.arr = NULL, V = NULL, testType = c('chi', 'gam'),

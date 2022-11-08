@@ -2,7 +2,7 @@
 % Please edit documentation in R/commutatorTest.R
 \name{commutatorTest}
 \alias{commutatorTest}
-\title{Test on the commutator of two matrices}
+\title{Test on the Commutator for Two Matrices}
 \usage{
 commutatorTest(
   mat.arr,
@@ -38,7 +38,8 @@ A named vector of P-value(s) when \code{param.out = FALSE}, or a named list of t
 }
 }
 \description{
-Test on the commutator of two matrices
+Two matrices with common eigenvectors commute.
+See \insertCite{xu2021testing;textual}{eigTest}.
 }
 \examples{
 means = generateMeans(5,2)
@@ -46,5 +47,5 @@ samples = simuSamples(means, sqrt(100), 1)
 commutatorTest(samples[[1]]$mu.bar, cn = samples[[1]]$CovRate)
 }
 \references{
-\insertRef{xu2021testing}{eigTest}
+\insertAllCited{}
 }

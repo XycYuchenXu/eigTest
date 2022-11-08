@@ -2,7 +2,7 @@
 % Please edit documentation in R/schurTest.R
 \name{schurTest}
 \alias{schurTest}
-\title{Test of common Schur components}
+\title{Test of Common Schur Components}
 \usage{
 schurTest(
   A,
@@ -28,9 +28,9 @@ schurTest(
 
 \item{k}{The number of common components to be tested. When \code{nn=TRUE}, \code{k} can be \code{NULL} or \code{k = 1}, otherwise \code{k} must be an integer within (0, \code{d}).}
 
-\item{warmup}{Logical whether use \code{partSchur} for a warm-up initial value, default to \code{FALSE}.}
+\item{warmup}{Logical whether use \code{partSchur} for a warm-up initial value \insertCite{Flury86}{eigTest}, default to \code{FALSE}.}
 
-\item{Q}{The orthogonal components to be tested with dimension \code{d}-\code{d}. Default (when \code{is.null(Q)}) will use \code{Q = nnPartSchur(A)} if \code{nn} else \code{Q = expmPartSchur(A, k, warmup = warmup)}.}
+\item{Q}{The orthogonal components to be tested with dimension \code{d}-\code{d}. Default (when \code{is.null(Q)}) will use \code{Q = nnPartSchur(A)} if \code{nn} else \code{Q = expmPartSchur(A, k, warmup = warmup)} \insertCite{tensor}{eigTest}.}
 
 \item{testType}{The test methods, can be exact chi-squared test \code{testType = 'chi'}, and/or approximated gamma test \code{testType = 'gam'}.}
 
@@ -50,12 +50,12 @@ A named vector of P-value(s) when \code{param.out = FALSE}, or a named list of t
 }
 }
 \description{
-Test of common Schur components
+Test whether the lower-left `d-k`-by-`k` block is zero after orthogonally transforming by `Q`.
+See \insertCite{xu2021testing;textual}{eigTest}.
 }
 \examples{
 schurTest(countryCoeff, cn = sqrt(112), cov.arr = countryCovar, k = 2, testType = 'chi')
 }
 \references{
-\insertRef{xu2021testing}{eigTest}
-    \insertRef{tensor}{eigTest}
+\insertAllCited{}
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/eigTest.R
 \name{eigTest}
 \alias{eigTest}
-\title{Test Whole Set of Eigenvectors}
+\title{Test Common Eigenvectors for Multiple Matrices}
 \usage{
 eigTest(
   A,
@@ -21,7 +21,7 @@ eigTest(
 
 \item{cov.arr}{The array of covariance matrices corresponding to the vectors with dimension \code{p}-\code{d^2}-\code{d^2}, default will use identity matrices when \code{is.null(cov.arr)}.}
 
-\item{V}{The eigenvectors to be tested with dimension \code{d}-\code{d}. Default will use \code{V = JDTE(A)} when \code{is.null(V)}.}
+\item{V}{The eigenvectors to be tested with dimension \code{d}-\code{d}. Default will use \code{V = JDTE(A)} when \code{is.null(V)} \insertCite{andre}{eigTest}.}
 
 \item{testType}{The test methods, can be exact chi-squared test \code{testType = 'chi'}, and/or approximated gamma test \code{testType = 'gam'}.}
 
@@ -41,12 +41,12 @@ A named vector of P-value(s) when \code{param.out = FALSE}, or a named list of t
 }
 }
 \description{
-Test Whole Set of Eigenvectors
+With approximated common eigenvector `V`, test whether the off-diagonal entries are annihilated after similarity transformations.
+See \insertCite{xu2021testing;textual}{eigTest}.
 }
 \examples{
 eigTest(countryCoeff, cn = sqrt(112), cov.arr = countryCovar, testType = 'gam')
 }
 \references{
-\insertRef{xu2021testing}{eigTest}
-    \insertRef{andre}{eigTest}
+\insertAllCited{}
 }

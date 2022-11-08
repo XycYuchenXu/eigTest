@@ -2,7 +2,7 @@
 % Please edit documentation in R/expmPartSchur.R
 \name{expmPartSchur}
 \alias{expmPartSchur}
-\title{Tangent space optimization for partially joint Schur decomposition using matrix exponential}
+\title{Optimize Common Invariant Orthogoonal Sub-spaces}
 \usage{
 expmPartSchur(A, k, warmup = FALSE, iter = 5000, tol = 10^(-12))
 }
@@ -11,7 +11,7 @@ expmPartSchur(A, k, warmup = FALSE, iter = 5000, tol = 10^(-12))
 
 \item{k}{The number of common Schur components. Must be an integer within (0, \code{d}).}
 
-\item{warmup}{Logical, whether use \code{partSchur} for a warm-up initial value, default to \code{warmup = FALSE}.}
+\item{warmup}{Logical, whether use \code{partSchur} for a warm-up initial value, default to \code{warmup = FALSE} \insertCite{Flury86}{eigTest}.}
 
 \item{iter}{The maximum iteration number.}
 
@@ -21,12 +21,12 @@ expmPartSchur(A, k, warmup = FALSE, iter = 5000, tol = 10^(-12))
 The orthogonal matrix \code{Q} of dimension \code{d}-\code{d} with the first \code{k} columns to be the estimated common components.
 }
 \description{
-Tangent space optimization for partially joint Schur decomposition using matrix exponential
+Tangent space optimization for partially joint Schur decomposition using matrix exponential parameterizations.
+See \insertCite{tensor;textual}{eigTest}.
 }
 \examples{
 expmPartSchur(countryCoeff, 2)
 }
 \references{
-\insertRef{xu2021testing}{eigTest}
-    \insertRef{tensor}{eigTest}
+\insertAllCited{}
 }

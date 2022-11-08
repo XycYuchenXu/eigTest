@@ -2,7 +2,7 @@
 % Please edit documentation in R/generateMeans.R
 \name{generateMeans}
 \alias{generateMeans}
-\title{Generate mean matrices for simulation samples}
+\title{Generate Mean Matrices for Simulations}
 \usage{
 generateMeans(d, p, k = d, snr = NULL, V = NULL, v = NULL, nn = FALSE)
 }
@@ -25,11 +25,12 @@ generateMeans(d, p, k = d, snr = NULL, V = NULL, v = NULL, nn = FALSE)
 An array of mean matrices: \code{p}-by-\code{q}-by-\code{d}-by-\code{d}, where \code{q} is the number of SNRs: \code{q = length(snr) + 1}.
 }
 \description{
-Generate mean matrices for simulation samples
+Mean matrices with (randomly perturbed) common eigenvectors are generated for simulations setups.
+See \insertCite{xu2021testing;textual}{eigTest}.
 }
 \examples{
 generateMeans(5,8,3)
 }
 \references{
-\insertRef{xu2021testing}{eigTest}
+\insertAllCited{}
 }

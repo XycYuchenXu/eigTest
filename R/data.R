@@ -1,62 +1,74 @@
-#' Standardized macroeconomic quarterly data for 8 countries.
+#' Macroeconomic Data
+#'
+#' Standardized Macroeconomic Quarterly Data for 8 Countries.
+#' Available from \insertCite{ceic,oecd;textual}{eigTest}.
+#' See \insertCite{xu2021testing;textual}{eigTest}.
 #'
 #' @source CEIC
 #' @format The list of multivariate time series.
 #' @importFrom 'Rdpack' reprompt
 #' @references
-#'     \insertRef{xu2021testing}{eigTest}
-#'     \insertRef{ceic}{eigTest}
-#'     \insertRef{oecd}{eigTest}
+#' \insertAllCited{}
 #' @examples
 #' \dontrun{
 #'  countryMacro
 #' }
 "countryMacro"
 
-#' Coefficient matrices of 8 countries' VAR(1) models.
+#' Macroeconomic VAR Model Data
+#'
+#' Estimated coefficient matrices of 8 countries' VAR(1) models.
+#' See \insertCite{xu2021testing;textual}{eigTest}.
 #'
 #' @format The array of coefficient matrices for country-wise macroeconomic VAR(1) models.
 #' @importFrom 'Rdpack' reprompt
 #' @references
-#' \insertRef{xu2021testing}{eigTest}
+#' \insertAllCited{}
 #' @examples
 #' \dontrun{
 #'  countryCoeff
 #' }
 "countryCoeff"
 
+#' Macroeconomic VAR Model Data
+#'
 #' Asymptotic covariance matrices of the 8 coefficient matrices' estimates.
+#' See \insertCite{xu2021testing;textual}{eigTest}.
 #'
 #' @format The array of covariance matrices of the estimated VAR(1) coefficient matrices.
 #' @importFrom 'Rdpack' reprompt
 #' @references
-#' \insertRef{xu2021testing}{eigTest}
+#' \insertAllCited{}
 #' @examples
 #' \dontrun{
 #'  countryCovar
 #' }
 "countryCovar"
 
-#' Hudson river daily discharge table.
+#' Streamflow Discharge Data
+#'
+#' Hudson river daily discharge table available from \insertCite{usgs}{eigTest}.
+#' See \insertCite{xu2021testing;textual}{eigTest}.
 #'
 #' @format The table of the Hudson river daily discharge with daily quantile and categories.
 #' @importFrom 'Rdpack' reprompt
 #' @references
-#'     \insertRef{xu2021testing}{eigTest}
-#'     \insertRef{usgs}{eigTest}
+#' \insertAllCited{}
 #' @examples
 #' \dontrun{
 #'  hudsonDaily
 #' }
 "hudsonDaily"
 
-#' Hudson river weekly discharge table.
+#' Streamflow Discharge Data
+#'
+#' Hudson river weekly discharge table available from \insertCite{usgs}{eigTest}.
+#' See \insertCite{xu2021testing;textual}{eigTest}.
 #'
 #' @format The table of the Hudson river weekly discharge with weekly quantile and categories.
 #' @importFrom 'Rdpack' reprompt
 #' @references
-#'     \insertRef{xu2021testing}{eigTest}
-#'     \insertRef{usgs}{eigTest}
+#' \insertAllCited{}
 #' @examples
 #' \dontrun{
 #'  hudsonWeekly

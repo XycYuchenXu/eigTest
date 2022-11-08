@@ -3,7 +3,7 @@
 \docType{data}
 \name{countryCoeff}
 \alias{countryCoeff}
-\title{Coefficient matrices of 8 countries' VAR(1) models.}
+\title{Macroeconomic VAR Model Data}
 \format{
 The array of coefficient matrices for country-wise macroeconomic VAR(1) models.
 }
@@ -11,7 +11,8 @@ The array of coefficient matrices for country-wise macroeconomic VAR(1) models.
 countryCoeff
 }
 \description{
-Coefficient matrices of 8 countries' VAR(1) models.
+Estimated coefficient matrices of 8 countries' VAR(1) models.
+See \insertCite{xu2021testing;textual}{eigTest}.
 }
 \examples{
 \dontrun{
@@ -19,6 +20,6 @@ Coefficient matrices of 8 countries' VAR(1) models.
 }
 }
 \references{
-\insertRef{xu2021testing}{eigTest}
+\insertAllCited{}
 }
 \keyword{datasets}

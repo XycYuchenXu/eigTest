@@ -1,4 +1,7 @@
-#' Joint Schur decomposition for the non-negative leading component
+#' Optimization of the Common Non-negative Leading Eigenvector
+#'
+#' Joint Schur decomposition, usually applicable on non-negative square matrices such as transition probability matrices, to estimate the common leading eigenvector.
+#' See \insertCite{xu2021testing;textual}{eigTest}.
 #'
 #' @param A The array of matrices with dimension \code{p}-\code{d}-\code{d}, where \code{p} is the number of matrices, \code{d} is the dimension of the matrices.
 #'
@@ -10,7 +13,7 @@
 #' @importFrom 'Rdpack' reprompt
 #'
 #' @references
-#'     \insertRef{xu2021testing}{eigTest}
+#' \insertAllCited{}
 #'
 #' @examples nnPartSchur(countryCoeff)
 nnPartSchur = function(A){

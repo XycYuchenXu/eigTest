@@ -2,7 +2,7 @@
 % Please edit documentation in R/simuSamples.R
 \name{simuSamples}
 \alias{simuSamples}
-\title{Generating consistent estimators for given means}
+\title{Generating Consistent Estimators for Given Means}
 \usage{
 simuSamples(mu, cn, reps, nn = FALSE, est.cov = TRUE, prl = FALSE)
 }
@@ -32,11 +32,12 @@ When \code{est.cov = FALSE}, only the first array of mean estimators are include
 \description{
 The consistent estimators are obtained either as the mean of standard normally distributed matrices,
 or as the estimated transition probability matrix of simulated Markov processes.
-In addition the estimated covariance matrices are also returned.
+The estimated covariance matrices are also returned.
+See \insertCite{xu2021testing;textual}{eigTest}.
 }
 \examples{
 simuSamples(generateMeans(5,4,3), sqrt(c(50,100)), 50)
 }
 \references{
-\insertRef{xu2021testing}{eigTest}.
+\insertAllCited{}
 }

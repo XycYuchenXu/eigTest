@@ -3,7 +3,7 @@
 \docType{data}
 \name{hudsonWeekly}
 \alias{hudsonWeekly}
-\title{Hudson river weekly discharge table.}
+\title{Streamflow Discharge Data}
 \format{
 The table of the Hudson river weekly discharge with weekly quantile and categories.
 }
@@ -11,7 +11,8 @@ The table of the Hudson river weekly discharge with weekly quantile and categori
 hudsonWeekly
 }
 \description{
-Hudson river weekly discharge table.
+Hudson river weekly discharge table available from \insertCite{usgs}{eigTest}.
+See \insertCite{xu2021testing;textual}{eigTest}.
 }
 \examples{
 \dontrun{
@@ -19,7 +20,6 @@ Hudson river weekly discharge table.
 }
 }
 \references{
-\insertRef{xu2021testing}{eigTest}
-    \insertRef{usgs}{eigTest}
+\insertAllCited{}
 }
 \keyword{datasets}

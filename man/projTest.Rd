@@ -2,7 +2,7 @@
 % Please edit documentation in R/projTest.R
 \name{projTest}
 \alias{projTest}
-\title{Calculate the p-value for projected MLE with specified covariance matrices}
+\title{Test on the Log-Likelihood Ratio (LLR) for Two Matrices}
 \usage{
 projTest(
   A,
@@ -28,7 +28,7 @@ projTest(
 
 \item{poly.sp}{Logical, whether the space matrix is generated from polynomial basis. Default \code{poly.sp = TRUE} to use Legendre polynomials. Otherwise \code{poly.sp = FALSE}, the space matrix is generated with common eigenvectors.}
 
-\item{CV}{Matrix of dimension \code{d}-by-\code{d} only functionable when \code{poly.sp = FALSE}, as the supplied reference common eigenvector matrix. Default (when \code{is.null(V)}) is to call \code{V = JDTE(refMat)}.}
+\item{CV}{Matrix of dimension \code{d}-by-\code{d} only functionable when \code{poly.sp = FALSE}, as the supplied reference common eigenvector matrix. Default (when \code{is.null(V)}) is to call \code{V = JDTE(refMat)} \insertCite{andre}{eigTest}.}
 
 \item{param.out}{Logical, whether the parameters of limiting distribution should be output or not. Default \code{param.out = FALSE} to only output P-value.}
 }
@@ -43,10 +43,13 @@ A P-value when \code{param.out = FALSE} or a list of test information when \code
 \description{
 Only valid for nonsingular covariance matrices \code{cov.arr}.
 }
+\details{
+For the LLR test, the maximum likelihood estimators (MLEs) are obtained by covariance-weighted projections onto the linear space either characterized by matrix polynomials or approximated common eigenvectors.
+See \insertCite{xu2021testing;textual}{eigTest}.
+}
 \examples{
 projTest(countryCoeff, cn = sqrt(112), countryCovar)
 }
 \references{
-\insertRef{xu2021testing}{eigTest}
-    \insertRef{andre}{eigTest}
+\insertAllCited{}
 }

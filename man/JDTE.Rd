@@ -2,7 +2,7 @@
 % Please edit documentation in R/JDTE.R
 \name{JDTE}
 \alias{JDTE}
-\title{JDTE algorithm.}
+\title{JDTE Algorithm}
 \usage{
 JDTE(A, iter = 500, tol = 10^(-8))
 }
@@ -17,12 +17,12 @@ JDTE(A, iter = 500, tol = 10^(-8))
 The eigenvector matrix \code{U} with dimension \code{d}-\code{d}.
 }
 \description{
-JDTE algorithm.
+Optimize the common eigenvectors for a set of square asymmetric matrices.
+The `(W)JDTE` algorithm, developed by \insertCite{andre;textual}{eigTest}, is implemented.
 }
 \examples{
 JDTE(countryCoeff)
 }
 \references{
-\insertRef{xu2021testing}{eigTest}
-    \insertRef{andre}{eigTest}
+\insertAllCited{}
 }

@@ -1,12 +1,15 @@
-#' Test of common Schur components
+#' Test of Common Schur Components
+#'
+#' Test whether the lower-left `d-k`-by-`k` block is zero after orthogonally transforming by `Q`.
+#' See \insertCite{xu2021testing;textual}{eigTest}.
 #'
 #' @param A The array of matrices with dimension \code{p}-\code{d}-\code{d}, where \code{p} is the number of matrices, \code{d} is the dimension of the matrices.
 #' @param cn The convergence rate(s) to normality. Assume \code{n} is the sample size, usually CLT indicates \code{cn = sqrt(n)} for consistent estimators. If \code{length(cn) < p}, all matrices share the same rate \code{cn[1]}, otherwise \code{cn = cn[1:p]}.
 #' @param cov.arr The array of covariance matrices corresponding to the vectors with dimension \code{p}-\code{d^2}-\code{d^2}, default will use identity matrices when \code{is.null(cov.arr)}.
 #' @param nn Logical, whether the matrices \code{A} are regarded as nonnegative transition probability matrices and the the eigenvector elements should be nonnegative.
 #' @param k The number of common components to be tested. When \code{nn=TRUE}, \code{k} can be \code{NULL} or \code{k = 1}, otherwise \code{k} must be an integer within (0, \code{d}).
-#' @param warmup Logical whether use \code{partSchur} for a warm-up initial value, default to \code{FALSE}.
-#' @param Q The orthogonal components to be tested with dimension \code{d}-\code{d}. Default (when \code{is.null(Q)}) will use \code{Q = nnPartSchur(A)} if \code{nn} else \code{Q = expmPartSchur(A, k, warmup = warmup)}.
+#' @param warmup Logical whether use \code{partSchur} for a warm-up initial value \insertCite{Flury86}{eigTest}, default to \code{FALSE}.
+#' @param Q The orthogonal components to be tested with dimension \code{d}-\code{d}. Default (when \code{is.null(Q)}) will use \code{Q = nnPartSchur(A)} if \code{nn} else \code{Q = expmPartSchur(A, k, warmup = warmup)} \insertCite{tensor}{eigTest}.
 #' @param testType The test methods, can be exact chi-squared test \code{testType = 'chi'}, and/or approximated gamma test \code{testType = 'gam'}.
 #' @param eps The threshold of eigenvalues when compute general inverse of covariance matrices. Required when \code{testType = 'chi'} but with default \code{cn^(-2/3)} when unsupplied.
 #' @param param.out Logical, whether the parameters of limiting distribution should be output or not. Default \code{param.out = FALSE} to only output P-value.
@@ -25,8 +28,7 @@
 #' @export
 #'
 #' @references
-#'     \insertRef{xu2021testing}{eigTest}
-#'     \insertRef{tensor}{eigTest}
+#' \insertAllCited{}
 #'
 #' @examples schurTest(countryCoeff, cn = sqrt(112), cov.arr = countryCovar, k = 2, testType = 'chi')
 schurTest = function(A, cn, cov.arr = NULL, nn = FALSE, k = NULL, warmup = FALSE, Q = NULL,

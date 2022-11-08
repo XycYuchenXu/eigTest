@@ -3,7 +3,7 @@
 \docType{data}
 \name{countryMacro}
 \alias{countryMacro}
-\title{Standardized macroeconomic quarterly data for 8 countries.}
+\title{Macroeconomic Data}
 \format{
 The list of multivariate time series.
 }
@@ -14,7 +14,9 @@ CEIC
 countryMacro
 }
 \description{
-Standardized macroeconomic quarterly data for 8 countries.
+Standardized Macroeconomic Quarterly Data for 8 Countries.
+Available from \insertCite{ceic,oecd;textual}{eigTest}.
+See \insertCite{xu2021testing;textual}{eigTest}.
 }
 \examples{
 \dontrun{
@@ -22,8 +24,6 @@ Standardized macroeconomic quarterly data for 8 countries.
 }
 }
 \references{
-\insertRef{xu2021testing}{eigTest}
-    \insertRef{ceic}{eigTest}
-    \insertRef{oecd}{eigTest}
+\insertAllCited{}
 }
 \keyword{datasets}

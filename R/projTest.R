@@ -1,4 +1,7 @@
-#' Calculate the p-value for projected MLE with specified covariance matrices
+#' Test on the Log-Likelihood Ratio (LLR) for Two Matrices
+#'
+#' For the LLR test, the maximum likelihood estimators (MLEs) are obtained by covariance-weighted projections onto the linear space either characterized by matrix polynomials or approximated common eigenvectors.
+#' See \insertCite{xu2021testing;textual}{eigTest}.
 #'
 #' @param A The array of two matrices to be tested with dimension \code{2}-\code{d}-\code{d}. If \code{dim(A)[1] > 2}, only the first two are used.
 #' @param cn The convergence rate to normality. Assume \code{n} is the sample size, usually CLT indicates \code{cn = sqrt(n)} for consistent estimators.
@@ -6,7 +9,7 @@
 #' @param eps The threshold of eigenvalues when compute general inverse of covariance matrices. Required when \code{testType = 'chi'} but with default \code{cn^(-2/3)} when unsupplied.
 #' @param refMat The array of reference matrices with dimension \code{2}-\code{d}-\code{d} that have the same eigenvectors. Default (when \code{is.null(refMat)}) is to use \code{A[2,,]} as reference for \code{A[1,,]} and vice versa. If \code{dim(refMat)[1] = 1}, the only reference matrix is shared.
 #' @param poly.sp Logical, whether the space matrix is generated from polynomial basis. Default \code{poly.sp = TRUE} to use Legendre polynomials. Otherwise \code{poly.sp = FALSE}, the space matrix is generated with common eigenvectors.
-#' @param CV Matrix of dimension \code{d}-by-\code{d} only functionable when \code{poly.sp = FALSE}, as the supplied reference common eigenvector matrix. Default (when \code{is.null(V)}) is to call \code{V = JDTE(refMat)}.
+#' @param CV Matrix of dimension \code{d}-by-\code{d} only functionable when \code{poly.sp = FALSE}, as the supplied reference common eigenvector matrix. Default (when \code{is.null(V)}) is to call \code{V = JDTE(refMat)} \insertCite{andre}{eigTest}.
 #' @param param.out Logical, whether the parameters of limiting distribution should be output or not. Default \code{param.out = FALSE} to only output P-value.
 #'
 #' @return A P-value when \code{param.out = FALSE} or a list of test information when \code{param.out = TRUE}.
@@ -22,8 +25,7 @@
 #' @description Only valid for nonsingular covariance matrices \code{cov.arr}.
 #'
 #' @references
-#'     \insertRef{xu2021testing}{eigTest}
-#'     \insertRef{andre}{eigTest}
+#' \insertAllCited{}
 #'
 #' @examples projTest(countryCoeff, cn = sqrt(112), countryCovar)
 projTest = function(A, cn, cov.arr = NULL, eps = NULL, refMat = NULL,

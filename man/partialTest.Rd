@@ -2,7 +2,7 @@
 % Please edit documentation in R/partialTest.R
 \name{partialTest}
 \alias{partialTest}
-\title{Test Subset of Common Eigenvectors}
+\title{Test the Common Subset of Eigenvectors for Multiple Matrices}
 \usage{
 partialTest(
   A,
@@ -29,11 +29,11 @@ partialTest(
 
 \item{k}{The number of common components to be tested. When \code{nn=TRUE}, \code{k} can be \code{NULL} or \code{k = 1}, otherwise \code{k} must be an integer within (0, \code{d}]. Will call \code{eigTest} instead if \code{k = d}.}
 
-\item{warmup}{Logical, whether use \code{partSchur} for a warm-up initial value, default to \code{FALSE}.}
+\item{warmup}{Logical, whether use \code{partSchur} for a warm-up initial value \insertCite{Flury86}{eigTest}, default to \code{FALSE}.}
 
-\item{Q}{The orthogonal components to be tested with dimension \code{d}-\code{d}. Default (when \code{is.null(Q)}) will use \code{Q = nnPartSchur(A)} if \code{nn = TRUE} else \code{Q = expmPartSchur(A, k, warmup = warmup)}.}
+\item{Q}{The orthogonal components to be tested with dimension \code{d}-\code{d}. Default (when \code{is.null(Q)}) will use \code{Q = nnPartSchur(A)} if \code{nn = TRUE} else \code{Q = expmPartSchur(A, k, warmup = warmup)} \insertCite{tensor}{eigTest}.}
 
-\item{V}{The \code{k}-\code{k} eigenvector matrix to be tested for the upper diagonal block after orthogonally transformed by \code{Q}. Only applicable when \code{nn = FALSE}. Default (when \code{is.null(V)}) will use \code{V = JDTE(A)} if \code{k = d} else \code{V = JDTE(B)} where \code{B[i,,] = (t(Q) A[i,,] Q)[1:k,1:k]}.}
+\item{V}{The \code{k}-\code{k} eigenvector matrix to be tested for the upper diagonal block after orthogonally transformed by \code{Q}. Only applicable when \code{nn = FALSE}. Default (when \code{is.null(V)}) will use \code{V = JDTE(A)} if \code{k = d} else \code{V = JDTE(B)} where \code{B[i,,] = (t(Q) A[i,,] Q)[1:k,1:k]} \insertCite{andre}{eigTest}.}
 
 \item{testType}{The test methods, can be exact chi-squared test \code{testType = 'chi'}, and/or approximated gamma test \code{testType = 'gam'}.}
 
@@ -53,14 +53,12 @@ A named vector of P-value(s) when \code{param.out = FALSE}, or a named list of t
 }
 }
 \description{
-Test whether a subset of common eigenvectors are shared by the list of random matrices.
+Test whether a subset of eigenvectors are shared by multiple matrices.
+See \insertCite{xu2021testing;textual}{eigTest}.
 }
 \examples{
 partialTest(countryCoeff, cn = sqrt(112), cov.arr = countryCovar, k = 2, testType = 'gam')
 }
 \references{
-\insertRef{xu2021testing}{eigTest}
-    \insertRef{Flury86}{eigTest}
-    \insertRef{tensor}{eigTest}
-    \insertRef{andre}{eigTest}
+\insertAllCited{}
 }

@@ -3,7 +3,7 @@
 \docType{data}
 \name{countryCovar}
 \alias{countryCovar}
-\title{Asymptotic covariance matrices of the 8 coefficient matrices' estimates.}
+\title{Macroeconomic VAR Model Data}
 \format{
 The array of covariance matrices of the estimated VAR(1) coefficient matrices.
 }
@@ -12,6 +12,7 @@ countryCovar
 }
 \description{
 Asymptotic covariance matrices of the 8 coefficient matrices' estimates.
+See \insertCite{xu2021testing;textual}{eigTest}.
 }
 \examples{
 \dontrun{
@@ -19,6 +20,6 @@ Asymptotic covariance matrices of the 8 coefficient matrices' estimates.
 }
 }
 \references{
-\insertRef{xu2021testing}{eigTest}
+\insertAllCited{}
 }
 \keyword{datasets}

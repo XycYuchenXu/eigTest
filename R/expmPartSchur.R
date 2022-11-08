@@ -1,8 +1,11 @@
-#' Tangent space optimization for partially joint Schur decomposition using matrix exponential
+#' Optimize Common Invariant Orthogoonal Sub-spaces
+#'
+#' Tangent space optimization for partially joint Schur decomposition using matrix exponential parameterizations.
+#' See \insertCite{tensor;textual}{eigTest}.
 #'
 #' @param A The array of matrices with dimension \code{p}-\code{d}-\code{d}, where \code{p} is the number of matrices, \code{d} is the dimension of the matrices.
 #' @param k The number of common Schur components. Must be an integer within (0, \code{d}).
-#' @param warmup Logical, whether use \code{partSchur} for a warm-up initial value, default to \code{warmup = FALSE}.
+#' @param warmup Logical, whether use \code{partSchur} for a warm-up initial value, default to \code{warmup = FALSE} \insertCite{Flury86}{eigTest}.
 #' @param iter The maximum iteration number.
 #' @param tol The tolerance error for iteration termination.
 #'
@@ -13,8 +16,7 @@
 #' @importFrom 'Rdpack' reprompt
 #'
 #' @references
-#'     \insertRef{xu2021testing}{eigTest}
-#'     \insertRef{tensor}{eigTest}
+#' \insertAllCited{}
 #'
 #' @examples expmPartSchur(countryCoeff, 2)
 expmPartSchur = function(A, k, warmup = FALSE, iter = 5000, tol = 10^(-12)){

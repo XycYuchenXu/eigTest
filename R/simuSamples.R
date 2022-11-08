@@ -1,8 +1,9 @@
-#' Generating consistent estimators for given means
+#' Generating Consistent Estimators for Given Means
 #'
 #' The consistent estimators are obtained either as the mean of standard normally distributed matrices,
 #' or as the estimated transition probability matrix of simulated Markov processes.
-#' In addition the estimated covariance matrices are also returned.
+#' The estimated covariance matrices are also returned.
+#' See \insertCite{xu2021testing;textual}{eigTest}.
 #'
 #' @param reps The number of replicates for the same distribution.
 #' @param cn The vector of convergence rates in each replicate. Assume \code{n} is the sample size, usually CLT indicates \code{cn = sqrt(n)} for consistent estimators.
@@ -28,7 +29,7 @@
 #' @export
 #'
 #' @references
-#'     \insertRef{xu2021testing}{eigTest}.
+#' \insertAllCited{}
 #'
 #' @examples simuSamples(generateMeans(5,4,3), sqrt(c(50,100)), 50)
 simuSamples = function(mu, cn, reps, nn = FALSE,

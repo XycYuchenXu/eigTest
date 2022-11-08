@@ -1,4 +1,7 @@
-#' Generate mean matrices for simulation samples
+#' Generate Mean Matrices for Simulations
+#'
+#' Mean matrices with (randomly perturbed) common eigenvectors are generated for simulations setups.
+#' See \insertCite{xu2021testing;textual}{eigTest}.
 #'
 #' @param d The dimension of matrices.
 #' @param p The number of matrices.
@@ -15,7 +18,7 @@
 #' @importFrom 'Rdpack' reprompt
 #'
 #' @references
-#' \insertRef{xu2021testing}{eigTest}
+#' \insertAllCited{}
 #'
 #' @examples generateMeans(5,8,3)
 generateMeans = function(d, p, k = d, snr = NULL, V = NULL, v = NULL, nn = FALSE) {

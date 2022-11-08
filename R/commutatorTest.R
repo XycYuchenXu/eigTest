@@ -1,4 +1,7 @@
-#' Test on the commutator of two matrices
+#' Test on the Commutator for Two Matrices
+#'
+#' Two matrices with common eigenvectors commute.
+#' See \insertCite{xu2021testing;textual}{eigTest}.
 #'
 #' @param mat.arr The array of two matrices to be tested with dimension \code{2}-\code{d}-\code{d}. If \code{dim(mat.arr)[1] > 2}, only the first two are used.
 #' @param cn The convergence rate(s) to normality. Assume \code{n} is the sample size, usually CLT indicates \code{cn = sqrt(n)} for consistent estimators. If \code{length(cn) < p}, all matrices share the same rate \code{cn[1]}, otherwise \code{cn = cn[1:p]}.
@@ -22,7 +25,7 @@
 #' @importFrom 'Rdpack' reprompt
 #'
 #' @references
-#' \insertRef{xu2021testing}{eigTest}
+#' \insertAllCited{}
 #'
 #' @examples means = generateMeans(5,2)
 #' samples = simuSamples(means, sqrt(100), 1)
