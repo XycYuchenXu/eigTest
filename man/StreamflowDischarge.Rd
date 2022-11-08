@@ -13,8 +13,8 @@ hudsonWeekly
 \description{
 Hudson river discharges with quantiles and categories, consisting 1827 rows and 6 columns.
 \itemize{
-\item `hudsonDaily` - The discharge table of daily data.
-\item `hudsonWeekly` - The discharge table of weekly data.
+\item \code{hudsonDaily} - The discharge table of daily data.
+\item \code{hudsonWeekly} - The discharge table of weekly data.
 }
 Data are accessed from \insertCite{usgs;textual}{eigTest}.
 See \insertCite{xu2021testing;textual}{eigTest} for processing details.

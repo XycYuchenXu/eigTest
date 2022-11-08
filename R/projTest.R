@@ -10,13 +10,13 @@
 #' @param refMat The array of reference matrices with dimension \code{2}-\code{d}-\code{d} that have the same eigenvectors. Default (when \code{is.null(refMat)}) is to use \code{A[2,,]} as reference for \code{A[1,,]} and vice versa. If \code{dim(refMat)[1] = 1}, the only reference matrix is shared.
 #' @param poly.sp Logical, whether the space matrix is generated from polynomial basis. Default \code{poly.sp = TRUE} to use Legendre polynomials. Otherwise \code{poly.sp = FALSE}, the space matrix is generated with common eigenvectors.
 #' @param CV Matrix of dimension \code{d}-by-\code{d} only functionable when \code{poly.sp = FALSE}, as the supplied reference common eigenvector matrix. Default (when \code{is.null(V)}) is to call \code{V = JDTE(refMat)} \insertCite{andre}{eigTest}.
-#' @param param.out Logical, whether the parameters of limiting distribution should be output or not. Default \code{param.out = FALSE} to only output P-value.
+#' @param param.out Logical, whether the parameters of limiting distribution should be output or not. Default \code{param.out = FALSE} to only output p-value.
 #'
-#' @return A P-value when \code{param.out = FALSE} or a list of test information when \code{param.out = TRUE}.
+#' @return A p-value when \code{param.out = FALSE} or a list of test information when \code{param.out = TRUE}.
 #' \itemize{
 #' \item \code{statistic}: The test statistic.
 #' \item \code{df}: The degrees of freedom for chi-squared distribution.
-#' \item \code{pvalue} The P-value.
+#' \item \code{pvalue} The p-value.
 #' }
 #' @importFrom 'abind' abind
 #' @importFrom 'Rdpack' reprompt

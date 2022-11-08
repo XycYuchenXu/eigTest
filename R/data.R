@@ -2,9 +2,9 @@
 #'
 #' @description
 #' \itemize{
-#' \item `countryMacro` - Standardized Macroeconomic Quarterly Data for 8 Countries.
-#' \item `countryCoeff` - Estimated coefficient matrices of 8 countries' VAR(1) models.
-#' \item `countryCovar` - Estimated covariance matrices of the 8 coefficient matrices' estimates.
+#' \item \code{countryMacro} - Standardized Macroeconomic Quarterly Data for 8 Countries.
+#' \item \code{countryCoeff} - Estimated coefficient matrices of 8 countries' VAR(1) models.
+#' \item \code{countryCovar} - Estimated covariance matrices of the 8 coefficient matrices' estimates.
 #' }
 #' Data are accessed from \insertCite{ceic,oecd;textual}{eigTest}.
 #' See \insertCite{xu2021testing;textual}{eigTest} for processing details.
@@ -35,8 +35,8 @@
 #'
 #' @description Hudson river discharges with quantiles and categories, consisting 1827 rows and 6 columns.
 #' \itemize{
-#' \item `hudsonDaily` - The discharge table of daily data.
-#' \item `hudsonWeekly` - The discharge table of weekly data.
+#' \item \code{hudsonDaily} - The discharge table of daily data.
+#' \item \code{hudsonWeekly} - The discharge table of weekly data.
 #' }
 #' Data are accessed from \insertCite{usgs;textual}{eigTest}.
 #' See \insertCite{xu2021testing;textual}{eigTest} for processing details.

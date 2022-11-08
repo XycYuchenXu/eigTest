@@ -13,16 +13,16 @@
 #' @param V The \code{k}-\code{k} eigenvector matrix to be tested for the upper diagonal block after orthogonally transformed by \code{Q}. Only applicable when \code{nn = FALSE}. Default (when \code{is.null(V)}) will use \code{V = JDTE(A)} if \code{k = d} else \code{V = JDTE(B)} where \code{B[i,,] = (t(Q) A[i,,] Q)[1:k,1:k]} \insertCite{andre}{eigTest}.
 #' @param testType The test methods, can be exact chi-squared test \code{testType = 'chi'}, and/or approximated gamma test \code{testType = 'gam'}.
 #' @param eps The threshold of eigenvalues when compute general inverse of covariance matrices. Required when \code{testType = 'chi'} but with default \code{cn^(-2/3)} when unsupplied.
-#' @param param.out Logical, whether the parameters of limiting distribution should be output or not. Default \code{param.out = FALSE} to only output P-value.
+#' @param param.out Logical, whether the parameters of limiting distribution should be output or not. Default \code{param.out = FALSE} to only output p-value.
 #'
-#' @return A named vector of P-value(s) when \code{param.out = FALSE}, or a named list of test information when \code{param.out = TRUE}, with name(s) to be \code{'chi'} and/or \code{'gam'}. Test information is a sub-list with elements including:
+#' @return A named vector of p-value(s) when \code{param.out = FALSE}, or a named list of test information when \code{param.out = TRUE}, with name(s) to be \code{'chi'} and/or \code{'gam'}. Test information is a sub-list with elements including:
 #' \itemize{
 #' \item \code{testType}: The test methods. Either exact chi-squared test \code{'chi'}, or approximated gamma test \code{'gam'}.
 #' \item \code{statistic}: The test statistic.
 #' \item \code{df}: The degrees of freedom for chi-squared distribution when \code{testType = 'chi'}.
 #' \item \code{shape}: The shape parameter in gamma distribution when \code{testType = 'gam'}.
 #' \item \code{rate}: The rate parameter in gamma distribution when \code{testType = 'gam'}.
-#' \item \code{pvalue}: The P-value.
+#' \item \code{pvalue}: The p-value.
 #' }
 #'
 #' @importFrom 'Rdpack' reprompt

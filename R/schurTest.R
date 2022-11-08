@@ -1,6 +1,6 @@
 #' Test of Common Schur Components
 #'
-#' Test whether the lower-left `d-k`-by-`k` block is zero after orthogonally transforming by `Q`.
+#' Test whether the lower-left \code{d-k}-by-\code{k} block is zero after orthogonally transforming by \code{Q}.
 #' See \insertCite{xu2021testing;textual}{eigTest}.
 #'
 #' @param A The array of matrices with dimension \code{p}-\code{d}-\code{d}, where \code{p} is the number of matrices, \code{d} is the dimension of the matrices.
@@ -12,16 +12,16 @@
 #' @param Q The orthogonal components to be tested with dimension \code{d}-\code{d}. Default (when \code{is.null(Q)}) will use \code{Q = nnPartSchur(A)} if \code{nn} else \code{Q = expmPartSchur(A, k, warmup = warmup)} \insertCite{tensor}{eigTest}.
 #' @param testType The test methods, can be exact chi-squared test \code{testType = 'chi'}, and/or approximated gamma test \code{testType = 'gam'}.
 #' @param eps The threshold of eigenvalues when compute general inverse of covariance matrices. Required when \code{testType = 'chi'} but with default \code{cn^(-2/3)} when unsupplied.
-#' @param param.out Logical, whether the parameters of limiting distribution should be output or not. Default \code{param.out = FALSE} to only output P-value.
+#' @param param.out Logical, whether the parameters of limiting distribution should be output or not. Default \code{param.out = FALSE} to only output p-value.
 #'
-#' @return A named vector of P-value(s) when \code{param.out = FALSE}, or a named list of test information when \code{param.out = TRUE}, with name(s) to be \code{'chi'} and/or \code{'gam'}. Test information is a sub-list with elements including:
+#' @return A named vector of p-value(s) when \code{param.out = FALSE}, or a named list of test information when \code{param.out = TRUE}, with name(s) to be \code{'chi'} and/or \code{'gam'}. Test information is a sub-list with elements including:
 #' \itemize{
 #' \item \code{testType}: The test methods. Either exact chi-squared test \code{'chi'}, or approximated gamma test \code{'gam'}.
 #' \item \code{statistic}: The test statistic.
 #' \item \code{df}: The degrees of freedom for chi-squared distribution when \code{testType = 'chi'}.
 #' \item \code{shape}: The shape parameter in gamma distribution when \code{testType = 'gam'}.
 #' \item \code{rate}: The rate parameter in gamma distribution when \code{testType = 'gam'}.
-#' \item \code{pvalue}: The P-value.
+#' \item \code{pvalue}: The p-value.
 #' }
 #'
 #' @importFrom 'Rdpack' reprompt

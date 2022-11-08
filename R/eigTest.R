@@ -1,6 +1,6 @@
 #' Test Common Eigenvectors for Multiple Matrices
 #'
-#' With approximated common eigenvector `V`, test whether the off-diagonal entries are annihilated after similarity transformations.
+#' With approximated common eigenvector \code{V}, test whether the off-diagonal entries are annihilated after similarity transformations.
 #' See \insertCite{xu2021testing;textual}{eigTest}.
 #'
 #' @param A The array of matrices with dimension \code{p}-\code{d}-\code{d}, where \code{p} is the number of matrices, \code{d} is the dimension of the matrices.

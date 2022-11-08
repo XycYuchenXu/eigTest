@@ -41,7 +41,7 @@ A named vector of P-value(s) when \code{param.out = FALSE}, or a named list of t
 }
 }
 \description{
-With approximated common eigenvector `V`, test whether the off-diagonal entries are annihilated after similarity transformations.
+With approximated common eigenvector \code{V}, test whether the off-diagonal entries are annihilated after similarity transformations.
 See \insertCite{xu2021testing;textual}{eigTest}.
 }
 \examples{

@@ -18,7 +18,7 @@ The eigenvector matrix \code{U} with dimension \code{d}-\code{d}.
 }
 \description{
 Optimize the common eigenvectors for a set of square asymmetric matrices.
-The `(W)JDTE` algorithm, developed by \insertCite{andre;textual}{eigTest}, is implemented.
+The weighted version of \code{JDTE} algorithm, developed by \insertCite{andre;textual}{eigTest}, is implemented.
 }
 \examples{
 JDTE(countryCoeff)

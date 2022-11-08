@@ -30,14 +30,14 @@ projTest(
 
 \item{CV}{Matrix of dimension \code{d}-by-\code{d} only functionable when \code{poly.sp = FALSE}, as the supplied reference common eigenvector matrix. Default (when \code{is.null(V)}) is to call \code{V = JDTE(refMat)} \insertCite{andre}{eigTest}.}
 
-\item{param.out}{Logical, whether the parameters of limiting distribution should be output or not. Default \code{param.out = FALSE} to only output P-value.}
+\item{param.out}{Logical, whether the parameters of limiting distribution should be output or not. Default \code{param.out = FALSE} to only output p-value.}
 }
 \value{
-A P-value when \code{param.out = FALSE} or a list of test information when \code{param.out = TRUE}.
+A p-value when \code{param.out = FALSE} or a list of test information when \code{param.out = TRUE}.
 \itemize{
 \item \code{statistic}: The test statistic.
 \item \code{df}: The degrees of freedom for chi-squared distribution.
-\item \code{pvalue} The P-value.
+\item \code{pvalue} The p-value.
 }
 }
 \description{

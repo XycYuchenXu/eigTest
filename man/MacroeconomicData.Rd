@@ -25,9 +25,9 @@ countryCovar
 }
 \description{
 \itemize{
-\item `countryMacro` - Standardized Macroeconomic Quarterly Data for 8 Countries.
-\item `countryCoeff` - Estimated coefficient matrices of 8 countries' VAR(1) models.
-\item `countryCovar` - Estimated covariance matrices of the 8 coefficient matrices' estimates.
+\item \code{countryMacro} - Standardized Macroeconomic Quarterly Data for 8 Countries.
+\item \code{countryCoeff} - Estimated coefficient matrices of 8 countries' VAR(1) models.
+\item \code{countryCovar} - Estimated covariance matrices of the 8 coefficient matrices' estimates.
 }
 Data are accessed from \insertCite{ceic,oecd;textual}{eigTest}.
 See \insertCite{xu2021testing;textual}{eigTest} for processing details.
