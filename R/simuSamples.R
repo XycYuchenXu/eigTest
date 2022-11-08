@@ -24,7 +24,11 @@
 #' @import foreach
 #' @import doSNOW
 #' @import abind
+#' @importFrom 'Rdpack' reprompt
 #' @export
+#'
+#' @references
+#' \insertRef{xu2021testing}{eigTest}.
 #'
 #' @examples simuSamples(generateMeans(5,4,3), sqrt(c(50,100)), 50)
 simuSamples = function(mu, cn, reps, nn = FALSE,

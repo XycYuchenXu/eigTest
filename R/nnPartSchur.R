@@ -7,6 +7,10 @@
 #'
 #' @import quadprog
 #' @importFrom 'pracma' quadprog
+#' @importFrom 'Rdpack' reprompt
+#'
+#' @references
+#' \insertRef{xu2021testing}{eigTest}
 #'
 #' @examples nnPartSchur(countryCoeff)
 nnPartSchur = function(A){

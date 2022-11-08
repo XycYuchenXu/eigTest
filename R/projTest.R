@@ -16,9 +16,14 @@
 #' \item \code{pvalue} The P-value.
 #' }
 #' @importFrom 'abind' abind
+#' @importFrom 'Rdpack' reprompt
 #' @export
 #'
 #' @description Only valid for nonsingular covariance matrices \code{cov.arr}.
+#'
+#' @references
+#' \insertRef{xu2021testing}{eigTest}
+#' \insertRef{andre}{eigTest}
 #'
 #' @examples projTest(countryCoeff, cn = sqrt(112), countryCovar)
 projTest = function(A, cn, cov.arr = NULL, eps = NULL, refMat = NULL,

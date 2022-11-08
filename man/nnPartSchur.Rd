@@ -18,3 +18,6 @@ Joint Schur decomposition for the non-negative leading component
 \examples{
 nnPartSchur(countryCoeff)
 }
+\references{
+\insertRef{xu2021testing}{eigTest}
+}

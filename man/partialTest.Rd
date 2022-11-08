@@ -58,3 +58,9 @@ Test whether a subset of common eigenvectors are shared by the list of random ma
 \examples{
 partialTest(countryCoeff, cn = sqrt(112), cov.arr = countryCovar, k = 2, testType = 'gam')
 }
+\references{
+\insertRef{xu2021testing}{eigTest}
+\insertRef{Flury86}{eigTest}
+\insertRef{tensor}{eigTest}
+\insertRef{andre}{eigTest}
+}

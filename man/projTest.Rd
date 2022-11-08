@@ -46,3 +46,7 @@ Only valid for nonsingular covariance matrices \code{cov.arr}.
 \examples{
 projTest(countryCoeff, cn = sqrt(112), countryCovar)
 }
+\references{
+\insertRef{xu2021testing}{eigTest}
+\insertRef{andre}{eigTest}
+}

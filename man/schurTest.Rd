@@ -55,3 +55,7 @@ Test of common Schur components
 \examples{
 schurTest(countryCoeff, cn = sqrt(112), cov.arr = countryCovar, k = 2, testType = 'chi')
 }
+\references{
+\insertRef{xu2021testing}{eigTest}
+\insertRef{tensor}{eigTest}
+}

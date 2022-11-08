@@ -1,10 +1,10 @@
 ---
-title: 'Vignette for eigTest'
+title: 'eigTest: Approximate and Test Common Eigenvectors'
 author: "Yuchen Xu"
 date: "10/2022"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette for eigTest}
+  %\VignetteIndexEntry{eigTest: Approximate and Test Common Eigenvectors}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

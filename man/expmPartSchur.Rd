@@ -26,3 +26,7 @@ Tangent space optimization for partially joint Schur decomposition using matrix 
 \examples{
 expmPartSchur(countryCoeff, 2)
 }
+\references{
+\insertRef{xu2021testing}{eigTest}
+\insertRef{tensor}{eigTest}
+}

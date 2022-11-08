@@ -45,3 +45,6 @@ means = generateMeans(5,2)
 samples = simuSamples(means, sqrt(100), 1)
 commutatorTest(samples[[1]]$mu.bar, cn = samples[[1]]$CovRate)
 }
+\references{
+\insertRef{xu2021testing}{eigTest}
+}

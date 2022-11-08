@@ -22,3 +22,7 @@ JDTE algorithm.
 \examples{
 JDTE(countryCoeff)
 }
+\references{
+\insertRef{xu2021testing}{eigTest}
+\insertRef{andre}{eigTest}
+}

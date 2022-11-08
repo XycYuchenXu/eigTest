@@ -19,6 +19,12 @@
 #' }
 #' @export
 #'
+#' @importFrom 'Rdpack' reprompt
+#'
+#' @references
+#' \insertRef{xu2021testing}{eigTest}
+#' \insertRef{andre}{eigTest}
+#'
 #' @examples eigTest(countryCoeff, cn = sqrt(112), cov.arr = countryCovar, testType = 'gam')
 eigTest = function(A, cn, cov.arr = NULL, V = NULL, testType = c('chi', 'gam'),
                    eps = NULL, param.out = FALSE){

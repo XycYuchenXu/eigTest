@@ -19,6 +19,10 @@
 #' @export
 #'
 #' @import stats
+#' @importFrom 'Rdpack' reprompt
+#'
+#' @references
+#' \insertRef{xu2021testing}{eigTest}
 #'
 #' @examples means = generateMeans(5,2)
 #' samples = simuSamples(means, sqrt(100), 1)

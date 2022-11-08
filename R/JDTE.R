@@ -5,7 +5,13 @@
 #' @param tol The tolerance error for iteration termination.
 #'
 #' @return The eigenvector matrix \code{U} with dimension \code{d}-\code{d}.
+#'
+#' @importFrom 'Rdpack' reprompt
 #' @export
+#'
+#' @references
+#' \insertRef{xu2021testing}{eigTest}
+#' \insertRef{andre}{eigTest}
 #'
 #' @examples JDTE(countryCoeff)
 JDTE = function(A, iter = 500, tol = 10^(-8)){

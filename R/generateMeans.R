@@ -12,6 +12,10 @@
 #' @export
 #'
 #' @import gtools
+#' @importFrom 'Rdpack' reprompt
+#'
+#' @references
+#' \insertRef{xu2021testing}{eigTest}
 #'
 #' @examples generateMeans(5,8,3)
 generateMeans = function(d, p, k = d, snr = NULL, V = NULL, v = NULL, nn = FALSE) {

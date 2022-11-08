@@ -30,3 +30,6 @@ Generate mean matrices for simulation samples
 \examples{
 generateMeans(5,8,3)
 }
+\references{
+\insertRef{xu2021testing}{eigTest}
+}

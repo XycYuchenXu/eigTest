@@ -37,3 +37,6 @@ In addition the estimated covariance matrices are also returned.
 \examples{
 simuSamples(generateMeans(5,4,3), sqrt(c(50,100)), 50)
 }
+\references{
+\insertRef{xu2021testing}{eigTest}.
+}

@@ -20,7 +20,13 @@
 #' \item \code{rate}: The rate parameter in gamma distribution when \code{testType = 'gam'}.
 #' \item \code{pvalue}: The P-value.
 #' }
+#'
+#' @importFrom 'Rdpack' reprompt
 #' @export
+#'
+#' @references
+#' \insertRef{xu2021testing}{eigTest}
+#' \insertRef{tensor}{eigTest}
 #'
 #' @examples schurTest(countryCoeff, cn = sqrt(112), cov.arr = countryCovar, k = 2, testType = 'chi')
 schurTest = function(A, cn, cov.arr = NULL, nn = FALSE, k = NULL, warmup = FALSE, Q = NULL,

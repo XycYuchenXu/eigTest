@@ -1,0 +1,34 @@
+citHeader("To cite the eigTest package in publications use:")
+
+citEntry(entry="misc",
+  author   = "Xu, Yuchen and D{\"u}ker, Marie-Christine and Matteson, David S",
+  title    = "Testing Simultaneous Diagonalizability",
+  year     = 2021,
+  textVersion=
+    paste("Xu, Yuchen and D{\"u}ker, Marie-Christine and Matteson, David S (2021),",
+          "Testing Simultaneous Diagonalizability,",
+          "arXiv preprint arXiv:2101.07776.",
+          sep=" ")
+)
+
+
+citEntry(
+  entry="Manual",
+  title = "eigTest: Approximate and Test Common Eigenvectors",
+  author = personList(
+    as.person("Yuchen Xu")
+    ),
+  year = "2022",
+  url = "https://github.com/XycYuchenXu/eigTest",
+  note = "R package",
+  textVersion =
+  paste(
+    "Yuchen Xu",
+    "eigTest: Approximate and Test Common Eigenvectors",
+    "R package",
+    "2022",
+    "https://github.com/XycYuchenXu/eigTest",
+    sep=". "
+  ),
+  header = "Also please use the following citation:"
+  )
