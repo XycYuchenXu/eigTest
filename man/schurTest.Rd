@@ -57,5 +57,5 @@ schurTest(countryCoeff, cn = sqrt(112), cov.arr = countryCovar, k = 2, testType 
 }
 \references{
 \insertRef{xu2021testing}{eigTest}
-\insertRef{tensor}{eigTest}
+    \insertRef{tensor}{eigTest}
 }

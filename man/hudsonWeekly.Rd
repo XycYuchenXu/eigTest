@@ -18,4 +18,8 @@ Hudson river weekly discharge table.
  hudsonWeekly
 }
 }
+\references{
+\insertRef{xu2021testing}{eigTest}
+    \insertRef{usgs}{eigTest}
+}
 \keyword{datasets}

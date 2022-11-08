@@ -21,4 +21,9 @@ Standardized macroeconomic quarterly data for 8 countries.
  countryMacro
 }
 }
+\references{
+\insertRef{xu2021testing}{eigTest}
+    \insertRef{ceic}{eigTest}
+    \insertRef{oecd}{eigTest}
+}
 \keyword{datasets}

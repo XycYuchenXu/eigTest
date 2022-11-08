@@ -60,7 +60,7 @@ partialTest(countryCoeff, cn = sqrt(112), cov.arr = countryCovar, k = 2, testTyp
 }
 \references{
 \insertRef{xu2021testing}{eigTest}
-\insertRef{Flury86}{eigTest}
-\insertRef{tensor}{eigTest}
-\insertRef{andre}{eigTest}
+    \insertRef{Flury86}{eigTest}
+    \insertRef{tensor}{eigTest}
+    \insertRef{andre}{eigTest}
 }

@@ -48,5 +48,5 @@ eigTest(countryCoeff, cn = sqrt(112), cov.arr = countryCovar, testType = 'gam')
 }
 \references{
 \insertRef{xu2021testing}{eigTest}
-\insertRef{andre}{eigTest}
+    \insertRef{andre}{eigTest}
 }

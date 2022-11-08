@@ -18,4 +18,7 @@ Asymptotic covariance matrices of the 8 coefficient matrices' estimates.
  countryCovar
 }
 }
+\references{
+\insertRef{xu2021testing}{eigTest}
+}
 \keyword{datasets}

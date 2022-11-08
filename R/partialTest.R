@@ -28,10 +28,10 @@
 #' @export
 #'
 #' @references
-#' \insertRef{xu2021testing}{eigTest}
-#' \insertRef{Flury86}{eigTest}
-#' \insertRef{tensor}{eigTest}
-#' \insertRef{andre}{eigTest}
+#'     \insertRef{xu2021testing}{eigTest}
+#'     \insertRef{Flury86}{eigTest}
+#'     \insertRef{tensor}{eigTest}
+#'     \insertRef{andre}{eigTest}
 #'
 #' @examples partialTest(countryCoeff, cn = sqrt(112), cov.arr = countryCovar, k = 2, testType = 'gam')
 partialTest = function(A, cn, cov.arr = NULL, nn = FALSE, k=NULL, warmup = FALSE,

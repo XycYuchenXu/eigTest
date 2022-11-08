@@ -18,4 +18,8 @@ Hudson river daily discharge table.
  hudsonDaily
 }
 }
+\references{
+\insertRef{xu2021testing}{eigTest}
+    \insertRef{usgs}{eigTest}
+}
 \keyword{datasets}

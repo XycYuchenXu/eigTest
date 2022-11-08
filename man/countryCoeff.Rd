@@ -18,4 +18,7 @@ Coefficient matrices of 8 countries' VAR(1) models.
  countryCoeff
 }
 }
+\references{
+\insertRef{xu2021testing}{eigTest}
+}
 \keyword{datasets}

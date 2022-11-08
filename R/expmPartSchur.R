@@ -13,8 +13,8 @@
 #' @importFrom 'Rdpack' reprompt
 #'
 #' @references
-#' \insertRef{xu2021testing}{eigTest}
-#' \insertRef{tensor}{eigTest}
+#'     \insertRef{xu2021testing}{eigTest}
+#'     \insertRef{tensor}{eigTest}
 #'
 #' @examples expmPartSchur(countryCoeff, 2)
 expmPartSchur = function(A, k, warmup = FALSE, iter = 5000, tol = 10^(-12)){

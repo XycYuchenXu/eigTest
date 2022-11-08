@@ -10,8 +10,8 @@
 #' @export
 #'
 #' @references
-#' \insertRef{xu2021testing}{eigTest}
-#' \insertRef{andre}{eigTest}
+#'     \insertRef{xu2021testing}{eigTest}
+#'     \insertRef{andre}{eigTest}
 #'
 #' @examples JDTE(countryCoeff)
 JDTE = function(A, iter = 500, tol = 10^(-8)){

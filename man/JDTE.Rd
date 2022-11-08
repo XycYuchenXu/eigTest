@@ -24,5 +24,5 @@ JDTE(countryCoeff)
 }
 \references{
 \insertRef{xu2021testing}{eigTest}
-\insertRef{andre}{eigTest}
+    \insertRef{andre}{eigTest}
 }
