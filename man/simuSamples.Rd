@@ -17,7 +17,7 @@ simuSamples(mu, cn, reps, nn = FALSE, est.cov = TRUE, prl = FALSE)
 
 \item{est.cov}{Logical, whether the covariance matrices are estimated empirically. Default to \code{est.cov = TRUE}.}
 
-\item{prl}{Logical, whether to use parallel sampling. Default to \code{prl = FALSE} for not parallelizing. If \code{prl = TRUE}, one must first call \code{registerDoSNOW()} externally.}
+\item{prl}{Logical, whether to use parallel sampling. Default to \code{prl = FALSE} for not parallelizing. If \code{prl = TRUE}, _one must first register clusters by calling \code{registerDoSNOW()} externally_.}
 }
 \value{
 A list of lists, with length \code{reps * m * q}, where \code{m} is the number of different rates \code{m = length(cn)}. Every sublist has the following format.

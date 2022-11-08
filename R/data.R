@@ -41,6 +41,7 @@
 #' Data are accessed from \insertCite{usgs;textual}{eigTest}.
 #' See \insertCite{xu2021testing;textual}{eigTest} for processing details.
 #'
+#' @source USGS
 #' @format NULL
 #'
 #' @importFrom 'Rdpack' reprompt

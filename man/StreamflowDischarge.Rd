@@ -5,6 +5,9 @@
 \alias{hudsonDaily}
 \alias{hudsonWeekly}
 \title{Streamflow Discharge Data}
+\source{
+USGS
+}
 \usage{
 hudsonDaily
 
