@@ -8,16 +8,16 @@
 #' @param cov.arr The array of covariance matrices of the two matrices with dimension \code{2}-\code{d^2}-\code{d^2}, default will use identity matrices when \code{is.null(cov.arr)}. If \code{dim(cov.arr)[1] > 2}, only the first two are used.
 #' @param testType The test methods, can be exact chi-squared test \code{testType = 'chi'}, and/or approximated gamma test \code{testType = 'gam'}.
 #' @param eps The threshold of eigenvalues when compute general inverse of covariance matrices. Required when \code{testType = 'chi'} but with default \code{cn^(-2/3)} when unsupplied.
-#' @param param.out Logical, whether the parameters of limiting distribution should be output or not. Default \code{param.out = FALSE} to only output P-value.
+#' @param param.out Logical, whether the parameters of limiting distribution should be output or not. Default \code{param.out = FALSE} to only output p-value.
 #'
-#' @return A named vector of P-value(s) when \code{param.out = FALSE}, or a named list of test information when \code{param.out = TRUE}, with name(s) to be \code{'chi'} and/or \code{'gam'}. Test information is a sub-list with elements including:
+#' @return A named vector of p-value(s) when \code{param.out = FALSE}, or a named list of test information when \code{param.out = TRUE}, with name(s) to be \code{'chi'} and/or \code{'gam'}. Test information is a sub-list with elements including:
 #' \itemize{
 #' \item \code{testType}: The test methods. Either exact chi-squared test \code{'chi'}, or approximated gamma test \code{'gam'}.
 #' \item \code{statistic}: The test statistic.
 #' \item \code{df}: The degrees of freedom for chi-squared distribution when \code{testType = 'chi'}.
 #' \item \code{shape}: The shape parameter in gamma distribution when \code{testType = 'gam'}.
 #' \item \code{rate}: The rate parameter in gamma distribution when \code{testType = 'gam'}.
-#' \item \code{pvalue}: The P-value.
+#' \item \code{pvalue}: The p-value.
 #' }
 #' @export
 #'

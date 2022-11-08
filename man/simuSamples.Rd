@@ -17,10 +17,10 @@ simuSamples(mu, cn, reps, nn = FALSE, est.cov = TRUE, prl = FALSE)
 
 \item{est.cov}{Logical, whether the covariance matrices are estimated empirically. Default to \code{est.cov = TRUE}.}
 
-\item{prl}{Logical, whether to use parallel sampling. Default to \code{prl = FALSE} for not parallelizing. If \code{prl = TRUE}, _one must first register clusters by calling \code{registerDoSNOW()} externally_.}
+\item{prl}{Logical, whether to use parallel sampling. Default to \code{prl = FALSE} for not parallelizing. If \code{prl = TRUE}, \strong{\emph{one must first register clusters by calling \code{registerDoSNOW()} externally}}.}
 }
 \value{
-A list of lists, with length \code{reps * m * q}, where \code{m} is the number of different rates \code{m = length(cn)}. Every sublist has the following format.
+A list of lists, with length \code{reps * m * q}, where \code{m} is the number of different convergence rates \code{m = length(cn)}. Every sub-list has the following format.
 \itemize{
 \item \code{SNR}: The string indicating the signal to noise ratio.
 \item \code{CovRate}: The numerical value indicating the corresponding convergence rate in \code{cn}.
