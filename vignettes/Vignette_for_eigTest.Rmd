@@ -52,8 +52,7 @@ full_samples = simuSamples(mu = full_means,                # mean matrices
                            cn = c(sqrt(100), sqrt(500)),   # convergence rate
                            reps = 20)                     # replicate
 
-eg_full_mat = full_samples[[1]]$mu.bar; print(dim(eg_full_mat))
-eg_full_cov = full_samples[[1]]$cov.bar; print(dim(eg_full_cov))
+eg_full = full_samples[[1]]
 
 part_means = generateMeans(d = 5,           # square matrix's dimension
                            p = 4,           # number of matrices
@@ -66,10 +65,18 @@ part_samples = simuSamples(mu = part_means,                # mean matrices
                            reps = 20,                      # replicate
                            nn = FALSE)                     # nonnegativity
 
-eg_part_mat = part_samples[[1]]$mu.bar; print(dim(eg_part_mat))
-eg_part_cov = part_samples[[1]]$cov.bar; print(dim(eg_part_cov))
+eg_part = part_samples[[1]]
 ```
 
+```{r showDim, echo=FALSE, message=FALSE, warning=FALSE}
+cat('Examples from full_samples:\n')
+cat(paste('\tMatrix dimension:', paste0(dim(eg_full$mu.bar), collapse = 'x'), '\n'))
+cat(paste('\tCovariance dimension:', paste0(dim(eg_full$cov.bar), collapse = 'x'), '\n'))
+
+cat('Examples from part_samples:\n')
+cat(paste('\tMatrix dimension:', paste0(dim(eg_part$mu.bar), collapse = 'x'), '\n'))
+cat(paste('\tCovariance dimension:', paste0(dim(eg_part$cov.bar), collapse = 'x'), '\n'))
+```
 
 ## Functionality
 
@@ -77,16 +84,16 @@ eg_part_cov = part_samples[[1]]$cov.bar; print(dim(eg_part_cov))
 
 ```{r twoSample, echo=TRUE, message=FALSE, warning=FALSE}
 ## Commutator-based test
-commutatorTest(mat.arr = eg_full_mat,              # sample matrices
-               cn = full_samples[[1]]$CovRate,     # convergence rate
-               cov.arr = eg_full_cov,              # covariance matrices
+commutatorTest(mat.arr = eg_full$mu.bar,           # sample matrices
+               cn = eg_full$CovRate,               # convergence rate
+               cov.arr = eg_full$cov.bar,          # covariance matrices
                testType = 'chi',                   # type of test statistic
                param.out = TRUE)$chi               # return parameters
 
 ## Log-likelihood ratio test
-projTest(A = eg_part_mat,                          # sample matrices
-         cn = part_samples[[1]]$CovRate,           # convergence rate
-         cov.arr = eg_part_cov,                    # covariance matrices
+projTest(A = eg_part$mu.bar,                       # sample matrices
+         cn = eg_part$CovRate,                     # convergence rate
+         cov.arr = eg_part$cov.bar,                # covariance matrices
          param.out = TRUE)                         # return parameters
 ```
 
@@ -99,9 +106,9 @@ V = JDTE(eg_full_mat); V
 ### Multi-sample test
 
 ```{r multiSample, echo=TRUE, message=FALSE, warning=FALSE}
-eigTest(eg_full_mat,                        # sample matrices
-        cn = full_samples[[1]]$CovRate,     # convergence rate
-        cov.arr = eg_full_cov,              # covariance matrices
+eigTest(eg_full$mu.bar,                     # sample matrices
+        cn = eg_full$CovRate,               # convergence rate
+        cov.arr = eg_full$cov.bar,          # covariance matrices
         testType = 'chi',                   # type of test statistic
         param.out = TRUE)$chi               # return parameters)
 ```
@@ -109,7 +116,7 @@ eigTest(eg_full_mat,                        # sample matrices
 ### Partially common eigenvector estimate
 
 ```{r parteigEst, echo=TRUE, message=FALSE, warning=FALSE}
-V = expmPartSchur(eg_part_mat,        # sample matrices
+V = expmPartSchur(eg_part$mu.bar,     # sample matrices
                   k = 3)              # number of common components
 V
 ```
@@ -117,9 +124,9 @@ V
 ### Partial test
 
 ```{r partial, echo=TRUE, message=FALSE, warning=FALSE}
-partialTest(A = eg_part_mat,                    # sample matrices
-            cn = part_samples[[1]]$CovRate,     # convergence rate
-            cov.arr = eg_part_cov,              # covariance matrices
+partialTest(A = eg_part$mu.bar,                 # sample matrices
+            cn = eg_part$CovRate,               # convergence rate
+            cov.arr = eg_part$cov.bar,          # covariance matrices
             k = 3,                              # number of common components
             param.out = TRUE)                   # return parameters
 ```

@@ -4,7 +4,7 @@
 This `R` package is developed for testing simultaneous diagonalizability.
 
 To install, use the code in `R`:
-`devtools::install_github('XycYuchenXu/eigTest', build_vignettes = T)`
+`devtools::install_github('XycYuchenXu/eigTest', force = T, build_vignettes = T)`
 
 ## Usage
 The package has the following functionalities:
