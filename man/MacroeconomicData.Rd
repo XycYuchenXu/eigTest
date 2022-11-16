@@ -29,7 +29,6 @@ countryCovar
 \item \code{countryCoeff} - Estimated coefficient matrices of 8 countries' VAR(1) models.
 \item \code{countryCovar} - Estimated covariance matrices of the 8 coefficient matrices' estimates.
 }
-Data are accessed from \insertCite{oecd,wbd,FRB;textual}{eigTest} and other central bank statistics portals.\insertNoCite{CAN,GBR,DEU,FRA,JPN,KOR}{eigTest}
 See \insertCite{xu2021testing;textual}{eigTest} for processing details.
 }
 \examples{

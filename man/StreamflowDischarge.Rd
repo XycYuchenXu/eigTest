@@ -6,7 +6,7 @@
 \alias{hudsonWeekly}
 \title{Streamflow Discharge Data}
 \source{
-USGS
+\insertCite{usgs;textual}{eigTest}.
 }
 \usage{
 hudsonDaily
@@ -19,7 +19,6 @@ Hudson river discharges with quantiles and categories, consisting 1827 rows and 
 \item \code{hudsonDaily} - The discharge table of daily data.
 \item \code{hudsonWeekly} - The discharge table of weekly data.
 }
-Data are accessed from \insertCite{usgs;textual}{eigTest}.
 See \insertCite{xu2021testing;textual}{eigTest} for processing details.
 }
 \examples{
