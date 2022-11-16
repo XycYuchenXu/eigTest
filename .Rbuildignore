@@ -2,5 +2,3 @@
 ^\.Rproj\.user$
 (^|/)\\.DS_Store$
 ^\\.(RData|Rhistory)$
-^code
-^output
