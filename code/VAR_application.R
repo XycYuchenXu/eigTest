@@ -129,9 +129,9 @@ text2plot = pair.test2plot
 groupMat = matrix(NA, nrow = length(countries), ncol = length(countries))
 colnames(groupMat) = countries
 rownames(groupMat) = countries
-groupMat[1:3,1:3] = 'Asia'
-groupMat[4:6,4:6] = 'EU'
-groupMat[7:8,7:8] = 'NA'
+groupMat[1:2,1:2] = 'NA'
+groupMat[3:5,3:5] = 'EU'
+groupMat[6:8,6:8] = 'NA'
 groupMat = melt(groupMat, na.rm = T)
 groupMat$value = as.factor(groupMat$value)
 
@@ -157,11 +157,11 @@ ggplot(data = pair.test2plot, aes(x = Var2, y = Var1, fill = value)) +
         legend.justification = c(0, 0.5),
         legend.direction = 'vertical')+#"horizontal")+
   coord_fixed() + ggtitle('Simultaneous commutator test p-values') +
-  scale_y_discrete(position = 'left') +scale_x_discrete(limits = rev(levels(pair.test2plot$Var2))) +
+  scale_y_discrete(position = 'left', limits = rev(levels(pair.test2plot$Var2))) +
   guides(fill = guide_colorbar(barwidth = 1.5, barheight = 7, title.vjust = 1,
                                title.position = "top", title.hjust = 0.5,
                                title.theme = element_text(margin = margin(0,0,8,0))))+
-  geom_tile(data = groupMat, aes(x = Var1, y = Var2), colour = "red", fill = NA, size = 1)
+  geom_tile(data = groupMat, aes(x = Var1, y = Var2), colour = "red", fill = NA, linewidth = 1)
 dev.off()
 
 p2 = ggplot(data = pair.test2plot, aes(x = Var2, y = Var1, fill = value)) +
@@ -187,7 +187,7 @@ p2 = ggplot(data = pair.test2plot, aes(x = Var2, y = Var1, fill = value)) +
   guides(fill = guide_colorbar(barwidth = 1.5, barheight = 7, title.vjust = 1,
                                title.position = "top", title.hjust = 0.5,
                                title.theme = element_text(margin = margin(0,0,8,0))))+
-  geom_tile(data = groupMat, aes(x = Var1, y = Var2), colour = "red", fill = NA, size = 1)
+  geom_tile(data = groupMat, aes(x = Var1, y = Var2), colour = "red", fill = NA, linewidth = 1)
 p2
 ggsave(filename = 'output/Plots/png/pvalMat.png', width = 5, height = 4.5, units = 'in')
 

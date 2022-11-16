@@ -1,3 +1,4 @@
+#devtools::install_github('XycYuchenXu/eigTest', force = T, build_vignettes = F)
 library(eigTest)
 library(tidyverse)
 library(tikzDevice)

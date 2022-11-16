@@ -1,9 +1,9 @@
+#devtools::install_github('XycYuchenXu/eigTest', force = T, build_vignettes = F)
 library(eigTest)
 library(foreach)
 library(doSNOW)
 library(tidyverse)
 library(reshape2)
-#library(tikzDevice)
 
 
 ###### generate / load pvalues ######
