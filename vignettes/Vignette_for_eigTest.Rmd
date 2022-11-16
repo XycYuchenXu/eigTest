@@ -100,7 +100,7 @@ projTest(A = eg_part$mu.bar,                       # sample matrices
 ### Common eigenvector estimate
 
 ```{r eigEst, echo=TRUE, message=FALSE, warning=FALSE}
-V = JDTE(eg_full_mat); V
+V = JDTE(eg_full$mu.bar); V
 ```
 
 ### Multi-sample test
