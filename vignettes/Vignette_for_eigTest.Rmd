@@ -3,6 +3,9 @@ title: 'eigTest: Approximate and Test Common Eigenvectors'
 author: "Yuchen Xu"
 date: "10/2022"
 output: rmarkdown::html_vignette
+bibliography: ../inst/REFERENCES.bib
+nocite:
+- '@xu2021testing'
 vignette: >
   %\VignetteIndexEntry{eigTest: Approximate and Test Common Eigenvectors}
   %\VignetteEngine{knitr::rmarkdown}
@@ -70,12 +73,12 @@ eg_part = part_samples[[1]]
 
 ```{r showDim, echo=FALSE, message=FALSE, warning=FALSE}
 cat('Examples from full_samples:\n')
-cat(paste('\tMatrix dimension:', paste0(dim(eg_full$mu.bar), collapse = 'x'), '\n'))
-cat(paste('\tCovariance dimension:', paste0(dim(eg_full$cov.bar), collapse = 'x'), '\n'))
+cat(paste('\tEstimate array dimension:', paste0(dim(eg_full$mu.bar), collapse = 'x'), '\n'))
+cat(paste('\tCovariance array dimension:', paste0(dim(eg_full$cov.bar), collapse = 'x'), '\n'))
 
 cat('Examples from part_samples:\n')
-cat(paste('\tMatrix dimension:', paste0(dim(eg_part$mu.bar), collapse = 'x'), '\n'))
-cat(paste('\tCovariance dimension:', paste0(dim(eg_part$cov.bar), collapse = 'x'), '\n'))
+cat(paste('\tEstimate array dimension:', paste0(dim(eg_part$mu.bar), collapse = 'x'), '\n'))
+cat(paste('\tCovariance array dimension:', paste0(dim(eg_part$cov.bar), collapse = 'x'), '\n'))
 ```
 
 ## Functionality
@@ -97,7 +100,7 @@ projTest(A = eg_part$mu.bar,                       # sample matrices
          param.out = TRUE)                         # return parameters
 ```
 
-### Common eigenvector estimate
+### Common eigenvector estimate [@andre]
 
 ```{r eigEst, echo=TRUE, message=FALSE, warning=FALSE}
 V = JDTE(eg_full$mu.bar); V
@@ -113,7 +116,7 @@ eigTest(eg_full$mu.bar,                     # sample matrices
         param.out = TRUE)$chi               # return parameters)
 ```
 
-### Partially common eigenvector estimate
+### Partially common eigenvector estimate [@tensor]
 
 ```{r parteigEst, echo=TRUE, message=FALSE, warning=FALSE}
 V = expmPartSchur(eg_part$mu.bar,     # sample matrices
@@ -131,3 +134,4 @@ partialTest(A = eg_part$mu.bar,                 # sample matrices
             param.out = TRUE)                   # return parameters
 ```
 
+## References
