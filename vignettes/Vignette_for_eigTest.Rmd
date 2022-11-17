@@ -37,12 +37,12 @@ The sample generating process is as follows:
 2. Set $V_i(k; d) = V(k; d)$ if $k = d$, otherwise span $V_i(k; d) = (V(k; d), \widetilde{V}_i) \in \mathbb{R}^{d \times d}$ with random but sufficiently distinct $\widetilde{V}_i \in \mathbb{R}^{d \times (d-k)}$ for $i = 1, \dots, p$.
 
 3. For $i=1, \dots, p$:
-  1. Perturb the $i$-th eigenvector matrix $V_i(k; d)$ as $V_i(\rho, k; d) = V_i(k; d) + \rho E_i$ with noise $E_i$ to be independent and standard normal, element-wise.
-  2. Randomly generate non-singular diagonal matrices $D_i \in \mathbb{R}^{d \times d}$ for $i = 1, \dots, p$.
+    1. Perturb the $i$-th eigenvector matrix $V_i(k; d)$ as $V_i(\rho, k; d) = V_i(k; d) + \rho E_i$ with noise $E_i$ to be independent and standard normal, element-wise.
+    2. Randomly generate non-singular diagonal matrices $D_i \in \mathbb{R}^{d \times d}$ for $i = 1, \dots, p$.
 
-4. Generate the target matrices $\mathcal{M}_p(\rho, k; d) = \{\mu_i(\rho, k; d)\} = \{ V_i(\rho, k; d) D_i V_i^{-1}(\rho, k; d)\}_{i=1}^p$.
+4. Generate the target deterministic matrices $\mathcal{M}_p(\rho, k; d) = \{\mu_i(\rho, k; d)\} = \{ V_i(\rho, k; d) D_i V_i^{-1}(\rho, k; d)\}_{i=1}^p$.
 
-5. Given sample size $n$, generate $n$ random matrices $X_{ij}(\rho, k; d), j = 1, \dots, n$ with mean $\mu_i(\rho, k; d)$ and identity variance matrix, and get the estimates $A_i(\rho, k; d) = \bar X_{ij}(\rho, k; d)$, $\Sigma_i(\rho, k; d) = \frac{1}{n-1} \sum_{j=1}^n \mbox{vec}(X_{ij}(\rho, k; d) - A_i(\rho, k; d)) \mbox{vec}'(X_{ij}(\rho, k; d) - A_i(\rho, k; d))$.
+5. Given sample size $n$, generate $n$ random matrices $X_{ij}(\rho, k; d), j = 1, \dots, n$, with mean $\mu_i(\rho, k; d)$ and identity covariance matrix, and get the estimates $A_i(\rho, k; d) = \bar X_{ij}(\rho, k; d)$, $\Sigma_i(\rho, k; d) = \frac{1}{n-1} \sum_{j=1}^n \mbox{vec}(X_{ij}(\rho, k; d) - A_i(\rho, k; d)) \mbox{vec}'(X_{ij}(\rho, k; d) - A_i(\rho, k; d))$.
 
 The package includes functions to generate simulation samples in the following way:
 
@@ -53,7 +53,7 @@ full_means = generateMeans(d = 5,           # square matrix's dimension
 
 full_samples = simuSamples(mu = full_means,                # mean matrices
                            cn = c(sqrt(100), sqrt(500)),   # convergence rate
-                           reps = 20)                     # replicate
+                           reps = 20)                      # replicate
 
 eg_full = full_samples[[1]]
 
@@ -75,10 +75,22 @@ eg_part = part_samples[[1]]
 cat('Examples from full_samples:\n')
 cat(paste('\tEstimate array dimension:', paste0(dim(eg_full$mu.bar), collapse = 'x'), '\n'))
 cat(paste('\tCovariance array dimension:', paste0(dim(eg_full$cov.bar), collapse = 'x'), '\n'))
+cat(paste('\tSample size: n =', round(eg_full$CovRate^2), '\n'))
+cat(paste('\tSNR level: SNR =',
+          ifelse(substring(eg_full$SNR, 7) == '0',
+                 'infinity',
+                 round(1 / as.numeric(substring(eg_full$SNR, 7)))),
+          '\n'))
 
 cat('Examples from part_samples:\n')
 cat(paste('\tEstimate array dimension:', paste0(dim(eg_part$mu.bar), collapse = 'x'), '\n'))
 cat(paste('\tCovariance array dimension:', paste0(dim(eg_part$cov.bar), collapse = 'x'), '\n'))
+cat(paste('\tSample size: n =', round(eg_part$CovRate^2), '\n'))
+cat(paste('\tSNR level: SNR =',
+          ifelse(substring(eg_part$SNR, 7) == '0',
+                 'infinity',
+                 round(1 / as.numeric(substring(eg_part$SNR, 7)))),
+          '\n'))
 ```
 
 ## Functionality
@@ -131,6 +143,7 @@ partialTest(A = eg_part$mu.bar,                 # sample matrices
             cn = eg_part$CovRate,               # convergence rate
             cov.arr = eg_part$cov.bar,          # covariance matrices
             k = 3,                              # number of common components
+            warmup = TRUE,                      # run warm-up initialization
             param.out = TRUE)                   # return parameters
 ```
 
