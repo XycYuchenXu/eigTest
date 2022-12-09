@@ -1,4 +1,4 @@
-# eigTest (development in progress)
+# eigTest: Approximate and Test Common Eigenvectors
 
 ## Intro & Setup
 This `R` package is developed for testing simultaneous diagonalizability.
